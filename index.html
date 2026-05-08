@@ -13,248 +13,239 @@
 <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0a0a0a;
-    --surface: #141414;
-    --surface2: #1e1e1e;
-    --accent: #00ff88;
-    --accent-dim: #00cc6a;
-    --danger: #ff4757;
-    --text: #f0f0f0;
-    --text-muted: #888;
-    --border: #2a2a2a;
-    --total-bg: #001a0d;
+    --bg: #0a0a0a; --surface: #141414; --surface2: #1e1e1e;
+    --accent: #00ff88; --accent-dim: #00cc6a;
+    --danger: #ff4757; --text: #f0f0f0; --muted: #888;
+    --border: #2a2a2a; --total-bg: #001a0d;
   }
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html, body { height:100%; background:var(--bg); color:var(--text); font-family:'Nanum Gothic',sans-serif; overflow:hidden; }
 
-  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-
-  html, body {
-    height: 100%;
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Nanum Gothic', sans-serif;
-    overflow: hidden;
-  }
-
-  #app {
-    display: flex;
-    flex-direction: column;
-    height: 100dvh;
-    max-width: 480px;
-    margin: 0 auto;
-    position: relative;
-  }
+  #app { display:flex; flex-direction:column; height:100dvh; max-width:480px; margin:0 auto; }
 
   /* ── HEADER ── */
   #header {
-    flex-shrink: 0;
-    background: var(--total-bg);
-    border-bottom: 1px solid var(--accent);
-    padding: 12px 16px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    z-index: 10;
+    flex-shrink:0; background:var(--total-bg); border-bottom:1px solid var(--accent);
+    padding:12px 16px; display:flex; align-items:center; justify-content:space-between; z-index:10;
   }
-  #logo { font-size: 18px; font-weight: 800; letter-spacing: -0.5px; color: var(--accent); }
-  #total-display { text-align: right; }
-  #total-label { font-size: 11px; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase; }
-  #total-amount { font-family: 'Share Tech Mono', monospace; font-size: 24px; color: var(--accent); line-height: 1; }
+  #logo { font-size:18px; font-weight:800; color:var(--accent); letter-spacing:-0.5px; }
+  #total-display { text-align:right; }
+  #total-label { font-size:11px; color:var(--muted); letter-spacing:1px; text-transform:uppercase; }
+  #total-amount { font-family:'Share Tech Mono',monospace; font-size:24px; color:var(--accent); line-height:1; }
 
-  /* ── CAMERA ── */
-  #camera-section { flex-shrink: 0; position: relative; height: 260px; background: #000; overflow: hidden; }
-  #video { width: 100%; height: 100%; object-fit: cover; display: block; }
-  #camera-overlay { position: absolute; inset: 0; pointer-events: none; }
-  #scan-box { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 75%; height: 70%; }
-  .corner { position: absolute; width: 20px; height: 20px; border-color: var(--accent); border-style: solid; border-width: 0; }
-  .corner-tl { top: 0; left: 0; border-top-width: 2px; border-left-width: 2px; }
-  .corner-tr { top: 0; right: 0; border-top-width: 2px; border-right-width: 2px; }
-  .corner-bl { bottom: 0; left: 0; border-bottom-width: 2px; border-left-width: 2px; }
-  .corner-br { bottom: 0; right: 0; border-bottom-width: 2px; border-right-width: 2px; }
-  #scan-hint { position: absolute; bottom: 10px; left: 0; right: 0; text-align: center; font-size: 12px; color: rgba(255,255,255,0.6); letter-spacing: 0.5px; }
-  #no-camera-msg { position: absolute; inset: 0; display: none; flex-direction: column; align-items: center; justify-content: center; color: var(--text-muted); font-size: 13px; gap: 8px; }
-  .camera-icon { font-size: 32px; opacity: 0.4; }
-  #scan-line { position: absolute; left: 12.5%; width: 75%; height: 1px; background: linear-gradient(90deg, transparent, var(--accent), transparent); top: 15%; opacity: 0; transition: opacity 0.3s; }
-  #scan-line.scanning { opacity: 1; animation: scanMove 1.2s ease-in-out infinite; }
-  @keyframes scanMove { 0% { top: 15%; } 50% { top: 85%; } 100% { top: 15%; } }
+  /* ── TAB PAGES ── */
+  #pages { flex:1; overflow:hidden; position:relative; }
+  .page { position:absolute; inset:0; display:flex; flex-direction:column; transition:opacity 0.2s; }
+  .page.hidden { opacity:0; pointer-events:none; }
 
-  /* ── SCAN BUTTON ── */
-  #scan-btn-area { flex-shrink: 0; padding: 12px 16px; background: var(--surface); border-bottom: 1px solid var(--border); display: flex; gap: 10px; align-items: center; }
-  #scan-btn { flex: 1; height: 52px; background: var(--accent); color: #000; border: none; border-radius: 8px; font-family: 'Nanum Gothic', sans-serif; font-size: 16px; font-weight: 800; cursor: pointer; transition: transform 0.1s, background 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; letter-spacing: -0.3px; }
-  #scan-btn:active { transform: scale(0.97); }
-  #scan-btn:disabled { background: #333; color: #666; cursor: not-allowed; }
-  #scan-btn.loading { background: #005533; color: var(--accent); }
-  #manual-btn { height: 52px; width: 52px; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; color: var(--text-muted); font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: border-color 0.2s, color 0.2s; }
-  #manual-btn:active { border-color: var(--accent); color: var(--accent); }
+  /* ── 장바구니 탭 ── */
+  #cart-page { background:var(--bg); }
 
-  /* ── CART ── */
-  #cart-section { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 12px 16px 16px; }
-  #cart-section::-webkit-scrollbar { width: 3px; }
-  #cart-section::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
-  #empty-state { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-muted); gap: 10px; font-size: 13px; padding-bottom: 40px; }
-  .empty-icon { font-size: 40px; opacity: 0.3; }
-  #cart-list { display: flex; flex-direction: column; gap: 8px; }
-  .cart-item { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; display: flex; align-items: center; gap: 10px; animation: slideIn 0.2s ease; }
-  @keyframes slideIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
-  .item-name { flex: 1; font-size: 14px; font-weight: 700; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .qty-controls { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
-  .qty-btn { width: 26px; height: 26px; border-radius: 4px; border: 1px solid var(--border); background: var(--surface2); color: var(--text); font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: border-color 0.15s; }
-  .qty-btn:active { border-color: var(--accent); }
-  .qty-num { font-family: 'Share Tech Mono', monospace; font-size: 14px; min-width: 18px; text-align: center; }
-  .item-subtotal { font-family: 'Share Tech Mono', monospace; font-size: 15px; color: var(--accent); white-space: nowrap; min-width: 60px; text-align: right; }
-  .del-btn { width: 26px; height: 26px; border-radius: 4px; border: none; background: transparent; color: #444; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: color 0.15s; }
-  .del-btn:active { color: var(--danger); }
+  #cart-scroll {
+    flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:16px;
+  }
+  #cart-scroll::-webkit-scrollbar { width:3px; }
+  #cart-scroll::-webkit-scrollbar-thumb { background:var(--border); border-radius:2px; }
 
-  /* ── BOTTOM BAR ── */
-  #bottom-bar { flex-shrink: 0; background: var(--surface); border-top: 1px solid var(--border); padding: 10px 16px; padding-bottom: max(10px, env(safe-area-inset-bottom)); display: flex; gap: 8px; }
-  #save-btn { flex: 1; height: 46px; background: var(--surface2); color: var(--text-muted); border: 1px solid var(--border); border-radius: 8px; font-family: 'Nanum Gothic', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; transition: border-color 0.2s, color 0.2s; }
-  #save-btn.active { border-color: var(--accent-dim); color: var(--accent-dim); }
-  #clear-btn { height: 46px; padding: 0 16px; background: transparent; color: var(--danger); border: 1px solid #331010; border-radius: 8px; font-family: 'Nanum Gothic', sans-serif; font-size: 13px; font-weight: 700; cursor: pointer; transition: border-color 0.2s; }
-  #clear-btn:active { border-color: var(--danger); }
+  #empty-state {
+    height:100%; display:flex; flex-direction:column; align-items:center;
+    justify-content:center; gap:12px; color:var(--muted); padding-bottom:60px;
+  }
+  .empty-icon { font-size:56px; opacity:0.25; }
+  .empty-title { font-size:16px; font-weight:800; color:var(--text); }
+  .empty-sub { font-size:13px; color:var(--muted); text-align:center; line-height:1.6; }
+  .empty-cta {
+    margin-top:8px; padding:12px 24px;
+    background:var(--total-bg); border:1px solid var(--accent);
+    border-radius:24px; color:var(--accent); font-size:14px; font-weight:800;
+    cursor:pointer; transition:background 0.2s;
+  }
+  .empty-cta:active { background:#003320; }
 
-  /* ── MANUAL MODAL ── */
-  #modal-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 100; align-items: flex-end; }
-  #modal-backdrop.open { display: flex; }
-  #modal { width: 100%; max-width: 480px; margin: 0 auto; background: var(--surface); border-top: 1px solid var(--border); border-radius: 16px 16px 0 0; padding: 20px 16px 32px; }
-  #modal h3 { font-size: 15px; font-weight: 800; margin-bottom: 16px; color: var(--text-muted); letter-spacing: 0.5px; }
-  .modal-field { margin-bottom: 12px; }
-  .modal-field label { display: block; font-size: 11px; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; }
-  .modal-field input { width: 100%; height: 46px; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-family: 'Nanum Gothic', sans-serif; font-size: 16px; padding: 0 12px; outline: none; transition: border-color 0.2s; }
-  .modal-field input:focus { border-color: var(--accent); }
-  #modal-add-btn { width: 100%; height: 50px; background: var(--accent); color: #000; border: none; border-radius: 8px; font-family: 'Nanum Gothic', sans-serif; font-size: 16px; font-weight: 800; cursor: pointer; margin-top: 4px; }
+  #cart-list { display:flex; flex-direction:column; gap:8px; }
 
-  /* ── TOAST ── */
-  #toast { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--surface2); border: 1px solid var(--border); color: var(--text); padding: 10px 18px; border-radius: 20px; font-size: 13px; font-weight: 700; opacity: 0; transition: opacity 0.25s, transform 0.25s; z-index: 200; white-space: nowrap; pointer-events: none; }
-  #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .cart-item {
+    background:var(--surface); border:1px solid var(--border);
+    border-radius:10px; padding:12px 14px;
+    display:flex; align-items:center; gap:10px;
+    animation:slideIn 0.2s ease;
+  }
+  .cart-item.new-item { border-color:var(--accent); background:#001a0d; }
+  @keyframes slideIn { from { opacity:0; transform:translateY(-6px); } to { opacity:1; transform:translateY(0); } }
+  .item-info { flex:1; min-width:0; }
+  .item-name { font-size:14px; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .item-unit { font-size:11px; color:var(--muted); margin-top:2px; font-family:'Share Tech Mono',monospace; }
+  .qty-controls { display:flex; align-items:center; gap:6px; flex-shrink:0; }
+  .qty-btn {
+    width:28px; height:28px; border-radius:6px; border:1px solid var(--border);
+    background:var(--surface2); color:var(--text); font-size:16px; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; transition:border-color 0.15s;
+  }
+  .qty-btn:active { border-color:var(--accent); }
+  .qty-num { font-family:'Share Tech Mono',monospace; font-size:14px; min-width:20px; text-align:center; }
+  .item-subtotal { font-family:'Share Tech Mono',monospace; font-size:15px; color:var(--accent); min-width:64px; text-align:right; }
+  .del-btn {
+    width:28px; height:28px; border-radius:6px; border:none;
+    background:transparent; color:#3a3a3a; font-size:15px; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; transition:color 0.15s;
+  }
+  .del-btn:active { color:var(--danger); }
 
-  /* ── FLASH ── */
-  #flash { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; z-index: 5; transition: opacity 0.05s; }
-  #flash.on { opacity: 0.6; }
-  canvas { display: none; }
+  /* 장바구니 하단 액션 */
+  #cart-actions {
+    flex-shrink:0; background:var(--surface); border-top:1px solid var(--border);
+    padding:10px 16px; padding-bottom:max(10px, env(safe-area-inset-bottom));
+    display:flex; gap:8px;
+  }
+  #save-btn {
+    flex:1; height:46px; background:var(--surface2); color:var(--muted);
+    border:1px solid var(--border); border-radius:8px;
+    font-family:'Nanum Gothic',sans-serif; font-size:14px; font-weight:700; cursor:pointer;
+    transition:border-color 0.2s, color 0.2s;
+  }
+  #save-btn.active { border-color:var(--accent-dim); color:var(--accent-dim); }
+  #clear-btn {
+    height:46px; padding:0 16px; background:transparent; color:var(--danger);
+    border:1px solid #331010; border-radius:8px;
+    font-family:'Nanum Gothic',sans-serif; font-size:13px; font-weight:700; cursor:pointer;
+  }
+  #clear-btn:active { border-color:var(--danger); }
 
-  /* ── SETUP SCREEN ── */
-  #setup-screen { display: none; position: fixed; inset: 0; background: var(--bg); z-index: 999; flex-direction: column; align-items: center; justify-content: center; padding: 32px 24px; }
-  #setup-screen.visible { display: flex; }
-  .setup-logo { font-size: 40px; margin-bottom: 8px; }
-  .setup-title { font-size: 22px; font-weight: 800; color: var(--accent); margin-bottom: 8px; letter-spacing: -0.5px; }
-  .setup-desc { font-size: 13px; color: var(--text-muted); text-align: center; line-height: 1.7; margin-bottom: 32px; }
-  .setup-desc a { color: var(--accent-dim); text-decoration: none; }
-  .setup-field { width: 100%; max-width: 360px; margin-bottom: 12px; }
-  .setup-field label { display: block; font-size: 11px; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; }
-  .setup-field input { width: 100%; height: 50px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-family: 'Share Tech Mono', monospace; font-size: 13px; padding: 0 14px; outline: none; transition: border-color 0.2s; }
-  .setup-field input:focus { border-color: var(--accent); }
-  #setup-save-btn { width: 100%; max-width: 360px; height: 52px; background: var(--accent); color: #000; border: none; border-radius: 8px; font-family: 'Nanum Gothic', sans-serif; font-size: 16px; font-weight: 800; cursor: pointer; margin-top: 4px; }
-  .setup-hint { margin-top: 20px; font-size: 11px; color: #444; text-align: center; line-height: 1.8; }
-  #settings-btn { position: fixed; bottom: 80px; right: 16px; width: 36px; height: 36px; border-radius: 50%; background: var(--surface2); border: 1px solid var(--border); color: var(--text-muted); font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 50; transition: border-color 0.2s; }
-  #settings-btn:active { border-color: var(--accent); }
+  /* ── 스캔 탭 ── */
+  #scan-page { background:#000; }
+  #camera-section { flex:1; position:relative; overflow:hidden; }
+  #video { width:100%; height:100%; object-fit:cover; display:block; }
+  #flash { position:absolute; inset:0; background:#fff; opacity:0; pointer-events:none; z-index:5; transition:opacity 0.05s; }
+  #flash.on { opacity:0.6; }
+  #scan-line {
+    position:absolute; left:12.5%; width:75%; height:1px;
+    background:linear-gradient(90deg,transparent,var(--accent),transparent);
+    top:15%; opacity:0; transition:opacity 0.3s;
+  }
+  #scan-line.scanning { opacity:1; animation:scanMove 1.2s ease-in-out infinite; }
+  @keyframes scanMove { 0%{top:15%} 50%{top:85%} 100%{top:15%} }
+  #camera-overlay { position:absolute; inset:0; pointer-events:none; }
+  #scan-box { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:75%; height:60%; }
+  .corner { position:absolute; width:22px; height:22px; border-color:var(--accent); border-style:solid; border-width:0; }
+  .corner-tl { top:0; left:0; border-top-width:2px; border-left-width:2px; }
+  .corner-tr { top:0; right:0; border-top-width:2px; border-right-width:2px; }
+  .corner-bl { bottom:0; left:0; border-bottom-width:2px; border-left-width:2px; }
+  .corner-br { bottom:0; right:0; border-bottom-width:2px; border-right-width:2px; }
+  #scan-hint { position:absolute; bottom:12px; left:0; right:0; text-align:center; font-size:12px; color:rgba(255,255,255,0.55); }
+  #no-camera-msg {
+    position:absolute; inset:0; display:none; flex-direction:column;
+    align-items:center; justify-content:center; color:var(--muted); font-size:13px; gap:8px;
+  }
+
+  #scan-btn-area {
+    flex-shrink:0; padding:12px 16px;
+    background:var(--surface); border-top:1px solid var(--border);
+    display:flex; gap:10px; align-items:center;
+  }
+  #scan-btn {
+    flex:1; height:52px; background:var(--accent); color:#000; border:none; border-radius:8px;
+    font-family:'Nanum Gothic',sans-serif; font-size:16px; font-weight:800; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; gap:8px;
+    transition:transform 0.1s, background 0.2s;
+  }
+  #scan-btn:active { transform:scale(0.97); }
+  #scan-btn:disabled { background:#333; color:#666; cursor:not-allowed; }
+  #scan-btn.loading { background:#005533; color:var(--accent); }
+  #manual-btn {
+    height:52px; width:52px; background:var(--surface2); border:1px solid var(--border);
+    border-radius:8px; color:var(--muted); font-size:20px; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; transition:border-color 0.2s;
+  }
+  #manual-btn:active { border-color:var(--accent); }
+
+  /* ── TAB BAR ── */
+  #tab-bar {
+    flex-shrink:0; background:var(--surface); border-top:1px solid var(--border);
+    display:flex; padding:8px 0; padding-bottom:max(8px, env(safe-area-inset-bottom));
+  }
+  .tab-btn {
+    flex:1; display:flex; flex-direction:column; align-items:center; gap:3px;
+    cursor:pointer; padding:4px 0; border:none; background:transparent;
+    transition:opacity 0.2s;
+  }
+  .tab-btn-icon { font-size:22px; line-height:1; }
+  .tab-btn-label { font-size:11px; color:var(--muted); font-family:'Nanum Gothic',sans-serif; font-weight:700; transition:color 0.2s; }
+  .tab-btn.active .tab-btn-label { color:var(--accent); }
+  .tab-btn.active .tab-btn-icon { filter:drop-shadow(0 0 4px rgba(0,255,136,0.4)); }
 
   /* ── RESULT BOTTOM SHEET ── */
   #result-sheet-backdrop {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.65);
-    z-index: 90;
-    align-items: flex-end;
-    justify-content: center;
+    display:none; position:fixed; inset:0;
+    background:rgba(0,0,0,0.65); z-index:90;
+    align-items:flex-end; justify-content:center;
   }
-  #result-sheet-backdrop.open { display: flex; }
-
+  #result-sheet-backdrop.open { display:flex; }
   #result-sheet {
-    width: 100%;
-    max-width: 480px;
-    background: #1a1a1a;
-    border-top: 1px solid var(--border);
-    border-radius: 20px 20px 0 0;
-    padding-bottom: max(16px, env(safe-area-inset-bottom));
-    animation: sheetUp 0.28s cubic-bezier(.32,1.2,.45,1);
+    width:100%; max-width:480px; background:#1a1a1a;
+    border-top:1px solid var(--border); border-radius:20px 20px 0 0;
+    padding-bottom:max(16px,env(safe-area-inset-bottom));
+    animation:sheetUp 0.28s cubic-bezier(.32,1.2,.45,1);
   }
-  @keyframes sheetUp { from { transform: translateY(60px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  @keyframes sheetUp { from{transform:translateY(60px);opacity:0} to{transform:translateY(0);opacity:1} }
+  .sheet-handle { width:36px; height:4px; background:#333; border-radius:2px; margin:12px auto 0; }
+  .sheet-header { display:flex; align-items:center; justify-content:space-between; padding:14px 16px; border-bottom:1px solid var(--border); }
+  .sheet-title { display:flex; align-items:center; gap:8px; font-size:14px; font-weight:800; color:var(--accent); }
+  .sheet-dot { width:7px; height:7px; border-radius:50%; background:var(--accent); animation:dotPulse 1.4s ease infinite; }
+  @keyframes dotPulse { 0%,100%{opacity:1} 50%{opacity:0.25} }
+  #sheet-close-btn { width:30px; height:30px; border-radius:50%; background:var(--surface2); border:1px solid var(--border); color:var(--muted); font-size:13px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+  .sheet-body { padding:18px 16px 0; }
+  .sheet-field-label { font-size:10px; color:var(--muted); letter-spacing:1.2px; text-transform:uppercase; margin-bottom:7px; }
+  .sheet-input { width:100%; height:52px; background:var(--surface2); border:1.5px solid var(--accent); border-radius:10px; color:var(--text); font-family:'Nanum Gothic',sans-serif; font-size:17px; padding:0 14px; outline:none; margin-bottom:16px; transition:border-color 0.2s,background 0.2s; }
+  .sheet-input:focus { border-color:#00ffaa; background:#0d1a14; }
+  #result-price-input { font-family:'Share Tech Mono',monospace; font-size:24px; color:var(--accent); }
+  .sheet-actions { display:flex; gap:10px; padding:4px 16px 0; }
+  #discard-btn { flex:1; height:54px; background:var(--surface2); border:1px solid var(--border); border-radius:10px; color:var(--muted); font-family:'Nanum Gothic',sans-serif; font-size:15px; font-weight:700; cursor:pointer; }
+  #add-btn { flex:2; height:54px; background:var(--accent); border:none; border-radius:10px; color:#000; font-family:'Nanum Gothic',sans-serif; font-size:16px; font-weight:800; cursor:pointer; transition:transform 0.1s; }
+  #add-btn:active { transform:scale(0.97); }
+  .sheet-note { font-size:11px; color:#555; text-align:center; padding:10px 16px 0; }
 
-  .sheet-handle { width: 36px; height: 4px; background: #333; border-radius: 2px; margin: 12px auto 0; }
+  /* ── MANUAL MODAL ── */
+  #modal-backdrop { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:100; align-items:flex-end; }
+  #modal-backdrop.open { display:flex; }
+  #modal { width:100%; max-width:480px; margin:0 auto; background:var(--surface); border-top:1px solid var(--border); border-radius:16px 16px 0 0; padding:20px 16px 32px; }
+  #modal h3 { font-size:15px; font-weight:800; margin-bottom:16px; color:var(--muted); }
+  .modal-field { margin-bottom:12px; }
+  .modal-field label { display:block; font-size:11px; color:var(--muted); letter-spacing:1px; text-transform:uppercase; margin-bottom:6px; }
+  .modal-field input { width:100%; height:46px; background:var(--surface2); border:1px solid var(--border); border-radius:8px; color:var(--text); font-family:'Nanum Gothic',sans-serif; font-size:16px; padding:0 12px; outline:none; transition:border-color 0.2s; }
+  .modal-field input:focus { border-color:var(--accent); }
+  #modal-add-btn { width:100%; height:50px; background:var(--accent); color:#000; border:none; border-radius:8px; font-family:'Nanum Gothic',sans-serif; font-size:16px; font-weight:800; cursor:pointer; margin-top:4px; }
 
-  .sheet-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 14px 16px;
-    border-bottom: 1px solid var(--border);
-  }
-  .sheet-title { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 800; color: var(--accent); }
-  .sheet-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); animation: dotPulse 1.4s ease infinite; flex-shrink: 0; }
-  @keyframes dotPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.25; } }
-  #sheet-close-btn { width: 30px; height: 30px; border-radius: 50%; background: var(--surface2); border: 1px solid var(--border); color: var(--text-muted); font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: border-color 0.2s, color 0.2s; }
-  #sheet-close-btn:active { border-color: var(--danger); color: var(--danger); }
+  /* ── SETUP SCREEN ── */
+  #setup-screen { display:none; position:fixed; inset:0; background:var(--bg); z-index:999; flex-direction:column; align-items:center; justify-content:center; padding:32px 24px; }
+  #setup-screen.visible { display:flex; }
+  .setup-logo { font-size:40px; margin-bottom:8px; }
+  .setup-title { font-size:22px; font-weight:800; color:var(--accent); margin-bottom:8px; }
+  .setup-desc { font-size:13px; color:var(--muted); text-align:center; line-height:1.7; margin-bottom:32px; }
+  .setup-desc a { color:var(--accent-dim); text-decoration:none; }
+  .setup-field { width:100%; max-width:360px; margin-bottom:12px; }
+  .setup-field label { display:block; font-size:11px; color:var(--muted); letter-spacing:1px; text-transform:uppercase; margin-bottom:6px; }
+  .setup-field input { width:100%; height:50px; background:var(--surface); border:1px solid var(--border); border-radius:8px; color:var(--text); font-family:'Share Tech Mono',monospace; font-size:13px; padding:0 14px; outline:none; }
+  .setup-field input:focus { border:1px solid var(--accent); }
+  #setup-save-btn { width:100%; max-width:360px; height:52px; background:var(--accent); color:#000; border:none; border-radius:8px; font-family:'Nanum Gothic',sans-serif; font-size:16px; font-weight:800; cursor:pointer; margin-top:4px; }
+  .setup-hint { margin-top:20px; font-size:11px; color:#444; text-align:center; line-height:1.8; }
+  #settings-btn { position:fixed; top:14px; right:16px; width:32px; height:32px; border-radius:50%; background:transparent; border:none; color:var(--muted); font-size:18px; cursor:pointer; z-index:50; display:flex; align-items:center; justify-content:center; }
 
-  .sheet-body { padding: 18px 16px 0; }
-  .sheet-field-label { font-size: 10px; color: var(--text-muted); letter-spacing: 1.2px; text-transform: uppercase; margin-bottom: 7px; }
+  /* ── TOAST ── */
+  #toast { position:fixed; bottom:90px; left:50%; transform:translateX(-50%) translateY(20px); background:var(--surface2); border:1px solid var(--border); color:var(--text); padding:10px 18px; border-radius:20px; font-size:13px; font-weight:700; opacity:0; transition:opacity 0.25s,transform 0.25s; z-index:200; white-space:nowrap; pointer-events:none; }
+  #toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
 
-  .sheet-input {
-    width: 100%;
-    height: 52px;
-    background: var(--surface2);
-    border: 1.5px solid var(--accent);
-    border-radius: 10px;
-    color: var(--text);
-    font-family: 'Nanum Gothic', sans-serif;
-    font-size: 17px;
-    padding: 0 14px;
-    outline: none;
-    margin-bottom: 16px;
-    transition: border-color 0.2s, background 0.2s;
-  }
-  .sheet-input:focus { border-color: #00ffaa; background: #0d1a14; }
-
-  #result-price-input {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 24px;
-    color: var(--accent);
-    letter-spacing: 0.5px;
-  }
-
-  .sheet-actions { display: flex; gap: 10px; padding: 4px 16px 0; }
-
-  #discard-btn {
-    flex: 1;
-    height: 54px;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    color: var(--text-muted);
-    font-family: 'Nanum Gothic', sans-serif;
-    font-size: 15px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: border-color 0.2s, color 0.2s;
-  }
-  #discard-btn:active { border-color: var(--danger); color: var(--danger); }
-
-  #add-btn {
-    flex: 2;
-    height: 54px;
-    background: var(--accent);
-    border: none;
-    border-radius: 10px;
-    color: #000;
-    font-family: 'Nanum Gothic', sans-serif;
-    font-size: 16px;
-    font-weight: 800;
-    cursor: pointer;
-    transition: transform 0.1s;
-  }
-  #add-btn:active { transform: scale(0.97); }
-
-  .sheet-note { font-size: 11px; color: #555; text-align: center; padding: 10px 16px 0; }
+  canvas { display:none; }
 </style>
 </head>
 <body>
 
-<!-- API KEY SETUP SCREEN -->
+<!-- SETUP SCREEN -->
 <div id="setup-screen">
   <div class="setup-logo">🔑</div>
   <div class="setup-title">API 키 설정</div>
   <div class="setup-desc">
     스캔마트를 사용하려면 Anthropic API 키가 필요해요.<br>
-    키는 이 기기에만 저장되며, Cloudflare Worker를 통해 안전하게 전달돼요.<br>
+    키는 이 기기에만 저장돼요.<br>
     <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a>에서 발급받으세요.
   </div>
   <div class="setup-field">
@@ -262,13 +253,10 @@
     <input type="password" id="setup-key-input" placeholder="sk-ant-api03-..." autocomplete="off" spellcheck="false">
   </div>
   <button id="setup-save-btn" onclick="saveApiKey()">저장하고 시작하기</button>
-  <div class="setup-hint">
-    🔒 키는 이 기기의 브라우저에만 저장돼요<br>
-    GitHub이나 서버에는 절대 올라가지 않아요
-  </div>
+  <div class="setup-hint">🔒 키는 이 기기 브라우저에만 저장돼요</div>
 </div>
 
-<!-- SETTINGS BUTTON -->
+<!-- 설정 버튼 -->
 <button id="settings-btn" onclick="showSetupScreen()" title="API 키 재설정">⚙️</button>
 
 <div id="app">
@@ -282,72 +270,87 @@
     </div>
   </div>
 
-  <!-- CAMERA -->
-  <div id="camera-section">
-    <video id="video" autoplay playsinline muted></video>
-    <div id="flash"></div>
-    <div id="scan-line"></div>
-    <div id="camera-overlay">
-      <div id="scan-box">
-        <div class="corner corner-tl"></div>
-        <div class="corner corner-tr"></div>
-        <div class="corner corner-bl"></div>
-        <div class="corner corner-br"></div>
+  <!-- PAGES -->
+  <div id="pages">
+
+    <!-- 🛒 장바구니 탭 (기본 홈) -->
+    <div class="page" id="cart-page">
+      <div id="cart-scroll">
+        <div id="empty-state">
+          <span class="empty-icon">🛒</span>
+          <span class="empty-title">장바구니가 비었어요</span>
+          <span class="empty-sub">아래 스캔 탭을 눌러<br>가격표를 찍어보세요</span>
+          <button class="empty-cta" onclick="switchTab('scan')">📷 스캔하러 가기</button>
+        </div>
+        <div id="cart-list"></div>
       </div>
-      <div id="scan-hint">가격표를 박스 안에 맞추세요</div>
+      <div id="cart-actions">
+        <button id="save-btn" onclick="saveSession()">🗒️ 쇼핑 저장</button>
+        <button id="clear-btn" onclick="clearCart()">초기화</button>
+      </div>
     </div>
-    <div id="no-camera-msg">
-      <span class="camera-icon">📷</span>
-      <span>카메라를 사용할 수 없어요</span>
-      <span style="font-size:11px">아래 수동 추가 버튼을 이용하세요</span>
-    </div>
-  </div>
 
-  <!-- SCAN BUTTON -->
-  <div id="scan-btn-area">
-    <button id="scan-btn" onclick="captureAndScan()">
-      <span id="btn-icon">⚡</span>
-      <span id="btn-text">스캔하기</span>
+    <!-- 📷 스캔 탭 -->
+    <div class="page hidden" id="scan-page">
+      <div id="camera-section">
+        <video id="video" autoplay playsinline muted></video>
+        <div id="flash"></div>
+        <div id="scan-line"></div>
+        <div id="camera-overlay">
+          <div id="scan-box">
+            <div class="corner corner-tl"></div>
+            <div class="corner corner-tr"></div>
+            <div class="corner corner-bl"></div>
+            <div class="corner corner-br"></div>
+          </div>
+          <div id="scan-hint">가격표를 박스 안에 맞추세요</div>
+        </div>
+        <div id="no-camera-msg">
+          <span style="font-size:32px;opacity:0.4;">📷</span>
+          <span>카메라를 사용할 수 없어요</span>
+          <span style="font-size:11px">수동 입력 버튼을 이용하세요</span>
+        </div>
+      </div>
+      <div id="scan-btn-area">
+        <button id="scan-btn" onclick="captureAndScan()">
+          <span id="btn-icon">⚡</span>
+          <span id="btn-text">스캔하기</span>
+        </button>
+        <button id="manual-btn" onclick="openModal()" title="직접 입력">✏️</button>
+      </div>
+    </div>
+
+  </div><!-- /pages -->
+
+  <!-- TAB BAR -->
+  <div id="tab-bar">
+    <button class="tab-btn active" id="tab-cart" onclick="switchTab('cart')">
+      <span class="tab-btn-icon">🛒</span>
+      <span class="tab-btn-label">장바구니</span>
     </button>
-    <button id="manual-btn" onclick="openModal()" title="직접 입력">✏️</button>
+    <button class="tab-btn" id="tab-scan" onclick="switchTab('scan')">
+      <span class="tab-btn-icon">📷</span>
+      <span class="tab-btn-label">스캔</span>
+    </button>
   </div>
 
-  <!-- CART -->
-  <div id="cart-section">
-    <div id="empty-state">
-      <span class="empty-icon">🛒</span>
-      <span>아직 담은 상품이 없어요</span>
-      <span style="font-size:11px; color: #555">카메라로 가격표를 스캔해보세요</span>
-    </div>
-    <div id="cart-list"></div>
-  </div>
+</div><!-- /app -->
 
-  <!-- BOTTOM BAR -->
-  <div id="bottom-bar">
-    <button id="save-btn" onclick="saveSession()">🗒️ 쇼핑 저장</button>
-    <button id="clear-btn" onclick="clearCart()">초기화</button>
-  </div>
-
-</div>
-
-<!-- RESULT BOTTOM SHEET (스캔 결과 확인/수정) -->
+<!-- RESULT BOTTOM SHEET -->
 <div id="result-sheet-backdrop" onclick="backdropClose(event)">
   <div id="result-sheet">
     <div class="sheet-handle"></div>
     <div class="sheet-header">
       <div class="sheet-title">
-        <div class="sheet-dot"></div>
-        인식 결과 확인
+        <div class="sheet-dot"></div>인식 결과 확인
       </div>
       <button id="sheet-close-btn" onclick="discardResult()">✕</button>
     </div>
     <div class="sheet-body">
       <div class="sheet-field-label">상품명</div>
-      <input class="sheet-input" type="text" id="result-name-input"
-             placeholder="상품명" autocomplete="off">
+      <input class="sheet-input" type="text" id="result-name-input" placeholder="상품명" autocomplete="off">
       <div class="sheet-field-label">가격 (원)</div>
-      <input class="sheet-input" type="number" id="result-price-input"
-             placeholder="가격" inputmode="numeric">
+      <input class="sheet-input" type="number" id="result-price-input" placeholder="가격" inputmode="numeric">
     </div>
     <div class="sheet-actions">
       <button id="discard-btn" onclick="discardResult()">✕ 취소</button>
@@ -357,7 +360,7 @@
   </div>
 </div>
 
-<!-- MANUAL INPUT MODAL -->
+<!-- MANUAL MODAL -->
 <div id="modal-backdrop" onclick="closeModalOnBackdrop(event)">
   <div id="modal">
     <h3>직접 입력</h3>
@@ -373,7 +376,6 @@
   </div>
 </div>
 
-<!-- TOAST -->
 <div id="toast"></div>
 <canvas id="canvas"></canvas>
 
@@ -392,6 +394,15 @@ const firebaseConfig = {
 const firebaseApp = initializeApp(firebaseConfig);
 const db = getFirestore(firebaseApp);
 
+const WORKER_URL = 'https://fancy-sound-0453.blackcore-ff6.workers.dev';
+
+// ── STATE ──
+let cart = [];
+let pendingItem = null;
+let stream = null;
+let currentTab = 'cart';
+
+// ── API KEY ──
 function getApiKey() { return localStorage.getItem('scanmart-api-key') || ''; }
 
 function saveApiKey() {
@@ -401,24 +412,39 @@ function saveApiKey() {
   hideSetupScreen();
   showToast('✓ API 키가 저장됐어요');
 }
-
 function showSetupScreen() {
-  const existing = getApiKey();
-  if (existing) document.getElementById('setup-key-input').value = existing;
+  const k = getApiKey();
+  if (k) document.getElementById('setup-key-input').value = k;
   document.getElementById('setup-screen').classList.add('visible');
 }
-
 function hideSetupScreen() { document.getElementById('setup-screen').classList.remove('visible'); }
 
-let cart = [], pendingItem = null, stream = null;
+// ── TAB SWITCHING ──
+function switchTab(tab) {
+  currentTab = tab;
 
+  document.getElementById('cart-page').classList.toggle('hidden', tab !== 'cart');
+  document.getElementById('scan-page').classList.toggle('hidden', tab !== 'scan');
+  document.getElementById('tab-cart').classList.toggle('active', tab === 'cart');
+  document.getElementById('tab-scan').classList.toggle('active', tab === 'scan');
+
+  if (tab === 'scan') {
+    initCamera();
+  } else {
+    stopCamera();
+  }
+}
+
+// ── CAMERA ──
 async function initCamera() {
+  if (stream) return; // 이미 켜져있으면 skip
   try {
     stream = await navigator.mediaDevices.getUserMedia({
       video: { facingMode: { ideal: 'environment' }, width: { ideal: 1280 }, height: { ideal: 720 } },
       audio: false
     });
     document.getElementById('video').srcObject = stream;
+    document.getElementById('scan-btn').disabled = false;
   } catch(e) {
     document.getElementById('no-camera-msg').style.display = 'flex';
     document.getElementById('scan-btn').disabled = true;
@@ -427,9 +453,14 @@ async function initCamera() {
 }
 
 function stopCamera() {
-  if (stream) { stream.getTracks().forEach(t => t.stop()); stream = null; document.getElementById('video').srcObject = null; }
+  if (stream) {
+    stream.getTracks().forEach(t => t.stop());
+    stream = null;
+    document.getElementById('video').srcObject = null;
+  }
 }
 
+// ── SCAN ──
 async function captureAndScan() {
   const video = document.getElementById('video');
   const canvas = document.getElementById('canvas');
@@ -461,7 +492,7 @@ async function captureAndScan() {
     else { showToast('가격표를 인식하지 못했어요. 다시 시도해보세요.'); }
   } catch(e) {
     console.error(e);
-    showToast('오류가 발생했어요: ' + (e.message || '다시 시도해주세요'));
+    showToast('오류: ' + (e.message || '다시 시도해주세요'));
   } finally {
     scanLine.classList.remove('scanning');
     btn.classList.remove('loading');
@@ -470,8 +501,6 @@ async function captureAndScan() {
     btn.disabled = false;
   }
 }
-
-const WORKER_URL = 'https://fancy-sound-0453.blackcore-ff6.workers.dev';
 
 async function callClaudeVision(base64Image, apiKey) {
   const response = await fetch(WORKER_URL, {
@@ -484,27 +513,25 @@ async function callClaudeVision(base64Image, apiKey) {
         role: 'user',
         content: [
           { type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: base64Image } },
-          { type: 'text', text: `이 이미지는 마트 가격표입니다. 상품명과 가격을 추출해주세요.\n반드시 아래 JSON 형식만 반환하세요. 다른 텍스트는 절대 포함하지 마세요:\n{"name": "상품명", "price": 숫자만}\n\n가격은 숫자만 (원 단위, 콤마 없이). 가격표가 없거나 인식 불가하면:\n{"name": null, "price": null}` }
+          { type: 'text', text: `이 이미지는 마트 가격표입니다. 상품명과 가격을 추출해주세요.\n반드시 아래 JSON 형식만 반환하세요:\n{"name": "상품명", "price": 숫자만}\n가격표가 없거나 인식 불가하면: {"name": null, "price": null}` }
         ]
       }]
     })
   });
-
   if (!response.ok) {
     const err = await response.json().catch(() => ({}));
     throw new Error(err.error?.message || `API 오류 (${response.status})`);
   }
-
   const data = await response.json();
   const text = data.content?.[0]?.text?.trim() || '';
   try {
     const parsed = JSON.parse(text.replace(/```json|```/g, '').trim());
     if (!parsed.name || !parsed.price) return null;
     return { name: parsed.name, price: parseInt(parsed.price) };
-  } catch(e) { console.warn('Parse error:', text); return null; }
+  } catch(e) { return null; }
 }
 
-// ── RESULT BOTTOM SHEET ──
+// ── RESULT SHEET ──
 function showResult(name, price) {
   pendingItem = { name, price };
   document.getElementById('result-name-input').value = name;
@@ -524,17 +551,23 @@ function backdropClose(e) {
 
 // ── CART ──
 function addToCart() {
-  if (!pendingItem) return;
   const name = document.getElementById('result-name-input').value.trim();
   const price = parseInt(document.getElementById('result-price-input').value);
   if (!name) { showToast('상품명을 입력해주세요'); return; }
   if (!price || price <= 0) { showToast('올바른 가격을 입력해주세요'); return; }
+
   const existing = cart.find(i => i.name === name);
-  if (existing) { existing.qty++; } else { cart.push({ name, price, qty: 1, id: Date.now() }); }
+  if (existing) { existing.qty++; }
+  else { cart.push({ name, price, qty: 1, id: Date.now(), isNew: true }); }
+
   const savedName = name;
   discardResult();
-  renderCart(); updateTotal();
+  renderCart();
+  updateTotal();
   showToast(`✓ ${savedName} 담았어요`);
+
+  // 장바구니 탭으로 자동 이동
+  setTimeout(() => switchTab('cart'), 300);
 }
 
 function addManual() {
@@ -542,10 +575,16 @@ function addManual() {
   const price = parseInt(document.getElementById('manual-price').value);
   if (!name) { showToast('상품명을 입력해주세요'); return; }
   if (!price || price <= 0) { showToast('올바른 가격을 입력해주세요'); return; }
+
   const existing = cart.find(i => i.name === name);
-  if (existing) { existing.qty++; } else { cart.push({ name, price, qty: 1, id: Date.now() }); }
-  closeModal(); renderCart(); updateTotal();
+  if (existing) { existing.qty++; }
+  else { cart.push({ name, price, qty: 1, id: Date.now(), isNew: true }); }
+
+  closeModal();
+  renderCart();
+  updateTotal();
   showToast(`✓ ${name} 담았어요`);
+  setTimeout(() => switchTab('cart'), 300);
 }
 
 function changeQty(id, delta) {
@@ -556,7 +595,10 @@ function changeQty(id, delta) {
   renderCart(); updateTotal();
 }
 
-function removeItem(id) { cart = cart.filter(i => i.id !== id); renderCart(); updateTotal(); }
+function removeItem(id) {
+  cart = cart.filter(i => i.id !== id);
+  renderCart(); updateTotal();
+}
 
 function clearCart() {
   if (cart.length === 0) return;
@@ -567,53 +609,73 @@ function clearCart() {
 function renderCart() {
   const list = document.getElementById('cart-list');
   const empty = document.getElementById('empty-state');
+  const saveBtn = document.getElementById('save-btn');
+
   if (cart.length === 0) {
-    empty.style.display = 'flex'; list.innerHTML = '';
-    document.getElementById('save-btn').classList.remove('active'); return;
+    empty.style.display = 'flex';
+    list.innerHTML = '';
+    saveBtn.classList.remove('active');
+    return;
   }
   empty.style.display = 'none';
-  document.getElementById('save-btn').classList.add('active');
+  saveBtn.classList.add('active');
+
   list.innerHTML = cart.map(item => `
-    <div class="cart-item" id="item-${item.id}">
-      <div class="item-name">${escHtml(item.name)}</div>
-      <div class="qty-controls">
-        <button class="qty-btn" onclick="changeQty(${item.id}, -1)">−</button>
-        <span class="qty-num">${item.qty}</span>
-        <button class="qty-btn" onclick="changeQty(${item.id}, 1)">+</button>
+    <div class="cart-item${item.isNew ? ' new-item' : ''}" id="item-${item.id}">
+      <div class="item-info">
+        <div class="item-name">${escHtml(item.name)}</div>
+        <div class="item-unit">개당 ₩${item.price.toLocaleString('ko-KR')}</div>
       </div>
-      <div class="item-subtotal">₩${(item.price * item.qty).toLocaleString('ko-KR')}</div>
+      <div class="qty-controls">
+        <button class="qty-btn" onclick="changeQty(${item.id},-1)">−</button>
+        <span class="qty-num">${item.qty}</span>
+        <button class="qty-btn" onclick="changeQty(${item.id},1)">+</button>
+      </div>
+      <div class="item-subtotal">₩${(item.price*item.qty).toLocaleString('ko-KR')}</div>
       <button class="del-btn" onclick="removeItem(${item.id})">✕</button>
     </div>
   `).join('');
+
+  // new 뱃지 2초 후 제거
+  cart.forEach(item => {
+    if (item.isNew) {
+      setTimeout(() => {
+        item.isNew = false;
+        const el = document.getElementById(`item-${item.id}`);
+        if (el) el.classList.remove('new-item');
+      }, 2000);
+    }
+  });
 }
 
 function updateTotal() {
-  const total = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
+  const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
   document.getElementById('total-amount').textContent = '₩' + total.toLocaleString('ko-KR');
 }
 
+// ── SAVE ──
 async function saveSession() {
   if (cart.length === 0) { showToast('담은 상품이 없어요'); return; }
   const btn = document.getElementById('save-btn');
   btn.textContent = '⏳ 저장 중...'; btn.disabled = true;
-  const total = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
+  const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
   const session = {
     date: new Date().toLocaleDateString('ko-KR'),
-    time: new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }),
-    total, items: cart.map(i => ({ name: i.name, price: i.price, qty: i.qty })),
+    time: new Date().toLocaleTimeString('ko-KR', {hour:'2-digit',minute:'2-digit'}),
+    total, items: cart.map(i => ({name:i.name,price:i.price,qty:i.qty})),
     createdAt: serverTimestamp()
   };
   try {
-    await addDoc(collection(db, 'shopping_sessions'), session);
+    await addDoc(collection(db,'shopping_sessions'), session);
     showToast('☁️ 저장 완료! 합계 ₩' + total.toLocaleString('ko-KR'));
     btn.classList.remove('active');
   } catch(e) {
-    console.error('Firestore 저장 실패:', e);
     showToast('저장 실패: ' + (e.message || '다시 시도해주세요'));
     btn.classList.add('active');
   } finally { btn.textContent = '🗒️ 쇼핑 저장'; btn.disabled = false; }
 }
 
+// ── MODAL ──
 function openModal() {
   document.getElementById('modal-backdrop').classList.add('open');
   setTimeout(() => document.getElementById('manual-name').focus(), 100);
@@ -627,21 +689,27 @@ function closeModalOnBackdrop(e) {
   if (e.target === document.getElementById('modal-backdrop')) closeModal();
 }
 
+// ── TOAST ──
 function showToast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg; t.classList.add('show');
-  clearTimeout(t._timeout);
-  t._timeout = setTimeout(() => t.classList.remove('show'), 2500);
+  clearTimeout(t._to);
+  t._to = setTimeout(() => t.classList.remove('show'), 2500);
 }
 
-function escHtml(str) {
-  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-}
+function escHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+// ── VISIBILITY (화면 꺼지면 카메라 OFF) ──
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) { stopCamera(); }
+  else if (currentTab === 'scan') { initCamera(); }
+});
 
 // ── GLOBALS ──
 window.saveApiKey = saveApiKey;
 window.showSetupScreen = showSetupScreen;
 window.hideSetupScreen = hideSetupScreen;
+window.switchTab = switchTab;
 window.captureAndScan = captureAndScan;
 window.addToCart = addToCart;
 window.discardResult = discardResult;
@@ -655,13 +723,9 @@ window.openModal = openModal;
 window.closeModal = closeModal;
 window.closeModalOnBackdrop = closeModalOnBackdrop;
 
-document.addEventListener('visibilitychange', () => {
-  if (document.hidden) { stopCamera(); } else { initCamera(); }
-});
-
+// ── INIT ──
 if (!getApiKey()) showSetupScreen();
-initCamera();
-renderCart();
+renderCart();  // 카메라는 스캔 탭 눌러야 켜짐!
 
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js').catch(e => console.warn('SW:', e));
