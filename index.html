@@ -55,704 +55,195 @@
     justify-content: space-between;
     z-index: 10;
   }
+  #logo { font-size: 18px; font-weight: 800; letter-spacing: -0.5px; color: var(--accent); }
+  #total-display { text-align: right; }
+  #total-label { font-size: 11px; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase; }
+  #total-amount { font-family: 'Share Tech Mono', monospace; font-size: 24px; color: var(--accent); line-height: 1; }
 
-  #logo {
-    font-size: 18px;
-    font-weight: 800;
-    letter-spacing: -0.5px;
-    color: var(--accent);
-  }
-
-  #total-display {
-    text-align: right;
-  }
-
-  #total-label {
-    font-size: 11px;
-    color: var(--text-muted);
-    letter-spacing: 1px;
-    text-transform: uppercase;
-  }
-
-  #total-amount {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 24px;
-    color: var(--accent);
-    line-height: 1;
-  }
-
-  /* ── CAMERA AREA ── */
-  #camera-section {
-    flex-shrink: 0;
-    position: relative;
-    height: 260px;
-    background: #000;
-    overflow: hidden;
-  }
-
-  #video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-  }
-
-  #camera-overlay {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-  }
-
-  #scan-box {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 75%;
-    height: 70%;
-    border: none;
-  }
-
-  .corner {
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    border-color: var(--accent);
-    border-style: solid;
-    border-width: 0;
-  }
+  /* ── CAMERA ── */
+  #camera-section { flex-shrink: 0; position: relative; height: 260px; background: #000; overflow: hidden; }
+  #video { width: 100%; height: 100%; object-fit: cover; display: block; }
+  #camera-overlay { position: absolute; inset: 0; pointer-events: none; }
+  #scan-box { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 75%; height: 70%; }
+  .corner { position: absolute; width: 20px; height: 20px; border-color: var(--accent); border-style: solid; border-width: 0; }
   .corner-tl { top: 0; left: 0; border-top-width: 2px; border-left-width: 2px; }
   .corner-tr { top: 0; right: 0; border-top-width: 2px; border-right-width: 2px; }
   .corner-bl { bottom: 0; left: 0; border-bottom-width: 2px; border-left-width: 2px; }
   .corner-br { bottom: 0; right: 0; border-bottom-width: 2px; border-right-width: 2px; }
-
-  #scan-hint {
-    position: absolute;
-    bottom: 10px;
-    left: 0; right: 0;
-    text-align: center;
-    font-size: 12px;
-    color: rgba(255,255,255,0.6);
-    letter-spacing: 0.5px;
-  }
-
-  #no-camera-msg {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: var(--text-muted);
-    font-size: 13px;
-    gap: 8px;
-    display: none;
-  }
-
-  .camera-icon {
-    font-size: 32px;
-    opacity: 0.4;
-  }
-
-  /* scanning line animation */
-  #scan-line {
-    position: absolute;
-    left: 12.5%;
-    width: 75%;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--accent), transparent);
-    top: 15%;
-    opacity: 0;
-    transition: opacity 0.3s;
-  }
-
-  #scan-line.scanning {
-    opacity: 1;
-    animation: scanMove 1.2s ease-in-out infinite;
-  }
-
-  @keyframes scanMove {
-    0% { top: 15%; }
-    50% { top: 85%; }
-    100% { top: 15%; }
-  }
+  #scan-hint { position: absolute; bottom: 10px; left: 0; right: 0; text-align: center; font-size: 12px; color: rgba(255,255,255,0.6); letter-spacing: 0.5px; }
+  #no-camera-msg { position: absolute; inset: 0; display: none; flex-direction: column; align-items: center; justify-content: center; color: var(--text-muted); font-size: 13px; gap: 8px; }
+  .camera-icon { font-size: 32px; opacity: 0.4; }
+  #scan-line { position: absolute; left: 12.5%; width: 75%; height: 1px; background: linear-gradient(90deg, transparent, var(--accent), transparent); top: 15%; opacity: 0; transition: opacity 0.3s; }
+  #scan-line.scanning { opacity: 1; animation: scanMove 1.2s ease-in-out infinite; }
+  @keyframes scanMove { 0% { top: 15%; } 50% { top: 85%; } 100% { top: 15%; } }
 
   /* ── SCAN BUTTON ── */
-  #scan-btn-area {
-    flex-shrink: 0;
-    padding: 12px 16px;
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    gap: 10px;
-    align-items: center;
-  }
-
-  #scan-btn {
-    flex: 1;
-    height: 52px;
-    background: var(--accent);
-    color: #000;
-    border: none;
-    border-radius: 8px;
-    font-family: 'Nanum Gothic', sans-serif;
-    font-size: 16px;
-    font-weight: 800;
-    cursor: pointer;
-    transition: transform 0.1s, background 0.2s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    letter-spacing: -0.3px;
-  }
-
+  #scan-btn-area { flex-shrink: 0; padding: 12px 16px; background: var(--surface); border-bottom: 1px solid var(--border); display: flex; gap: 10px; align-items: center; }
+  #scan-btn { flex: 1; height: 52px; background: var(--accent); color: #000; border: none; border-radius: 8px; font-family: 'Nanum Gothic', sans-serif; font-size: 16px; font-weight: 800; cursor: pointer; transition: transform 0.1s, background 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; letter-spacing: -0.3px; }
   #scan-btn:active { transform: scale(0.97); }
   #scan-btn:disabled { background: #333; color: #666; cursor: not-allowed; }
   #scan-btn.loading { background: #005533; color: var(--accent); }
-
-  #manual-btn {
-    height: 52px;
-    width: 52px;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    color: var(--text-muted);
-    font-size: 20px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: border-color 0.2s, color 0.2s;
-  }
-
+  #manual-btn { height: 52px; width: 52px; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; color: var(--text-muted); font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: border-color 0.2s, color 0.2s; }
   #manual-btn:active { border-color: var(--accent); color: var(--accent); }
 
-  /* ── RESULT PREVIEW ── */
-  #result-preview {
-    display: none;
-    flex-shrink: 0;
-    margin: 0 16px;
-    background: var(--surface2);
-    border: 1px solid var(--accent);
-    border-radius: 8px;
-    padding: 12px 14px;
-    position: relative;
-  }
-
-  #result-preview.visible { display: flex; gap: 12px; align-items: center; margin-top: 12px; }
-
-  .result-info { flex: 1; min-width: 0; }
-
-  #result-name {
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--text);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  #result-price {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 20px;
-    color: var(--accent);
-    margin-top: 2px;
-  }
-
-  #add-btn {
-    height: 44px;
-    padding: 0 16px;
-    background: var(--accent);
-    color: #000;
-    border: none;
-    border-radius: 6px;
-    font-family: 'Nanum Gothic', sans-serif;
-    font-size: 15px;
-    font-weight: 800;
-    cursor: pointer;
-    white-space: nowrap;
-    transition: transform 0.1s;
-  }
-
-  #add-btn:active { transform: scale(0.95); }
-
-  #discard-btn {
-    position: absolute;
-    top: -8px;
-    right: -8px;
-    width: 22px;
-    height: 22px;
-    border-radius: 50%;
-    background: var(--danger);
-    border: none;
-    color: #fff;
-    font-size: 12px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    line-height: 1;
-  }
-
-  /* ── CART LIST ── */
-  #cart-section {
-    flex: 1;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    padding: 12px 16px 16px;
-  }
-
+  /* ── CART ── */
+  #cart-section { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 12px 16px 16px; }
   #cart-section::-webkit-scrollbar { width: 3px; }
-  #cart-section::-webkit-scrollbar-track { background: transparent; }
   #cart-section::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
-
-  #empty-state {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: var(--text-muted);
-    gap: 10px;
-    font-size: 13px;
-    padding-bottom: 40px;
-  }
-
+  #empty-state { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-muted); gap: 10px; font-size: 13px; padding-bottom: 40px; }
   .empty-icon { font-size: 40px; opacity: 0.3; }
-
   #cart-list { display: flex; flex-direction: column; gap: 8px; }
-
-  .cart-item {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 10px 12px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    animation: slideIn 0.2s ease;
-  }
-
-  @keyframes slideIn {
-    from { opacity: 0; transform: translateY(-8px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .item-name {
-    flex: 1;
-    font-size: 14px;
-    font-weight: 700;
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .item-price {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 14px;
-    color: var(--text-muted);
-    white-space: nowrap;
-  }
-
-  .qty-controls {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    flex-shrink: 0;
-  }
-
-  .qty-btn {
-    width: 26px;
-    height: 26px;
-    border-radius: 4px;
-    border: 1px solid var(--border);
-    background: var(--surface2);
-    color: var(--text);
-    font-size: 14px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: border-color 0.15s;
-  }
-
+  .cart-item { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; display: flex; align-items: center; gap: 10px; animation: slideIn 0.2s ease; }
+  @keyframes slideIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+  .item-name { flex: 1; font-size: 14px; font-weight: 700; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .qty-controls { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+  .qty-btn { width: 26px; height: 26px; border-radius: 4px; border: 1px solid var(--border); background: var(--surface2); color: var(--text); font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: border-color 0.15s; }
   .qty-btn:active { border-color: var(--accent); }
-
-  .qty-num {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 14px;
-    min-width: 18px;
-    text-align: center;
-  }
-
-  .item-subtotal {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 15px;
-    color: var(--accent);
-    white-space: nowrap;
-    min-width: 60px;
-    text-align: right;
-  }
-
-  .del-btn {
-    width: 26px;
-    height: 26px;
-    border-radius: 4px;
-    border: none;
-    background: transparent;
-    color: #444;
-    font-size: 14px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: color 0.15s;
-  }
-
+  .qty-num { font-family: 'Share Tech Mono', monospace; font-size: 14px; min-width: 18px; text-align: center; }
+  .item-subtotal { font-family: 'Share Tech Mono', monospace; font-size: 15px; color: var(--accent); white-space: nowrap; min-width: 60px; text-align: right; }
+  .del-btn { width: 26px; height: 26px; border-radius: 4px; border: none; background: transparent; color: #444; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: color 0.15s; }
   .del-btn:active { color: var(--danger); }
 
   /* ── BOTTOM BAR ── */
-  #bottom-bar {
-    flex-shrink: 0;
-    background: var(--surface);
+  #bottom-bar { flex-shrink: 0; background: var(--surface); border-top: 1px solid var(--border); padding: 10px 16px; padding-bottom: max(10px, env(safe-area-inset-bottom)); display: flex; gap: 8px; }
+  #save-btn { flex: 1; height: 46px; background: var(--surface2); color: var(--text-muted); border: 1px solid var(--border); border-radius: 8px; font-family: 'Nanum Gothic', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; transition: border-color 0.2s, color 0.2s; }
+  #save-btn.active { border-color: var(--accent-dim); color: var(--accent-dim); }
+  #clear-btn { height: 46px; padding: 0 16px; background: transparent; color: var(--danger); border: 1px solid #331010; border-radius: 8px; font-family: 'Nanum Gothic', sans-serif; font-size: 13px; font-weight: 700; cursor: pointer; transition: border-color 0.2s; }
+  #clear-btn:active { border-color: var(--danger); }
+
+  /* ── MANUAL MODAL ── */
+  #modal-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 100; align-items: flex-end; }
+  #modal-backdrop.open { display: flex; }
+  #modal { width: 100%; max-width: 480px; margin: 0 auto; background: var(--surface); border-top: 1px solid var(--border); border-radius: 16px 16px 0 0; padding: 20px 16px 32px; }
+  #modal h3 { font-size: 15px; font-weight: 800; margin-bottom: 16px; color: var(--text-muted); letter-spacing: 0.5px; }
+  .modal-field { margin-bottom: 12px; }
+  .modal-field label { display: block; font-size: 11px; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; }
+  .modal-field input { width: 100%; height: 46px; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-family: 'Nanum Gothic', sans-serif; font-size: 16px; padding: 0 12px; outline: none; transition: border-color 0.2s; }
+  .modal-field input:focus { border-color: var(--accent); }
+  #modal-add-btn { width: 100%; height: 50px; background: var(--accent); color: #000; border: none; border-radius: 8px; font-family: 'Nanum Gothic', sans-serif; font-size: 16px; font-weight: 800; cursor: pointer; margin-top: 4px; }
+
+  /* ── TOAST ── */
+  #toast { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--surface2); border: 1px solid var(--border); color: var(--text); padding: 10px 18px; border-radius: 20px; font-size: 13px; font-weight: 700; opacity: 0; transition: opacity 0.25s, transform 0.25s; z-index: 200; white-space: nowrap; pointer-events: none; }
+  #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* ── FLASH ── */
+  #flash { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; z-index: 5; transition: opacity 0.05s; }
+  #flash.on { opacity: 0.6; }
+  canvas { display: none; }
+
+  /* ── SETUP SCREEN ── */
+  #setup-screen { display: none; position: fixed; inset: 0; background: var(--bg); z-index: 999; flex-direction: column; align-items: center; justify-content: center; padding: 32px 24px; }
+  #setup-screen.visible { display: flex; }
+  .setup-logo { font-size: 40px; margin-bottom: 8px; }
+  .setup-title { font-size: 22px; font-weight: 800; color: var(--accent); margin-bottom: 8px; letter-spacing: -0.5px; }
+  .setup-desc { font-size: 13px; color: var(--text-muted); text-align: center; line-height: 1.7; margin-bottom: 32px; }
+  .setup-desc a { color: var(--accent-dim); text-decoration: none; }
+  .setup-field { width: 100%; max-width: 360px; margin-bottom: 12px; }
+  .setup-field label { display: block; font-size: 11px; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; }
+  .setup-field input { width: 100%; height: 50px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-family: 'Share Tech Mono', monospace; font-size: 13px; padding: 0 14px; outline: none; transition: border-color 0.2s; }
+  .setup-field input:focus { border-color: var(--accent); }
+  #setup-save-btn { width: 100%; max-width: 360px; height: 52px; background: var(--accent); color: #000; border: none; border-radius: 8px; font-family: 'Nanum Gothic', sans-serif; font-size: 16px; font-weight: 800; cursor: pointer; margin-top: 4px; }
+  .setup-hint { margin-top: 20px; font-size: 11px; color: #444; text-align: center; line-height: 1.8; }
+  #settings-btn { position: fixed; bottom: 80px; right: 16px; width: 36px; height: 36px; border-radius: 50%; background: var(--surface2); border: 1px solid var(--border); color: var(--text-muted); font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 50; transition: border-color 0.2s; }
+  #settings-btn:active { border-color: var(--accent); }
+
+  /* ── RESULT BOTTOM SHEET ── */
+  #result-sheet-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.65);
+    z-index: 90;
+    align-items: flex-end;
+    justify-content: center;
+  }
+  #result-sheet-backdrop.open { display: flex; }
+
+  #result-sheet {
+    width: 100%;
+    max-width: 480px;
+    background: #1a1a1a;
     border-top: 1px solid var(--border);
-    padding: 10px 16px;
-    padding-bottom: max(10px, env(safe-area-inset-bottom));
+    border-radius: 20px 20px 0 0;
+    padding-bottom: max(16px, env(safe-area-inset-bottom));
+    animation: sheetUp 0.28s cubic-bezier(.32,1.2,.45,1);
+  }
+  @keyframes sheetUp { from { transform: translateY(60px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+  .sheet-handle { width: 36px; height: 4px; background: #333; border-radius: 2px; margin: 12px auto 0; }
+
+  .sheet-header {
     display: flex;
-    gap: 8px;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .sheet-title { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 800; color: var(--accent); }
+  .sheet-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); animation: dotPulse 1.4s ease infinite; flex-shrink: 0; }
+  @keyframes dotPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.25; } }
+  #sheet-close-btn { width: 30px; height: 30px; border-radius: 50%; background: var(--surface2); border: 1px solid var(--border); color: var(--text-muted); font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: border-color 0.2s, color 0.2s; }
+  #sheet-close-btn:active { border-color: var(--danger); color: var(--danger); }
+
+  .sheet-body { padding: 18px 16px 0; }
+  .sheet-field-label { font-size: 10px; color: var(--text-muted); letter-spacing: 1.2px; text-transform: uppercase; margin-bottom: 7px; }
+
+  .sheet-input {
+    width: 100%;
+    height: 52px;
+    background: var(--surface2);
+    border: 1.5px solid var(--accent);
+    border-radius: 10px;
+    color: var(--text);
+    font-family: 'Nanum Gothic', sans-serif;
+    font-size: 17px;
+    padding: 0 14px;
+    outline: none;
+    margin-bottom: 16px;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .sheet-input:focus { border-color: #00ffaa; background: #0d1a14; }
+
+  #result-price-input {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 24px;
+    color: var(--accent);
+    letter-spacing: 0.5px;
   }
 
-  #save-btn {
+  .sheet-actions { display: flex; gap: 10px; padding: 4px 16px 0; }
+
+  #discard-btn {
     flex: 1;
-    height: 46px;
+    height: 54px;
     background: var(--surface2);
-    color: var(--text-muted);
     border: 1px solid var(--border);
-    border-radius: 8px;
+    border-radius: 10px;
+    color: var(--text-muted);
     font-family: 'Nanum Gothic', sans-serif;
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 700;
     cursor: pointer;
     transition: border-color 0.2s, color 0.2s;
   }
-
-  #save-btn.active {
-    border-color: var(--accent-dim);
-    color: var(--accent-dim);
-  }
-
-  #clear-btn {
-    height: 46px;
-    padding: 0 16px;
-    background: transparent;
-    color: var(--danger);
-    border: 1px solid #331010;
-    border-radius: 8px;
-    font-family: 'Nanum Gothic', sans-serif;
-    font-size: 13px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: border-color 0.2s;
-  }
-
-  #clear-btn:active { border-color: var(--danger); }
-
-  /* ── MANUAL INPUT MODAL ── */
-  #modal-backdrop {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.7);
-    z-index: 100;
-    align-items: flex-end;
-  }
-
-  #modal-backdrop.open { display: flex; }
-
-  #modal {
-    width: 100%;
-    max-width: 480px;
-    margin: 0 auto;
-    background: var(--surface);
-    border-top: 1px solid var(--border);
-    border-radius: 16px 16px 0 0;
-    padding: 20px 16px 32px;
-  }
-
-  #modal h3 {
-    font-size: 15px;
-    font-weight: 800;
-    margin-bottom: 16px;
-    color: var(--text-muted);
-    letter-spacing: 0.5px;
-  }
-
-  .modal-field { margin-bottom: 12px; }
-
-  .modal-field label {
-    display: block;
-    font-size: 11px;
-    color: var(--text-muted);
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    margin-bottom: 6px;
-  }
-
-  .modal-field input {
-    width: 100%;
-    height: 46px;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    color: var(--text);
-    font-family: 'Nanum Gothic', sans-serif;
-    font-size: 16px;
-    padding: 0 12px;
-    outline: none;
-    transition: border-color 0.2s;
-  }
-
-  .modal-field input:focus { border-color: var(--accent); }
-
-  #modal-add-btn {
-    width: 100%;
-    height: 50px;
-    background: var(--accent);
-    color: #000;
-    border: none;
-    border-radius: 8px;
-    font-family: 'Nanum Gothic', sans-serif;
-    font-size: 16px;
-    font-weight: 800;
-    cursor: pointer;
-    margin-top: 4px;
-    transition: opacity 0.2s;
-  }
-
-  /* ── TOAST ── */
-  #toast {
-    position: fixed;
-    bottom: 90px;
-    left: 50%;
-    transform: translateX(-50%) translateY(20px);
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    color: var(--text);
-    padding: 10px 18px;
-    border-radius: 20px;
-    font-size: 13px;
-    font-weight: 700;
-    opacity: 0;
-    transition: opacity 0.25s, transform 0.25s;
-    z-index: 200;
-    white-space: nowrap;
-    pointer-events: none;
-  }
-
-  #toast.show {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
-
-  /* ── FLASH ── */
-  #flash {
-    position: absolute;
-    inset: 0;
-    background: #fff;
-    opacity: 0;
-    pointer-events: none;
-    z-index: 5;
-    transition: opacity 0.05s;
-  }
-
-  #flash.on { opacity: 0.6; }
-
-  canvas { display: none; }
-
-  /* ── API KEY SETUP SCREEN ── */
-  #setup-screen {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: var(--bg);
-    z-index: 999;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 32px 24px;
-  }
-
-  #setup-screen.visible { display: flex; }
-
-  .setup-logo {
-    font-size: 40px;
-    margin-bottom: 8px;
-  }
-
-  .setup-title {
-    font-size: 22px;
-    font-weight: 800;
-    color: var(--accent);
-    margin-bottom: 8px;
-    letter-spacing: -0.5px;
-  }
-
-  .setup-desc {
-    font-size: 13px;
-    color: var(--text-muted);
-    text-align: center;
-    line-height: 1.7;
-    margin-bottom: 32px;
-  }
-
-  .setup-desc a {
-    color: var(--accent-dim);
-    text-decoration: none;
-  }
-
-  .setup-field {
-    width: 100%;
-    max-width: 360px;
-    margin-bottom: 12px;
-  }
-
-  .setup-field label {
-    display: block;
-    font-size: 11px;
-    color: var(--text-muted);
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    margin-bottom: 6px;
-  }
-
-  .setup-field input {
-    width: 100%;
-    height: 50px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    color: var(--text);
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 13px;
-    padding: 0 14px;
-    outline: none;
-    transition: border-color 0.2s;
-  }
-
-  .setup-field input:focus { border-color: var(--accent); }
-
-  #setup-save-btn {
-    width: 100%;
-    max-width: 360px;
-    height: 52px;
-    background: var(--accent);
-    color: #000;
-    border: none;
-    border-radius: 8px;
-    font-family: 'Nanum Gothic', sans-serif;
-    font-size: 16px;
-    font-weight: 800;
-    cursor: pointer;
-    margin-top: 4px;
-    transition: opacity 0.2s;
-  }
-
-  .setup-hint {
-    margin-top: 20px;
-    font-size: 11px;
-    color: #444;
-    text-align: center;
-    line-height: 1.8;
-  }
-
-  #settings-btn {
-    position: fixed;
-    bottom: 80px;
-    right: 16px;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    color: var(--text-muted);
-    font-size: 16px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 50;
-    transition: border-color 0.2s;
-  }
-
-  #settings-btn:active { border-color: var(--accent); }
-
-  /* ── RESULT EDIT INPUTS ── */
-  .result-edit {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    flex: 1;
-    min-width: 0;
-  }
-
-  .result-edit input {
-    width: 100%;
-    background: var(--surface2);
-    border: 1px solid var(--accent);
-    border-radius: 6px;
-    color: var(--text);
-    font-family: 'Nanum Gothic', sans-serif;
-    font-size: 14px;
-    padding: 6px 10px;
-    outline: none;
-  }
-
-  .result-edit input:first-child {
-    font-weight: 700;
-  }
-
-  .result-edit input[type="number"] {
-    font-family: 'Share Tech Mono', monospace;
-    color: var(--accent);
-  }
-
-  .result-edit-label {
-    font-size: 11px;
-    color: var(--accent);
-    letter-spacing: 0.05em;
-    margin-bottom: 6px;
-    opacity: 0.8;
-  }
-
-  .result-actions {
-    display: flex;
-    gap: 8px;
-    margin-top: 8px;
-  }
-
-  .result-actions button {
-    flex: 1;
-    padding: 10px;
-    border-radius: 8px;
-    border: none;
-    font-family: 'Nanum Gothic', sans-serif;
-    font-size: 14px;
-    font-weight: 700;
-    cursor: pointer;
-  }
+  #discard-btn:active { border-color: var(--danger); color: var(--danger); }
 
   #add-btn {
+    flex: 2;
+    height: 54px;
     background: var(--accent);
+    border: none;
+    border-radius: 10px;
     color: #000;
+    font-family: 'Nanum Gothic', sans-serif;
+    font-size: 16px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: transform 0.1s;
   }
+  #add-btn:active { transform: scale(0.97); }
 
-  #discard-btn {
-    background: var(--surface2);
-    color: var(--text-muted);
-    border: 1px solid var(--border) !important;
-  }
+  .sheet-note { font-size: 11px; color: #555; text-align: center; padding: 10px 16px 0; }
 </style>
 </head>
 <body>
@@ -777,7 +268,7 @@
   </div>
 </div>
 
-<!-- SETTINGS BUTTON (키 재설정용) -->
+<!-- SETTINGS BUTTON -->
 <button id="settings-btn" onclick="showSetupScreen()" title="API 키 재설정">⚙️</button>
 
 <div id="app">
@@ -821,19 +312,6 @@
     <button id="manual-btn" onclick="openModal()" title="직접 입력">✏️</button>
   </div>
 
-  <!-- RESULT PREVIEW -->
-  <div id="result-preview">
-    <div class="result-edit-label">✏️ 인식 결과 — 수정 후 담기</div>
-    <div class="result-edit">
-      <input type="text" id="result-name-input" placeholder="상품명" autocomplete="off">
-      <input type="number" id="result-price-input" placeholder="가격" inputmode="numeric">
-    </div>
-    <div class="result-actions">
-      <button id="discard-btn" onclick="discardResult()">✕ 취소</button>
-      <button id="add-btn" onclick="addToCart()">✓ 담기</button>
-    </div>
-  </div>
-
   <!-- CART -->
   <div id="cart-section">
     <div id="empty-state">
@@ -850,6 +328,33 @@
     <button id="clear-btn" onclick="clearCart()">초기화</button>
   </div>
 
+</div>
+
+<!-- RESULT BOTTOM SHEET (스캔 결과 확인/수정) -->
+<div id="result-sheet-backdrop" onclick="backdropClose(event)">
+  <div id="result-sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-header">
+      <div class="sheet-title">
+        <div class="sheet-dot"></div>
+        인식 결과 확인
+      </div>
+      <button id="sheet-close-btn" onclick="discardResult()">✕</button>
+    </div>
+    <div class="sheet-body">
+      <div class="sheet-field-label">상품명</div>
+      <input class="sheet-input" type="text" id="result-name-input"
+             placeholder="상품명" autocomplete="off">
+      <div class="sheet-field-label">가격 (원)</div>
+      <input class="sheet-input" type="number" id="result-price-input"
+             placeholder="가격" inputmode="numeric">
+    </div>
+    <div class="sheet-actions">
+      <button id="discard-btn" onclick="discardResult()">✕ 취소</button>
+      <button id="add-btn" onclick="addToCart()">✓ 장바구니 담기</button>
+    </div>
+    <div class="sheet-note">수정 후 담기를 눌러주세요</div>
+  </div>
 </div>
 
 <!-- MANUAL INPUT MODAL -->
@@ -870,8 +375,6 @@
 
 <!-- TOAST -->
 <div id="toast"></div>
-
-<!-- CANVAS FOR CAPTURE -->
 <canvas id="canvas"></canvas>
 
 <script type="module">
@@ -889,17 +392,11 @@ const firebaseConfig = {
 const firebaseApp = initializeApp(firebaseConfig);
 const db = getFirestore(firebaseApp);
 
-// ── API KEY (localStorage) ──
-function getApiKey() {
-  return localStorage.getItem('scanmart-api-key') || '';
-}
+function getApiKey() { return localStorage.getItem('scanmart-api-key') || ''; }
 
 function saveApiKey() {
   const key = document.getElementById('setup-key-input').value.trim();
-  if (!key.startsWith('sk-ant-')) {
-    showToast('올바른 API 키 형식이 아니에요 (sk-ant-로 시작)');
-    return;
-  }
+  if (!key.startsWith('sk-ant-')) { showToast('올바른 API 키 형식이 아니에요 (sk-ant-로 시작)'); return; }
   localStorage.setItem('scanmart-api-key', key);
   hideSetupScreen();
   showToast('✓ API 키가 저장됐어요');
@@ -911,23 +408,17 @@ function showSetupScreen() {
   document.getElementById('setup-screen').classList.add('visible');
 }
 
-function hideSetupScreen() {
-  document.getElementById('setup-screen').classList.remove('visible');
-}
+function hideSetupScreen() { document.getElementById('setup-screen').classList.remove('visible'); }
 
-let cart = [];
-let pendingItem = null;
-let stream = null;
+let cart = [], pendingItem = null, stream = null;
 
-// ── CAMERA INIT ──
 async function initCamera() {
   try {
     stream = await navigator.mediaDevices.getUserMedia({
       video: { facingMode: { ideal: 'environment' }, width: { ideal: 1280 }, height: { ideal: 720 } },
       audio: false
     });
-    const video = document.getElementById('video');
-    video.srcObject = stream;
+    document.getElementById('video').srcObject = stream;
   } catch(e) {
     document.getElementById('no-camera-msg').style.display = 'flex';
     document.getElementById('scan-btn').disabled = true;
@@ -935,44 +426,39 @@ async function initCamera() {
   }
 }
 
-// ── CAPTURE & SCAN ──
+function stopCamera() {
+  if (stream) { stream.getTracks().forEach(t => t.stop()); stream = null; document.getElementById('video').srcObject = null; }
+}
+
 async function captureAndScan() {
   const video = document.getElementById('video');
   const canvas = document.getElementById('canvas');
-  const flash = document.getElementById('flash');
-  const scanLine = document.getElementById('scan-line');
   const btn = document.getElementById('scan-btn');
 
   if (!stream || !video.videoWidth) { showToast('카메라가 준비되지 않았어요'); return; }
-
   const apiKey = getApiKey();
   if (!apiKey) { showSetupScreen(); return; }
 
-  // flash
+  const flash = document.getElementById('flash');
   flash.classList.add('on');
   setTimeout(() => flash.classList.remove('on'), 150);
 
-  // scanning animation
+  const scanLine = document.getElementById('scan-line');
   scanLine.classList.add('scanning');
   btn.classList.add('loading');
   document.getElementById('btn-icon').textContent = '⏳';
   document.getElementById('btn-text').textContent = '분석 중...';
   btn.disabled = true;
 
-  // capture frame
   canvas.width = video.videoWidth;
   canvas.height = video.videoHeight;
-  const ctx = canvas.getContext('2d');
-  ctx.drawImage(video, 0, 0);
+  canvas.getContext('2d').drawImage(video, 0, 0);
   const base64 = canvas.toDataURL('image/jpeg', 0.85).split(',')[1];
 
   try {
     const result = await callClaudeVision(base64, apiKey);
-    if (result) {
-      showResult(result.name, result.price);
-    } else {
-      showToast('가격표를 인식하지 못했어요. 다시 시도해보세요.');
-    }
+    if (result) { showResult(result.name, result.price); }
+    else { showToast('가격표를 인식하지 못했어요. 다시 시도해보세요.'); }
   } catch(e) {
     console.error(e);
     showToast('오류가 발생했어요: ' + (e.message || '다시 시도해주세요'));
@@ -985,7 +471,6 @@ async function captureAndScan() {
   }
 }
 
-// ── CLAUDE VISION API ──
 const WORKER_URL = 'https://fancy-sound-0453.blackcore-ff6.workers.dev';
 
 async function callClaudeVision(base64Image, apiKey) {
@@ -998,19 +483,8 @@ async function callClaudeVision(base64Image, apiKey) {
       messages: [{
         role: 'user',
         content: [
-          {
-            type: 'image',
-            source: { type: 'base64', media_type: 'image/jpeg', data: base64Image }
-          },
-          {
-            type: 'text',
-            text: `이 이미지는 마트 가격표입니다. 상품명과 가격을 추출해주세요.
-반드시 아래 JSON 형식만 반환하세요. 다른 텍스트는 절대 포함하지 마세요:
-{"name": "상품명", "price": 숫자만}
-
-가격은 숫자만 (원 단위, 콤마 없이). 가격표가 없거나 인식 불가하면:
-{"name": null, "price": null}`
-          }
+          { type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: base64Image } },
+          { type: 'text', text: `이 이미지는 마트 가격표입니다. 상품명과 가격을 추출해주세요.\n반드시 아래 JSON 형식만 반환하세요. 다른 텍스트는 절대 포함하지 마세요:\n{"name": "상품명", "price": 숫자만}\n\n가격은 숫자만 (원 단위, 콤마 없이). 가격표가 없거나 인식 불가하면:\n{"name": null, "price": null}` }
         ]
       }]
     })
@@ -1023,75 +497,54 @@ async function callClaudeVision(base64Image, apiKey) {
 
   const data = await response.json();
   const text = data.content?.[0]?.text?.trim() || '';
-
   try {
-    const clean = text.replace(/```json|```/g, '').trim();
-    const parsed = JSON.parse(clean);
+    const parsed = JSON.parse(text.replace(/```json|```/g, '').trim());
     if (!parsed.name || !parsed.price) return null;
     return { name: parsed.name, price: parseInt(parsed.price) };
-  } catch(e) {
-    console.warn('Parse error:', text);
-    return null;
-  }
+  } catch(e) { console.warn('Parse error:', text); return null; }
 }
 
-// ── RESULT PREVIEW ──
+// ── RESULT BOTTOM SHEET ──
 function showResult(name, price) {
   pendingItem = { name, price };
   document.getElementById('result-name-input').value = name;
   document.getElementById('result-price-input').value = price;
-  document.getElementById('result-preview').classList.add('visible');
-  setTimeout(() => document.getElementById('result-name-input').focus(), 100);
+  document.getElementById('result-sheet-backdrop').classList.add('open');
+  setTimeout(() => document.getElementById('result-name-input').focus(), 200);
 }
 
 function discardResult() {
   pendingItem = null;
-  document.getElementById('result-preview').classList.remove('visible');
+  document.getElementById('result-sheet-backdrop').classList.remove('open');
+}
+
+function backdropClose(e) {
+  if (e.target === document.getElementById('result-sheet-backdrop')) discardResult();
 }
 
 // ── CART ──
 function addToCart() {
   if (!pendingItem) return;
-
-  // 사용자가 수정한 값 반영
   const name = document.getElementById('result-name-input').value.trim();
   const price = parseInt(document.getElementById('result-price-input').value);
-
   if (!name) { showToast('상품명을 입력해주세요'); return; }
   if (!price || price <= 0) { showToast('올바른 가격을 입력해주세요'); return; }
-
-  const finalItem = { name, price };
   const existing = cart.find(i => i.name === name);
-  if (existing) {
-    existing.qty++;
-  } else {
-    cart.push({ ...finalItem, qty: 1, id: Date.now() });
-  }
-
+  if (existing) { existing.qty++; } else { cart.push({ name, price, qty: 1, id: Date.now() }); }
   const savedName = name;
   discardResult();
-  renderCart();
-  updateTotal();
+  renderCart(); updateTotal();
   showToast(`✓ ${savedName} 담았어요`);
 }
 
 function addManual() {
   const name = document.getElementById('manual-name').value.trim();
   const price = parseInt(document.getElementById('manual-price').value);
-
   if (!name) { showToast('상품명을 입력해주세요'); return; }
   if (!price || price <= 0) { showToast('올바른 가격을 입력해주세요'); return; }
-
   const existing = cart.find(i => i.name === name);
-  if (existing) {
-    existing.qty++;
-  } else {
-    cart.push({ name, price, qty: 1, id: Date.now() });
-  }
-
-  closeModal();
-  renderCart();
-  updateTotal();
+  if (existing) { existing.qty++; } else { cart.push({ name, price, qty: 1, id: Date.now() }); }
+  closeModal(); renderCart(); updateTotal();
   showToast(`✓ ${name} 담았어요`);
 }
 
@@ -1100,38 +553,26 @@ function changeQty(id, delta) {
   if (!item) return;
   item.qty += delta;
   if (item.qty <= 0) cart = cart.filter(i => i.id !== id);
-  renderCart();
-  updateTotal();
+  renderCart(); updateTotal();
 }
 
-function removeItem(id) {
-  cart = cart.filter(i => i.id !== id);
-  renderCart();
-  updateTotal();
-}
+function removeItem(id) { cart = cart.filter(i => i.id !== id); renderCart(); updateTotal(); }
 
 function clearCart() {
   if (cart.length === 0) return;
   if (!confirm('장바구니를 비울까요?')) return;
-  cart = [];
-  renderCart();
-  updateTotal();
+  cart = []; renderCart(); updateTotal();
 }
 
 function renderCart() {
   const list = document.getElementById('cart-list');
   const empty = document.getElementById('empty-state');
-
   if (cart.length === 0) {
-    empty.style.display = 'flex';
-    list.innerHTML = '';
-    document.getElementById('save-btn').classList.remove('active');
-    return;
+    empty.style.display = 'flex'; list.innerHTML = '';
+    document.getElementById('save-btn').classList.remove('active'); return;
   }
-
   empty.style.display = 'none';
   document.getElementById('save-btn').classList.add('active');
-
   list.innerHTML = cart.map(item => `
     <div class="cart-item" id="item-${item.id}">
       <div class="item-name">${escHtml(item.name)}</div>
@@ -1151,24 +592,17 @@ function updateTotal() {
   document.getElementById('total-amount').textContent = '₩' + total.toLocaleString('ko-KR');
 }
 
-
-// ── SAVE SESSION (Firestore) ──
 async function saveSession() {
   if (cart.length === 0) { showToast('담은 상품이 없어요'); return; }
-
   const btn = document.getElementById('save-btn');
-  btn.textContent = '⏳ 저장 중...';
-  btn.disabled = true;
-
+  btn.textContent = '⏳ 저장 중...'; btn.disabled = true;
   const total = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
   const session = {
     date: new Date().toLocaleDateString('ko-KR'),
     time: new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }),
-    total,
-    items: cart.map(i => ({ name: i.name, price: i.price, qty: i.qty })),
+    total, items: cart.map(i => ({ name: i.name, price: i.price, qty: i.qty })),
     createdAt: serverTimestamp()
   };
-
   try {
     await addDoc(collection(db, 'shopping_sessions'), session);
     showToast('☁️ 저장 완료! 합계 ₩' + total.toLocaleString('ko-KR'));
@@ -1177,34 +611,25 @@ async function saveSession() {
     console.error('Firestore 저장 실패:', e);
     showToast('저장 실패: ' + (e.message || '다시 시도해주세요'));
     btn.classList.add('active');
-  } finally {
-    btn.textContent = '🗒️ 쇼핑 저장';
-    btn.disabled = false;
-  }
+  } finally { btn.textContent = '🗒️ 쇼핑 저장'; btn.disabled = false; }
 }
 
-
-// ── MODAL ──
 function openModal() {
   document.getElementById('modal-backdrop').classList.add('open');
   setTimeout(() => document.getElementById('manual-name').focus(), 100);
 }
-
 function closeModal() {
   document.getElementById('modal-backdrop').classList.remove('open');
   document.getElementById('manual-name').value = '';
   document.getElementById('manual-price').value = '';
 }
-
 function closeModalOnBackdrop(e) {
   if (e.target === document.getElementById('modal-backdrop')) closeModal();
 }
 
-// ── TOAST ──
 function showToast(msg) {
   const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
+  t.textContent = msg; t.classList.add('show');
   clearTimeout(t._timeout);
   t._timeout = setTimeout(() => t.classList.remove('show'), 2500);
 }
@@ -1213,14 +638,14 @@ function escHtml(str) {
   return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
-
-// ── EXPOSE GLOBALS (needed for inline onclick with type=module) ──
+// ── GLOBALS ──
 window.saveApiKey = saveApiKey;
 window.showSetupScreen = showSetupScreen;
 window.hideSetupScreen = hideSetupScreen;
 window.captureAndScan = captureAndScan;
 window.addToCart = addToCart;
 window.discardResult = discardResult;
+window.backdropClose = backdropClose;
 window.addManual = addManual;
 window.changeQty = changeQty;
 window.removeItem = removeItem;
@@ -1230,31 +655,14 @@ window.openModal = openModal;
 window.closeModal = closeModal;
 window.closeModalOnBackdrop = closeModalOnBackdrop;
 
-// ── CAMERA PAUSE / RESUME (화면 꺼지면 카메라 정지) ──
-function stopCamera() {
-  if (stream) {
-    stream.getTracks().forEach(t => t.stop());
-    stream = null;
-    document.getElementById('video').srcObject = null;
-  }
-}
-
 document.addEventListener('visibilitychange', () => {
-  if (document.hidden) {
-    stopCamera();
-  } else {
-    initCamera();
-  }
+  if (document.hidden) { stopCamera(); } else { initCamera(); }
 });
 
-// ── INIT ──
-if (!getApiKey()) {
-  showSetupScreen();
-}
+if (!getApiKey()) showSetupScreen();
 initCamera();
 renderCart();
 
-// Service Worker
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js').catch(e => console.warn('SW:', e));
 }
