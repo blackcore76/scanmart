@@ -914,7 +914,7 @@ async function captureAndScan() {
 }
 
 // ── CLAUDE VISION API ──
-const WORKER_URL = 'https://fancy-sound-0453.blackcore-ff6.workers.dev/'; // ← 배포 후 교체
+const WORKER_URL = 'https://fancy-sound-0453.blackcore-ff6.workers.dev';
 
 async function callClaudeVision(base64Image) {
   const response = await fetch(WORKER_URL, {
