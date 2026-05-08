@@ -876,6 +876,9 @@ async function captureAndScan() {
 
   if (!stream || !video.videoWidth) { showToast('카메라가 준비되지 않았어요'); return; }
 
+  const apiKey = getApiKey();
+  if (!apiKey) { showSetupScreen(); return; }
+
   // flash
   flash.classList.add('on');
   setTimeout(() => flash.classList.remove('on'), 150);
@@ -895,7 +898,7 @@ async function captureAndScan() {
   const base64 = canvas.toDataURL('image/jpeg', 0.85).split(',')[1];
 
   try {
-    const result = await callClaudeVision(base64);
+    const result = await callClaudeVision(base64, apiKey);
     if (result) {
       showResult(result.name, result.price);
     } else {
@@ -916,10 +919,10 @@ async function captureAndScan() {
 // ── CLAUDE VISION API ──
 const WORKER_URL = 'https://fancy-sound-0453.blackcore-ff6.workers.dev';
 
-async function callClaudeVision(base64Image) {
+async function callClaudeVision(base64Image, apiKey) {
   const response = await fetch(WORKER_URL, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'x-api-key': getApiKey() },
+    headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey },
     body: JSON.stringify({
       model: 'claude-sonnet-4-20250514',
       max_tokens: 200,
@@ -1147,6 +1150,23 @@ window.saveSession = saveSession;
 window.openModal = openModal;
 window.closeModal = closeModal;
 window.closeModalOnBackdrop = closeModalOnBackdrop;
+
+// ── CAMERA PAUSE / RESUME (화면 꺼지면 카메라 정지) ──
+function stopCamera() {
+  if (stream) {
+    stream.getTracks().forEach(t => t.stop());
+    stream = null;
+    document.getElementById('video').srcObject = null;
+  }
+}
+
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) {
+    stopCamera();
+  } else {
+    initCamera();
+  }
+});
 
 // ── INIT ──
 if (!getApiKey()) {
