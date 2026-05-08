@@ -396,7 +396,7 @@ const db = getFirestore(firebaseApp);
 const WORKER_URL = 'https://fancy-sound-0453.blackcore-ff6.workers.dev';
 
 // ── STATE ──
-let cart = [];
+let cart = JSON.parse(localStorage.getItem('scanmart-cart') || '[]');
 let pendingItem = null;
 let stream = null;
 let currentTab = 'cart';
@@ -606,6 +606,7 @@ function clearCart() {
 }
 
 function renderCart() {
+  localStorage.setItem('scanmart-cart', JSON.stringify(cart));
   const list = document.getElementById('cart-list');
   const empty = document.getElementById('empty-state');
   const saveBtn = document.getElementById('save-btn');
@@ -648,6 +649,7 @@ function renderCart() {
 }
 
 function updateTotal() {
+  localStorage.setItem('scanmart-cart', JSON.stringify(cart));
   const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
   document.getElementById('total-amount').textContent = '₩' + total.toLocaleString('ko-KR');
 }
