@@ -1,0 +1,27 @@
+{
+  "name": "스캔마트 - AI 장보기 도우미",
+  "short_name": "스캔마트",
+  "description": "카메라로 가격표를 스캔하면 자동으로 장바구니에 담아주는 AI 쇼핑 앱",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#0a0a0a",
+  "orientation": "portrait",
+  "lang": "ko",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["shopping", "utilities"],
+  "screenshots": []
+}
