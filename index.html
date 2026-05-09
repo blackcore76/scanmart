@@ -442,7 +442,7 @@ function updateAuthUI(u){
 }
 async function handleLoginBtn(){
   if(currentUser){openUserSheet();return;}
-try{await signInWithRedirect(auth,googleProvider);}
+try{await signInWithRedirect(auth,gp);}
   catch(e){if(e.code!=='auth/popup-closed-by-user')showToast('로그인 실패: '+(e.message||'다시 시도'));}
 }
 async function handleSignOut(){closeUserSheet();await signOut(auth);allSessions=[];historyLoaded=false;showToast('로그아웃됐어요');}
