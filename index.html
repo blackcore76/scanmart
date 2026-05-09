@@ -721,7 +721,7 @@ getRedirectResult(auth).then(result => {
 if(!getApiKey())document.getElementById('setup-screen').classList.add('visible');
 
 renderCart();
-//if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js').catch(e=>console.warn('SW:',e));
+if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js').catch(e=>console.warn('SW:',e));
 
 </script>
 </body>
