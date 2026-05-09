@@ -719,8 +719,10 @@ getRedirectResult(auth).then(result => {
   if (result?.user) showToast('✓ 로그인 됐어요');
 }).catch(e => console.warn('redirect:', e));
 if(!getApiKey())document.getElementById('setup-screen').classList.add('visible');
+
 renderCart();
-if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js').catch(e=>console.warn('SW:',e));
+//if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js').catch(e=>console.warn('SW:',e));
+
 </script>
 </body>
 </html>
