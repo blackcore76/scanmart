@@ -13,266 +13,255 @@
 <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0a0a0a; --surface: #141414; --surface2: #1e1e1e;
-    --accent: #00ff88; --accent-dim: #00cc6a;
-    --danger: #ff4757; --text: #f0f0f0; --muted: #888;
-    --border: #2a2a2a; --total-bg: #001a0d;
+    --bg:#0a0a0a;--surface:#141414;--surface2:#1e1e1e;
+    --accent:#00ff88;--accent-dim:#00cc6a;
+    --danger:#ff4757;--text:#f0f0f0;--muted:#888;
+    --border:#2a2a2a;--total-bg:#001a0d;
   }
-  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-  html, body { height:100%; background:var(--bg); color:var(--text); font-family:'Nanum Gothic',sans-serif; overflow:hidden; }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Nanum Gothic',sans-serif;overflow:hidden;}
+  #app{display:flex;flex-direction:column;height:100dvh;max-width:480px;margin:0 auto;}
 
-  #app { display:flex; flex-direction:column; height:100dvh; max-width:480px; margin:0 auto; }
+  /* HEADER */
+  #header{flex-shrink:0;background:var(--total-bg);border-bottom:1px solid var(--accent);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;z-index:10;}
+  #logo{font-size:18px;font-weight:800;color:var(--accent);letter-spacing:-0.5px;}
+  #header-right{display:flex;align-items:center;gap:10px;}
+  #total-display{text-align:right;}
+  #total-label{font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;}
+  #total-amount{font-family:'Share Tech Mono',monospace;font-size:22px;color:var(--accent);line-height:1;}
+  #login-btn{height:32px;padding:0 12px;background:transparent;border:1px solid var(--accent-dim);border-radius:16px;color:var(--accent-dim);font-family:'Nanum Gothic',sans-serif;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:6px;}
+  #login-btn:active{background:#003320;}
+  #user-avatar{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--accent-dim);object-fit:cover;cursor:pointer;display:none;}
 
-  /* ── HEADER ── */
-  #header {
-    flex-shrink:0; background:var(--total-bg); border-bottom:1px solid var(--accent);
-    padding:12px 16px; display:flex; align-items:center; justify-content:space-between; z-index:10;
-  }
-  #logo { font-size:18px; font-weight:800; color:var(--accent); letter-spacing:-0.5px; }
-  #total-display { text-align:right; }
-  #total-label { font-size:11px; color:var(--muted); letter-spacing:1px; text-transform:uppercase; }
-  #total-amount { font-family:'Share Tech Mono',monospace; font-size:24px; color:var(--accent); line-height:1; }
+  /* PAGES */
+  #pages{flex:1;overflow:hidden;position:relative;}
+  .page{position:absolute;inset:0;display:flex;flex-direction:column;transition:opacity 0.2s;}
+  .page.hidden{opacity:0;pointer-events:none;}
 
-  /* ── TAB PAGES ── */
-  #pages { flex:1; overflow:hidden; position:relative; }
-  .page { position:absolute; inset:0; display:flex; flex-direction:column; transition:opacity 0.2s; }
-  .page.hidden { opacity:0; pointer-events:none; }
+  /* 장바구니 */
+  #cart-page{background:var(--bg);}
+  #cart-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px;}
+  #cart-scroll::-webkit-scrollbar{width:3px;}
+  #cart-scroll::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+  #empty-state{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;color:var(--muted);padding-bottom:60px;}
+  .empty-icon{font-size:56px;opacity:0.25;}
+  .empty-title{font-size:16px;font-weight:800;color:var(--text);}
+  .empty-sub{font-size:13px;color:var(--muted);text-align:center;line-height:1.6;}
+  .empty-cta{margin-top:8px;padding:12px 24px;background:var(--total-bg);border:1px solid var(--accent);border-radius:24px;color:var(--accent);font-size:14px;font-weight:800;cursor:pointer;}
+  .empty-cta:active{background:#003320;}
+  #cart-list{display:flex;flex-direction:column;gap:8px;}
+  .cart-item{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 14px;display:flex;align-items:center;gap:10px;animation:slideIn 0.2s ease;}
+  .cart-item.new-item{border-color:var(--accent);background:#001a0d;}
+  @keyframes slideIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+  .item-info{flex:1;min-width:0;}
+  .item-name{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .item-unit{font-size:11px;color:var(--muted);margin-top:2px;font-family:'Share Tech Mono',monospace;}
+  .qty-controls{display:flex;align-items:center;gap:6px;flex-shrink:0;}
+  .qty-btn{width:28px;height:28px;border-radius:6px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+  .qty-btn:active{border-color:var(--accent);}
+  .qty-num{font-family:'Share Tech Mono',monospace;font-size:14px;min-width:20px;text-align:center;}
+  .item-subtotal{font-family:'Share Tech Mono',monospace;font-size:15px;color:var(--accent);min-width:64px;text-align:right;}
+  .del-btn{width:28px;height:28px;border-radius:6px;border:none;background:transparent;color:#3a3a3a;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+  .del-btn:active{color:var(--danger);}
+  #cart-actions{flex-shrink:0;background:var(--surface);border-top:1px solid var(--border);padding:10px 16px;padding-bottom:max(10px,env(safe-area-inset-bottom));display:flex;gap:8px;}
+  #save-btn{flex:1;height:46px;background:var(--surface2);color:var(--muted);border:1px solid var(--border);border-radius:8px;font-family:'Nanum Gothic',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:border-color 0.2s,color 0.2s;}
+  #save-btn.active{border-color:var(--accent-dim);color:var(--accent-dim);}
+  #clear-btn{height:46px;padding:0 16px;background:transparent;color:var(--danger);border:1px solid #331010;border-radius:8px;font-family:'Nanum Gothic',sans-serif;font-size:13px;font-weight:700;cursor:pointer;}
+  #clear-btn:active{border-color:var(--danger);}
 
-  /* ── 장바구니 탭 ── */
-  #cart-page { background:var(--bg); }
+  /* 스캔 */
+  #scan-page{background:#000;}
+  #camera-section{flex:1;position:relative;overflow:hidden;}
+  #video{width:100%;height:100%;object-fit:cover;display:block;}
+  #flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:5;transition:opacity 0.05s;}
+  #flash.on{opacity:0.6;}
+  #scan-line{position:absolute;left:12.5%;width:75%;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent);top:15%;opacity:0;transition:opacity 0.3s;}
+  #scan-line.scanning{opacity:1;animation:scanMove 1.2s ease-in-out infinite;}
+  @keyframes scanMove{0%{top:15%}50%{top:85%}100%{top:15%}}
+  #camera-overlay{position:absolute;inset:0;pointer-events:none;}
+  #scan-box{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:75%;height:60%;}
+  .corner{position:absolute;width:22px;height:22px;border-color:var(--accent);border-style:solid;border-width:0;}
+  .corner-tl{top:0;left:0;border-top-width:2px;border-left-width:2px;}
+  .corner-tr{top:0;right:0;border-top-width:2px;border-right-width:2px;}
+  .corner-bl{bottom:0;left:0;border-bottom-width:2px;border-left-width:2px;}
+  .corner-br{bottom:0;right:0;border-bottom-width:2px;border-right-width:2px;}
+  #scan-hint{position:absolute;bottom:12px;left:0;right:0;text-align:center;font-size:12px;color:rgba(255,255,255,0.55);}
+  #no-camera-msg{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;color:var(--muted);font-size:13px;gap:8px;}
+  #scan-btn-area{flex-shrink:0;padding:12px 16px;background:var(--surface);border-top:1px solid var(--border);display:flex;gap:10px;align-items:center;}
+  #scan-btn{flex:1;height:52px;background:var(--accent);color:#000;border:none;border-radius:8px;font-family:'Nanum Gothic',sans-serif;font-size:16px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:transform 0.1s,background 0.2s;}
+  #scan-btn:active{transform:scale(0.97);}
+  #scan-btn:disabled{background:#333;color:#666;cursor:not-allowed;}
+  #scan-btn.loading{background:#005533;color:var(--accent);}
+  #manual-btn{height:52px;width:52px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--muted);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+  #manual-btn:active{border-color:var(--accent);}
 
-  #cart-scroll {
-    flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:16px;
-  }
-  #cart-scroll::-webkit-scrollbar { width:3px; }
-  #cart-scroll::-webkit-scrollbar-thumb { background:var(--border); border-radius:2px; }
+  /* 히스토리 */
+  #history-page{background:var(--bg);}
+  #history-login-prompt{flex:1;display:none;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding-bottom:60px;}
+  .history-login-cta{margin-top:4px;padding:12px 28px;background:var(--total-bg);border:1px solid var(--accent);border-radius:24px;color:var(--accent);font-size:14px;font-weight:800;cursor:pointer;display:flex;align-items:center;gap:8px;}
+  .history-login-cta:active{background:#003320;}
+  #history-loading{flex:1;display:none;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:var(--muted);font-size:13px;}
+  .spin{animation:spin 1s linear infinite;display:inline-block;font-size:24px;}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  #history-empty{display:none;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:60px 20px;color:var(--muted);}
+  #history-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px;display:none;}
+  #history-scroll::-webkit-scrollbar{width:3px;}
+  #history-scroll::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+  #history-list{display:flex;flex-direction:column;gap:12px;}
 
-  #empty-state {
-    height:100%; display:flex; flex-direction:column; align-items:center;
-    justify-content:center; gap:12px; color:var(--muted); padding-bottom:60px;
-  }
-  .empty-icon { font-size:56px; opacity:0.25; }
-  .empty-title { font-size:16px; font-weight:800; color:var(--text); }
-  .empty-sub { font-size:13px; color:var(--muted); text-align:center; line-height:1.6; }
-  .empty-cta {
-    margin-top:8px; padding:12px 24px;
-    background:var(--total-bg); border:1px solid var(--accent);
-    border-radius:24px; color:var(--accent); font-size:14px; font-weight:800;
-    cursor:pointer; transition:background 0.2s;
-  }
-  .empty-cta:active { background:#003320; }
+  .session-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;animation:slideIn 0.2s ease;}
+  .session-card-header{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;cursor:pointer;user-select:none;transition:background 0.15s;}
+  .session-card-header:active{background:var(--surface2);}
+  .session-date-block{display:flex;flex-direction:column;gap:2px;}
+  .session-date{font-size:14px;font-weight:800;color:var(--text);}
+  .session-time{font-size:11px;color:var(--muted);font-family:'Share Tech Mono',monospace;}
+  .session-card-right{display:flex;align-items:center;gap:10px;}
+  .session-total{font-family:'Share Tech Mono',monospace;font-size:16px;color:var(--accent);}
+  .session-item-count{font-size:11px;color:var(--muted);background:var(--surface2);padding:2px 7px;border-radius:10px;}
+  .session-chevron{color:var(--muted);font-size:11px;transition:transform 0.2s;}
+  .session-card.open .session-chevron{transform:rotate(180deg);}
+  .session-body{display:none;border-top:1px solid var(--border);}
+  .session-card.open .session-body{display:block;}
+  .session-items-list{padding:10px 12px;display:flex;flex-direction:column;gap:4px;}
 
-  #cart-list { display:flex; flex-direction:column; gap:8px; }
+  .session-item-row{display:flex;align-items:center;gap:6px;background:var(--surface2);border-radius:8px;padding:8px 10px;border:1px solid transparent;}
+  .session-item-row.editing{border-color:var(--accent-dim);background:#001a0d;}
+  .si-name{flex:1;font-size:13px;font-weight:700;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .si-qty{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--muted);flex-shrink:0;}
+  .si-price{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--muted);flex-shrink:0;}
+  .si-subtotal{font-family:'Share Tech Mono',monospace;font-size:13px;color:var(--accent);flex-shrink:0;min-width:58px;text-align:right;}
+  .si-edit-btn{width:26px;height:26px;border-radius:5px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .si-edit-btn:active{border-color:var(--accent);color:var(--accent);}
+  .si-del-btn{width:26px;height:26px;border-radius:5px;border:none;background:transparent;color:#3a3a3a;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .si-del-btn:active{color:var(--danger);}
 
-  .cart-item {
-    background:var(--surface); border:1px solid var(--border);
-    border-radius:10px; padding:12px 14px;
-    display:flex; align-items:center; gap:10px;
-    animation:slideIn 0.2s ease;
-  }
-  .cart-item.new-item { border-color:var(--accent); background:#001a0d; }
-  @keyframes slideIn { from { opacity:0; transform:translateY(-6px); } to { opacity:1; transform:translateY(0); } }
-  .item-info { flex:1; min-width:0; }
-  .item-name { font-size:14px; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  .item-unit { font-size:11px; color:var(--muted); margin-top:2px; font-family:'Share Tech Mono',monospace; }
-  .qty-controls { display:flex; align-items:center; gap:6px; flex-shrink:0; }
-  .qty-btn {
-    width:28px; height:28px; border-radius:6px; border:1px solid var(--border);
-    background:var(--surface2); color:var(--text); font-size:16px; cursor:pointer;
-    display:flex; align-items:center; justify-content:center; transition:border-color 0.15s;
-  }
-  .qty-btn:active { border-color:var(--accent); }
-  .qty-num { font-family:'Share Tech Mono',monospace; font-size:14px; min-width:20px; text-align:center; }
-  .item-subtotal { font-family:'Share Tech Mono',monospace; font-size:15px; color:var(--accent); min-width:64px; text-align:right; }
-  .del-btn {
-    width:28px; height:28px; border-radius:6px; border:none;
-    background:transparent; color:#3a3a3a; font-size:15px; cursor:pointer;
-    display:flex; align-items:center; justify-content:center; transition:color 0.15s;
-  }
-  .del-btn:active { color:var(--danger); }
+  .si-edit-form{display:none;flex-direction:column;gap:6px;padding:8px 12px;background:#001a0d;border-top:1px solid #003320;}
+  .si-edit-form.open{display:flex;}
+  .si-edit-row{display:flex;gap:6px;align-items:center;}
+  .si-edit-input{flex:1;height:36px;background:var(--surface2);border:1px solid var(--accent-dim);border-radius:6px;color:var(--text);font-family:'Nanum Gothic',sans-serif;font-size:13px;padding:0 10px;outline:none;}
+  .si-edit-input:focus{border-color:var(--accent);}
+  .si-edit-input.small{flex:none;width:68px;font-family:'Share Tech Mono',monospace;text-align:center;}
+  .si-save-btn{height:36px;padding:0 12px;background:var(--accent);border:none;border-radius:6px;color:#000;font-family:'Nanum Gothic',sans-serif;font-size:13px;font-weight:800;cursor:pointer;flex-shrink:0;}
+  .si-cancel-btn{height:36px;padding:0 10px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--muted);font-family:'Nanum Gothic',sans-serif;font-size:13px;cursor:pointer;flex-shrink:0;}
 
-  /* 장바구니 하단 액션 */
-  #cart-actions {
-    flex-shrink:0; background:var(--surface); border-top:1px solid var(--border);
-    padding:10px 16px; padding-bottom:max(10px, env(safe-area-inset-bottom));
-    display:flex; gap:8px;
-  }
-  #save-btn {
-    flex:1; height:46px; background:var(--surface2); color:var(--muted);
-    border:1px solid var(--border); border-radius:8px;
-    font-family:'Nanum Gothic',sans-serif; font-size:14px; font-weight:700; cursor:pointer;
-    transition:border-color 0.2s, color 0.2s;
-  }
-  #save-btn.active { border-color:var(--accent-dim); color:var(--accent-dim); }
-  #clear-btn {
-    height:46px; padding:0 16px; background:transparent; color:var(--danger);
-    border:1px solid #331010; border-radius:8px;
-    font-family:'Nanum Gothic',sans-serif; font-size:13px; font-weight:700; cursor:pointer;
-  }
-  #clear-btn:active { border-color:var(--danger); }
+  .session-actions{display:flex;gap:8px;padding:10px 12px;border-top:1px solid var(--border);}
+  .session-add-btn{flex:1;height:38px;background:transparent;border:1px dashed var(--accent-dim);border-radius:8px;color:var(--accent-dim);font-family:'Nanum Gothic',sans-serif;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;}
+  .session-add-btn:active{background:#001a0d;}
+  .session-del-btn{height:38px;padding:0 14px;background:transparent;border:1px solid #331010;border-radius:8px;color:var(--danger);font-family:'Nanum Gothic',sans-serif;font-size:13px;font-weight:700;cursor:pointer;}
+  .session-del-btn:active{border-color:var(--danger);}
 
-  /* ── 스캔 탭 ── */
-  #scan-page { background:#000; }
-  #camera-section { flex:1; position:relative; overflow:hidden; }
-  #video { width:100%; height:100%; object-fit:cover; display:block; }
-  #flash { position:absolute; inset:0; background:#fff; opacity:0; pointer-events:none; z-index:5; transition:opacity 0.05s; }
-  #flash.on { opacity:0.6; }
-  #scan-line {
-    position:absolute; left:12.5%; width:75%; height:1px;
-    background:linear-gradient(90deg,transparent,var(--accent),transparent);
-    top:15%; opacity:0; transition:opacity 0.3s;
-  }
-  #scan-line.scanning { opacity:1; animation:scanMove 1.2s ease-in-out infinite; }
-  @keyframes scanMove { 0%{top:15%} 50%{top:85%} 100%{top:15%} }
-  #camera-overlay { position:absolute; inset:0; pointer-events:none; }
-  #scan-box { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:75%; height:60%; }
-  .corner { position:absolute; width:22px; height:22px; border-color:var(--accent); border-style:solid; border-width:0; }
-  .corner-tl { top:0; left:0; border-top-width:2px; border-left-width:2px; }
-  .corner-tr { top:0; right:0; border-top-width:2px; border-right-width:2px; }
-  .corner-bl { bottom:0; left:0; border-bottom-width:2px; border-left-width:2px; }
-  .corner-br { bottom:0; right:0; border-bottom-width:2px; border-right-width:2px; }
-  #scan-hint { position:absolute; bottom:12px; left:0; right:0; text-align:center; font-size:12px; color:rgba(255,255,255,0.55); }
-  #no-camera-msg {
-    position:absolute; inset:0; display:none; flex-direction:column;
-    align-items:center; justify-content:center; color:var(--muted); font-size:13px; gap:8px;
-  }
+  #history-pagination{flex-shrink:0;display:none;align-items:center;justify-content:center;gap:12px;padding:12px 16px;border-top:1px solid var(--border);background:var(--surface);}
+  .page-btn{height:36px;padding:0 16px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--muted);font-family:'Nanum Gothic',sans-serif;font-size:13px;font-weight:700;cursor:pointer;}
+  .page-btn:disabled{opacity:0.3;cursor:not-allowed;}
+  .page-btn:not(:disabled):active{border-color:var(--accent);color:var(--accent);}
+  #page-info{font-family:'Share Tech Mono',monospace;font-size:13px;color:var(--muted);min-width:52px;text-align:center;}
 
-  #scan-btn-area {
-    flex-shrink:0; padding:12px 16px;
-    background:var(--surface); border-top:1px solid var(--border);
-    display:flex; gap:10px; align-items:center;
-  }
-  #scan-btn {
-    flex:1; height:52px; background:var(--accent); color:#000; border:none; border-radius:8px;
-    font-family:'Nanum Gothic',sans-serif; font-size:16px; font-weight:800; cursor:pointer;
-    display:flex; align-items:center; justify-content:center; gap:8px;
-    transition:transform 0.1s, background 0.2s;
-  }
-  #scan-btn:active { transform:scale(0.97); }
-  #scan-btn:disabled { background:#333; color:#666; cursor:not-allowed; }
-  #scan-btn.loading { background:#005533; color:var(--accent); }
-  #manual-btn {
-    height:52px; width:52px; background:var(--surface2); border:1px solid var(--border);
-    border-radius:8px; color:var(--muted); font-size:20px; cursor:pointer;
-    display:flex; align-items:center; justify-content:center; transition:border-color 0.2s;
-  }
-  #manual-btn:active { border-color:var(--accent); }
+  /* TAB BAR */
+  #tab-bar{flex-shrink:0;background:var(--surface);border-top:1px solid var(--border);display:flex;padding:8px 0;padding-bottom:max(8px,env(safe-area-inset-bottom));}
+  .tab-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:4px 0;border:none;background:transparent;position:relative;}
+  .tab-btn-icon{font-size:22px;line-height:1;}
+  .tab-btn-label{font-size:11px;color:var(--muted);font-family:'Nanum Gothic',sans-serif;font-weight:700;transition:color 0.2s;}
+  .tab-btn.active .tab-btn-label{color:var(--accent);}
+  .tab-btn.active .tab-btn-icon{filter:drop-shadow(0 0 4px rgba(0,255,136,0.4));}
+  .tab-badge{position:absolute;top:0;right:calc(50% - 20px);background:var(--danger);color:#fff;font-size:9px;font-weight:800;border-radius:8px;padding:1px 5px;line-height:1.5;display:none;}
+  .tab-badge.show{display:block;}
 
-  /* ── TAB BAR ── */
-  #tab-bar {
-    flex-shrink:0; background:var(--surface); border-top:1px solid var(--border);
-    display:flex; padding:8px 0; padding-bottom:max(8px, env(safe-area-inset-bottom));
-  }
-  .tab-btn {
-    flex:1; display:flex; flex-direction:column; align-items:center; gap:3px;
-    cursor:pointer; padding:4px 0; border:none; background:transparent;
-    transition:opacity 0.2s;
-  }
-  .tab-btn-icon { font-size:22px; line-height:1; }
-  .tab-btn-label { font-size:11px; color:var(--muted); font-family:'Nanum Gothic',sans-serif; font-weight:700; transition:color 0.2s; }
-  .tab-btn.active .tab-btn-label { color:var(--accent); }
-  .tab-btn.active .tab-btn-icon { filter:drop-shadow(0 0 4px rgba(0,255,136,0.4)); }
+  /* RESULT SHEET */
+  #result-sheet-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:90;align-items:flex-end;justify-content:center;}
+  #result-sheet-backdrop.open{display:flex;}
+  #result-sheet{width:100%;max-width:480px;background:#1a1a1a;border-top:1px solid var(--border);border-radius:20px 20px 0 0;padding-bottom:max(16px,env(safe-area-inset-bottom));animation:sheetUp 0.28s cubic-bezier(.32,1.2,.45,1);}
+  @keyframes sheetUp{from{transform:translateY(60px);opacity:0}to{transform:translateY(0);opacity:1}}
+  .sheet-handle{width:36px;height:4px;background:#333;border-radius:2px;margin:12px auto 0;}
+  .sheet-header{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--border);}
+  .sheet-title{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:800;color:var(--accent);}
+  .sheet-dot{width:7px;height:7px;border-radius:50%;background:var(--accent);animation:dotPulse 1.4s ease infinite;}
+  @keyframes dotPulse{0%,100%{opacity:1}50%{opacity:0.25}}
+  #sheet-close-btn{width:30px;height:30px;border-radius:50%;background:var(--surface2);border:1px solid var(--border);color:var(--muted);font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+  .sheet-body{padding:18px 16px 0;}
+  .sheet-field-label{font-size:10px;color:var(--muted);letter-spacing:1.2px;text-transform:uppercase;margin-bottom:7px;}
+  .sheet-input{width:100%;height:52px;background:var(--surface2);border:1.5px solid var(--accent);border-radius:10px;color:var(--text);font-family:'Nanum Gothic',sans-serif;font-size:17px;padding:0 14px;outline:none;margin-bottom:16px;}
+  .sheet-input:focus{border-color:#00ffaa;background:#0d1a14;}
+  #result-price-input{font-family:'Share Tech Mono',monospace;font-size:24px;color:var(--accent);}
+  .sheet-actions{display:flex;gap:10px;padding:4px 16px 0;}
+  #discard-btn{flex:1;height:54px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;color:var(--muted);font-family:'Nanum Gothic',sans-serif;font-size:15px;font-weight:700;cursor:pointer;}
+  #add-btn{flex:2;height:54px;background:var(--accent);border:none;border-radius:10px;color:#000;font-family:'Nanum Gothic',sans-serif;font-size:16px;font-weight:800;cursor:pointer;transition:transform 0.1s;}
+  #add-btn:active{transform:scale(0.97);}
+  .sheet-note{font-size:11px;color:#555;text-align:center;padding:10px 16px 0;}
 
-  /* ── RESULT BOTTOM SHEET ── */
-  #result-sheet-backdrop {
-    display:none; position:fixed; inset:0;
-    background:rgba(0,0,0,0.65); z-index:90;
-    align-items:flex-end; justify-content:center;
-  }
-  #result-sheet-backdrop.open { display:flex; }
-  #result-sheet {
-    width:100%; max-width:480px; background:#1a1a1a;
-    border-top:1px solid var(--border); border-radius:20px 20px 0 0;
-    padding-bottom:max(16px,env(safe-area-inset-bottom));
-    animation:sheetUp 0.28s cubic-bezier(.32,1.2,.45,1);
-  }
-  @keyframes sheetUp { from{transform:translateY(60px);opacity:0} to{transform:translateY(0);opacity:1} }
-  .sheet-handle { width:36px; height:4px; background:#333; border-radius:2px; margin:12px auto 0; }
-  .sheet-header { display:flex; align-items:center; justify-content:space-between; padding:14px 16px; border-bottom:1px solid var(--border); }
-  .sheet-title { display:flex; align-items:center; gap:8px; font-size:14px; font-weight:800; color:var(--accent); }
-  .sheet-dot { width:7px; height:7px; border-radius:50%; background:var(--accent); animation:dotPulse 1.4s ease infinite; }
-  @keyframes dotPulse { 0%,100%{opacity:1} 50%{opacity:0.25} }
-  #sheet-close-btn { width:30px; height:30px; border-radius:50%; background:var(--surface2); border:1px solid var(--border); color:var(--muted); font-size:13px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
-  .sheet-body { padding:18px 16px 0; }
-  .sheet-field-label { font-size:10px; color:var(--muted); letter-spacing:1.2px; text-transform:uppercase; margin-bottom:7px; }
-  .sheet-input { width:100%; height:52px; background:var(--surface2); border:1.5px solid var(--accent); border-radius:10px; color:var(--text); font-family:'Nanum Gothic',sans-serif; font-size:17px; padding:0 14px; outline:none; margin-bottom:16px; transition:border-color 0.2s,background 0.2s; }
-  .sheet-input:focus { border-color:#00ffaa; background:#0d1a14; }
-  #result-price-input { font-family:'Share Tech Mono',monospace; font-size:24px; color:var(--accent); }
-  .sheet-actions { display:flex; gap:10px; padding:4px 16px 0; }
-  #discard-btn { flex:1; height:54px; background:var(--surface2); border:1px solid var(--border); border-radius:10px; color:var(--muted); font-family:'Nanum Gothic',sans-serif; font-size:15px; font-weight:700; cursor:pointer; }
-  #add-btn { flex:2; height:54px; background:var(--accent); border:none; border-radius:10px; color:#000; font-family:'Nanum Gothic',sans-serif; font-size:16px; font-weight:800; cursor:pointer; transition:transform 0.1s; }
-  #add-btn:active { transform:scale(0.97); }
-  .sheet-note { font-size:11px; color:#555; text-align:center; padding:10px 16px 0; }
+  /* MODALS */
+  .mbd{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.72);z-index:100;align-items:flex-end;}
+  .mbd.open{display:flex;}
+  .mbox{width:100%;max-width:480px;margin:0 auto;background:var(--surface);border-top:1px solid var(--border);border-radius:16px 16px 0 0;padding:20px 16px 32px;animation:sheetUp 0.25s ease;}
+  .mbox h3{font-size:15px;font-weight:800;margin-bottom:4px;color:var(--accent);}
+  .mbox-sub{font-size:12px;color:var(--muted);margin-bottom:16px;}
+  .mf{margin-bottom:12px;}
+  .mf label{display:block;font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;}
+  .mf input{width:100%;height:46px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Nanum Gothic',sans-serif;font-size:16px;padding:0 12px;outline:none;}
+  .mf input:focus{border-color:var(--accent);}
+  .mpbtn{width:100%;height:50px;background:var(--accent);color:#000;border:none;border-radius:8px;font-family:'Nanum Gothic',sans-serif;font-size:16px;font-weight:800;cursor:pointer;margin-top:4px;}
 
-  /* ── MANUAL MODAL ── */
-  #modal-backdrop { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:100; align-items:flex-end; }
-  #modal-backdrop.open { display:flex; }
-  #modal { width:100%; max-width:480px; margin:0 auto; background:var(--surface); border-top:1px solid var(--border); border-radius:16px 16px 0 0; padding:20px 16px 32px; }
-  #modal h3 { font-size:15px; font-weight:800; margin-bottom:16px; color:var(--muted); }
-  .modal-field { margin-bottom:12px; }
-  .modal-field label { display:block; font-size:11px; color:var(--muted); letter-spacing:1px; text-transform:uppercase; margin-bottom:6px; }
-  .modal-field input { width:100%; height:46px; background:var(--surface2); border:1px solid var(--border); border-radius:8px; color:var(--text); font-family:'Nanum Gothic',sans-serif; font-size:16px; padding:0 12px; outline:none; transition:border-color 0.2s; }
-  .modal-field input:focus { border-color:var(--accent); }
-  #modal-add-btn { width:100%; height:50px; background:var(--accent); color:#000; border:none; border-radius:8px; font-family:'Nanum Gothic',sans-serif; font-size:16px; font-weight:800; cursor:pointer; margin-top:4px; }
+  /* USER SHEET */
+  #user-sheet-bd{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:120;align-items:flex-end;justify-content:center;}
+  #user-sheet-bd.open{display:flex;}
+  #user-sheet{width:100%;max-width:480px;background:var(--surface);border-top:1px solid var(--border);border-radius:20px 20px 0 0;padding:20px 16px;padding-bottom:max(20px,env(safe-area-inset-bottom));animation:sheetUp 0.25s ease;}
+  .usp{display:flex;align-items:center;gap:12px;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--border);}
+  .usp-av{width:48px;height:48px;border-radius:50%;border:2px solid var(--accent-dim);object-fit:cover;}
+  .usp-ph{width:48px;height:48px;border-radius:50%;background:var(--surface2);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:22px;}
+  .usp-info{flex:1;}
+  .usp-name{font-size:15px;font-weight:800;color:var(--text);}
+  .usp-email{font-size:12px;color:var(--muted);margin-top:2px;}
+  .usmi{display:flex;align-items:center;gap:12px;padding:14px 4px;border-bottom:1px solid var(--border);cursor:pointer;font-size:15px;font-weight:700;color:var(--text);}
+  .usmi:last-child{border-bottom:none;}
+  .usmi:active{color:var(--accent);}
+  .usmi.danger{color:var(--danger);}
+  .usmi.danger:active{color:#ff6b78;}
+  .usmi.center{justify-content:center;color:var(--muted);}
+  .usmi-ic{font-size:18px;width:24px;text-align:center;}
 
-  /* ── SETUP SCREEN ── */
-  #setup-screen { display:none; position:fixed; inset:0; background:var(--bg); z-index:999; flex-direction:column; align-items:center; justify-content:center; padding:32px 24px; }
-  #setup-screen.visible { display:flex; }
-  .setup-logo { font-size:40px; margin-bottom:8px; }
-  .setup-title { font-size:22px; font-weight:800; color:var(--accent); margin-bottom:8px; }
-  .setup-desc { font-size:13px; color:var(--muted); text-align:center; line-height:1.7; margin-bottom:32px; }
-  .setup-desc a { color:var(--accent-dim); text-decoration:none; }
-  .setup-field { width:100%; max-width:360px; margin-bottom:12px; }
-  .setup-field label { display:block; font-size:11px; color:var(--muted); letter-spacing:1px; text-transform:uppercase; margin-bottom:6px; }
-  .setup-field input { width:100%; height:50px; background:var(--surface); border:1px solid var(--border); border-radius:8px; color:var(--text); font-family:'Share Tech Mono',monospace; font-size:13px; padding:0 14px; outline:none; }
-  .setup-field input:focus { border:1px solid var(--accent); }
-  #setup-save-btn { width:100%; max-width:360px; height:52px; background:var(--accent); color:#000; border:none; border-radius:8px; font-family:'Nanum Gothic',sans-serif; font-size:16px; font-weight:800; cursor:pointer; margin-top:4px; }
-  .setup-hint { margin-top:20px; font-size:11px; color:#444; text-align:center; line-height:1.8; }
-  
+  /* SETUP */
+  #setup-screen{display:none;position:fixed;inset:0;background:var(--bg);z-index:999;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;}
+  #setup-screen.visible{display:flex;}
+  .su-logo{font-size:40px;margin-bottom:8px;}
+  .su-title{font-size:22px;font-weight:800;color:var(--accent);margin-bottom:8px;}
+  .su-desc{font-size:13px;color:var(--muted);text-align:center;line-height:1.7;margin-bottom:32px;}
+  .su-desc a{color:var(--accent-dim);text-decoration:none;}
+  .su-field{width:100%;max-width:360px;margin-bottom:12px;}
+  .su-field label{display:block;font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;}
+  .su-field input{width:100%;height:50px;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Share Tech Mono',monospace;font-size:13px;padding:0 14px;outline:none;}
+  .su-field input:focus{border:1px solid var(--accent);}
+  #su-save{width:100%;max-width:360px;height:52px;background:var(--accent);color:#000;border:none;border-radius:8px;font-family:'Nanum Gothic',sans-serif;font-size:16px;font-weight:800;cursor:pointer;margin-top:4px;}
+  .su-hint{margin-top:20px;font-size:11px;color:#444;text-align:center;line-height:1.8;}
 
-  /* ── TOAST ── */
-  #toast { position:fixed; bottom:90px; left:50%; transform:translateX(-50%) translateY(20px); background:var(--surface2); border:1px solid var(--border); color:var(--text); padding:10px 18px; border-radius:20px; font-size:13px; font-weight:700; opacity:0; transition:opacity 0.25s,transform 0.25s; z-index:200; white-space:nowrap; pointer-events:none; }
-  #toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
-
-  canvas { display:none; }
+  /* TOAST */
+  #toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:10px 18px;border-radius:20px;font-size:13px;font-weight:700;opacity:0;transition:opacity 0.25s,transform 0.25s;z-index:300;white-space:nowrap;pointer-events:none;}
+  #toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+  canvas{display:none;}
 </style>
 </head>
 <body>
 
-<!-- SETUP SCREEN -->
 <div id="setup-screen">
-  <div class="setup-logo">🔑</div>
-  <div class="setup-title">API 키 설정</div>
-  <div class="setup-desc">
-    스캔마트를 사용하려면 Anthropic API 키가 필요해요.<br>
-    키는 이 기기에만 저장돼요.<br>
-    <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a>에서 발급받으세요.
-  </div>
-  <div class="setup-field">
-    <label>Anthropic API Key</label>
-    <input type="password" id="setup-key-input" placeholder="sk-ant-api03-..." autocomplete="off" spellcheck="false">
-  </div>
-  <button id="setup-save-btn" onclick="saveApiKey()">저장하고 시작하기</button>
-  <div class="setup-hint">🔒 키는 이 기기 브라우저에만 저장돼요</div>
+  <div class="su-logo">🔑</div>
+  <div class="su-title">API 키 설정</div>
+  <div class="su-desc">스캔마트를 사용하려면 Anthropic API 키가 필요해요.<br>키는 이 기기에만 저장돼요.<br><a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a>에서 발급받으세요.</div>
+  <div class="su-field"><label>Anthropic API Key</label><input type="password" id="setup-key-input" placeholder="sk-ant-api03-..." autocomplete="off" spellcheck="false"></div>
+  <button id="su-save" onclick="saveApiKey()">저장하고 시작하기</button>
+  <div class="su-hint">🔒 키는 이 기기 브라우저에만 저장돼요</div>
 </div>
 
-
-
 <div id="app">
-
-  <!-- HEADER -->
   <div id="header">
     <div id="logo">📷 스캔마트</div>
-    <div id="total-display">
-      <div id="total-label">합계</div>
-      <div id="total-amount">₩0</div>
+    <div id="header-right">
+      <div id="total-display"><div id="total-label">합계</div><div id="total-amount">₩0</div></div>
+      <button id="login-btn" onclick="handleLoginBtn()"><span>🔐</span><span id="login-btn-text">로그인</span></button>
+      <img id="user-avatar" onclick="openUserSheet()" alt="프로필">
     </div>
   </div>
 
-  <!-- PAGES -->
   <div id="pages">
 
-    <!-- 🛒 장바구니 탭 (기본 홈) -->
+    <!-- 장바구니 -->
     <div class="page" id="cart-page">
       <div id="cart-scroll">
         <div id="empty-state">
@@ -289,18 +278,15 @@
       </div>
     </div>
 
-    <!-- 📷 스캔 탭 -->
+    <!-- 스캔 -->
     <div class="page hidden" id="scan-page">
       <div id="camera-section">
         <video id="video" autoplay playsinline muted></video>
-        <div id="flash"></div>
-        <div id="scan-line"></div>
+        <div id="flash"></div><div id="scan-line"></div>
         <div id="camera-overlay">
           <div id="scan-box">
-            <div class="corner corner-tl"></div>
-            <div class="corner corner-tr"></div>
-            <div class="corner corner-bl"></div>
-            <div class="corner corner-br"></div>
+            <div class="corner corner-tl"></div><div class="corner corner-tr"></div>
+            <div class="corner corner-bl"></div><div class="corner corner-br"></div>
           </div>
           <div id="scan-hint">가격표를 박스 안에 맞추세요</div>
         </div>
@@ -311,38 +297,55 @@
         </div>
       </div>
       <div id="scan-btn-area">
-        <button id="scan-btn" onclick="captureAndScan()">
-          <span id="btn-icon">⚡</span>
-          <span id="btn-text">스캔하기</span>
-        </button>
-        <button id="manual-btn" onclick="openModal()" title="직접 입력">✏️</button>
+        <button id="scan-btn" onclick="captureAndScan()"><span id="btn-icon">⚡</span><span id="btn-text">스캔하기</span></button>
+        <button id="manual-btn" onclick="openModal()">✏️</button>
       </div>
     </div>
 
-  </div><!-- /pages -->
+    <!-- 기록 -->
+    <div class="page hidden" id="history-page">
+      <div id="history-login-prompt">
+        <span style="font-size:48px;opacity:0.3;">📋</span>
+        <span style="font-size:16px;font-weight:800;color:var(--text);">로그인이 필요해요</span>
+        <span style="font-size:13px;color:var(--muted);text-align:center;line-height:1.6;">Google 계정으로 로그인하면<br>쇼핑 기록을 확인할 수 있어요</span>
+        <button class="history-login-cta" onclick="handleLoginBtn()"><span>🔐</span><span>Google로 로그인</span></button>
+      </div>
+      <div id="history-loading"><span class="spin">⏳</span><span>불러오는 중...</span></div>
+      <div id="history-empty">
+        <span style="font-size:44px;opacity:0.25;">📋</span>
+        <span style="font-size:15px;font-weight:800;color:var(--text);">저장된 쇼핑이 없어요</span>
+        <span style="font-size:13px;color:var(--muted);">장바구니에서 쇼핑을 저장해보세요</span>
+      </div>
+      <div id="history-scroll"><div id="history-list"></div></div>
+      <div id="history-pagination">
+        <button class="page-btn" id="prev-page-btn" onclick="changePage(-1)">← 이전</button>
+        <span id="page-info">1 / 1</span>
+        <button class="page-btn" id="next-page-btn" onclick="changePage(1)">다음 →</button>
+      </div>
+    </div>
 
-  <!-- TAB BAR -->
-  <div id="tab-bar">
-    <button class="tab-btn active" id="tab-cart" onclick="switchTab('cart')">
-      <span class="tab-btn-icon">🛒</span>
-      <span class="tab-btn-label">장바구니</span>
-    </button>
-    <button class="tab-btn" id="tab-scan" onclick="switchTab('scan')">
-      <span class="tab-btn-icon">📷</span>
-      <span class="tab-btn-label">스캔</span>
-    </button>
   </div>
 
-</div><!-- /app -->
+  <div id="tab-bar">
+    <button class="tab-btn active" id="tab-cart" onclick="switchTab('cart')">
+      <span class="tab-btn-icon">🛒</span><span class="tab-btn-label">장바구니</span>
+      <span class="tab-badge" id="cart-badge"></span>
+    </button>
+    <button class="tab-btn" id="tab-scan" onclick="switchTab('scan')">
+      <span class="tab-btn-icon">📷</span><span class="tab-btn-label">스캔</span>
+    </button>
+    <button class="tab-btn" id="tab-history" onclick="switchTab('history')">
+      <span class="tab-btn-icon">📋</span><span class="tab-btn-label">기록</span>
+    </button>
+  </div>
+</div>
 
-<!-- RESULT BOTTOM SHEET -->
+<!-- 스캔 결과 시트 -->
 <div id="result-sheet-backdrop" onclick="backdropClose(event)">
   <div id="result-sheet">
     <div class="sheet-handle"></div>
     <div class="sheet-header">
-      <div class="sheet-title">
-        <div class="sheet-dot"></div>인식 결과 확인
-      </div>
+      <div class="sheet-title"><div class="sheet-dot"></div>인식 결과 확인</div>
       <button id="sheet-close-btn" onclick="discardResult()">✕</button>
     </div>
     <div class="sheet-body">
@@ -359,19 +362,40 @@
   </div>
 </div>
 
-<!-- MANUAL MODAL -->
-<div id="modal-backdrop" onclick="closeModalOnBackdrop(event)">
-  <div id="modal">
-    <h3>직접 입력</h3>
-    <div class="modal-field">
-      <label>상품명</label>
-      <input type="text" id="manual-name" placeholder="예: 비요뜨 복숭아" autocomplete="off">
+<!-- 직접 입력 -->
+<div id="modal-bd" class="mbd" onclick="closeModalOnBackdrop(event)">
+  <div class="mbox">
+    <h3>직접 입력</h3><div class="mbox-sub">상품명과 가격을 입력하세요</div>
+    <div class="mf"><label>상품명</label><input type="text" id="manual-name" placeholder="예: 비요뜨 복숭아" autocomplete="off"></div>
+    <div class="mf"><label>가격 (원)</label><input type="number" id="manual-price" placeholder="예: 1980" inputmode="numeric"></div>
+    <button class="mpbtn" onclick="addManual()">장바구니에 담기</button>
+  </div>
+</div>
+
+<!-- 히스토리 항목 추가 -->
+<div id="additem-bd" class="mbd" onclick="closeAddItemOnBackdrop(event)">
+  <div class="mbox">
+    <h3>항목 추가</h3><div class="mbox-sub" id="additem-session-date"></div>
+    <div class="mf"><label>상품명</label><input type="text" id="additem-name" placeholder="예: 비요뜨 복숭아" autocomplete="off"></div>
+    <div class="mf"><label>가격 (원)</label><input type="number" id="additem-price" placeholder="예: 1980" inputmode="numeric"></div>
+    <div class="mf"><label>수량</label><input type="number" id="additem-qty" value="1" min="1" inputmode="numeric"></div>
+    <button class="mpbtn" onclick="confirmAddItem()">추가하기</button>
+  </div>
+</div>
+
+<!-- 사용자 시트 -->
+<div id="user-sheet-bd" onclick="closeUserSheetOnBackdrop(event)">
+  <div id="user-sheet">
+    <div class="usp">
+      <div id="usp-av-wrap"></div>
+      <div class="usp-info">
+        <div class="usp-name" id="usp-name">-</div>
+        <div class="usp-email" id="usp-email">-</div>
+      </div>
     </div>
-    <div class="modal-field">
-      <label>가격 (원)</label>
-      <input type="number" id="manual-price" placeholder="예: 1980" inputmode="numeric">
-    </div>
-    <button id="modal-add-btn" onclick="addManual()">장바구니에 담기</button>
+    <div class="usmi" onclick="openSetupScreen()"><span class="usmi-ic">🔑</span> API 키 변경</div>
+    <div class="usmi danger" onclick="handleSignOut()"><span class="usmi-ic">🚪</span> 로그아웃</div>
+    <div class="usmi center" onclick="closeUserSheet()">닫기</div>
   </div>
 </div>
 
@@ -379,253 +403,149 @@
 <canvas id="canvas"></canvas>
 
 <script type="module">
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-import { getFirestore, collection, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import{initializeApp}from'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import{getFirestore,collection,addDoc,getDocs,updateDoc,deleteDoc,doc,query,where,orderBy,serverTimestamp}from'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import{getAuth,GoogleAuthProvider,signInWithPopup,signOut,onAuthStateChanged}from'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 
-const firebaseConfig = {
-  apiKey: "AIzaSyC_vh0fqH6vYFwFDYCKVcBi-xlFKvxnu6U",
-  authDomain: "scanmart-aa92f.firebaseapp.com",
-  projectId: "scanmart-aa92f",
-  storageBucket: "scanmart-aa92f.firebasestorage.app",
-  messagingSenderId: "944056726237",
-  appId: "1:944056726237:web:c7a62101714970c977a134"
-};
-const firebaseApp = initializeApp(firebaseConfig);
-const db = getFirestore(firebaseApp);
+const FC={apiKey:"AIzaSyC_vh0fqH6vYFwFDYCKVcBi-xlFKvxnu6U",authDomain:"scanmart-aa92f.firebaseapp.com",projectId:"scanmart-aa92f",storageBucket:"scanmart-aa92f.firebasestorage.app",messagingSenderId:"944056726237",appId:"1:944056726237:web:c7a62101714970c977a134"};
+const fa=initializeApp(FC);
+const db=getFirestore(fa);
+const auth=getAuth(fa);
+const gp=new GoogleAuthProvider();
+const WORKER='https://fancy-sound-0453.blackcore-ff6.workers.dev';
+const PG=10;
 
-const WORKER_URL = 'https://fancy-sound-0453.blackcore-ff6.workers.dev';
+let cart=JSON.parse(localStorage.getItem('scanmart-cart')||'[]');
+let stream=null,currentTab='cart',currentUser=null;
+let allSessions=[],hPage=1,hTotalPages=1,addItemTarget=null,historyLoaded=false;
 
-// ── STATE ──
-let cart = JSON.parse(localStorage.getItem('scanmart-cart') || '[]');
-let pendingItem = null;
-let stream = null;
-let currentTab = 'cart';
-
-// ── API KEY ──
-function getApiKey() { return localStorage.getItem('scanmart-api-key') || ''; }
-
-function saveApiKey() {
-  const key = document.getElementById('setup-key-input').value.trim();
-  if (!key.startsWith('sk-ant-')) { showToast('올바른 API 키 형식이 아니에요 (sk-ant-로 시작)'); return; }
-  localStorage.setItem('scanmart-api-key', key);
-  hideSetupScreen();
-  showToast('✓ API 키가 저장됐어요');
+// API KEY
+function getApiKey(){return localStorage.getItem('scanmart-api-key')||'';}
+function saveApiKey(){
+  const k=document.getElementById('setup-key-input').value.trim();
+  if(!k.startsWith('sk-ant-')){showToast('올바른 API 키 형식이 아니에요');return;}
+  localStorage.setItem('scanmart-api-key',k);hideSetupScreen();showToast('✓ API 키가 저장됐어요');
 }
-function showSetupScreen() {
-  const k = getApiKey();
-  if (k) document.getElementById('setup-key-input').value = k;
-  document.getElementById('setup-screen').classList.add('visible');
+function openSetupScreen(){closeUserSheet();const k=getApiKey();if(k)document.getElementById('setup-key-input').value=k;document.getElementById('setup-screen').classList.add('visible');}
+function hideSetupScreen(){document.getElementById('setup-screen').classList.remove('visible');}
+
+// AUTH
+onAuthStateChanged(auth,user=>{
+  currentUser=user;updateAuthUI(user);
+  if(!user){allSessions=[];historyLoaded=false;}
+  if(currentTab==='history')renderHistoryPage();
+});
+function updateAuthUI(u){
+  const lb=document.getElementById('login-btn'),av=document.getElementById('user-avatar');
+  if(u){lb.style.display='none';if(u.photoURL){av.src=u.photoURL;av.style.display='block';}else av.style.display='none';}
+  else{lb.style.display='flex';av.style.display='none';}
 }
-function hideSetupScreen() { document.getElementById('setup-screen').classList.remove('visible'); }
+async function handleLoginBtn(){
+  if(currentUser){openUserSheet();return;}
+  try{await signInWithPopup(auth,gp);showToast('✓ 로그인됐어요');}
+  catch(e){if(e.code!=='auth/popup-closed-by-user')showToast('로그인 실패: '+(e.message||'다시 시도'));}
+}
+async function handleSignOut(){closeUserSheet();await signOut(auth);allSessions=[];historyLoaded=false;showToast('로그아웃됐어요');}
 
-// ── TAB SWITCHING ──
-function switchTab(tab) {
-  currentTab = tab;
+// USER SHEET
+function openUserSheet(){
+  if(!currentUser)return;
+  document.getElementById('usp-name').textContent=currentUser.displayName||'사용자';
+  document.getElementById('usp-email').textContent=currentUser.email||'';
+  document.getElementById('usp-av-wrap').innerHTML=currentUser.photoURL?`<img class="usp-av" src="${currentUser.photoURL}" alt="">`:`<div class="usp-ph">👤</div>`;
+  document.getElementById('user-sheet-bd').classList.add('open');
+}
+function closeUserSheet(){document.getElementById('user-sheet-bd').classList.remove('open');}
+function closeUserSheetOnBackdrop(e){if(e.target===document.getElementById('user-sheet-bd'))closeUserSheet();}
 
-  document.getElementById('cart-page').classList.toggle('hidden', tab !== 'cart');
-  document.getElementById('scan-page').classList.toggle('hidden', tab !== 'scan');
-  document.getElementById('tab-cart').classList.toggle('active', tab === 'cart');
-  document.getElementById('tab-scan').classList.toggle('active', tab === 'scan');
+// TAB
+function switchTab(tab){
+  currentTab=tab;
+  ['cart','scan','history'].forEach(t=>{document.getElementById(t+'-page').classList.toggle('hidden',t!==tab);document.getElementById('tab-'+t).classList.toggle('active',t===tab);});
+  if(tab==='scan')initCamera();else stopCamera();
+  if(tab==='history')renderHistoryPage();
+}
 
-  if (tab === 'scan') {
-    initCamera();
-  } else {
-    stopCamera();
+// CAMERA
+async function initCamera(){
+  if(stream)return;
+  try{
+    stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:1280},height:{ideal:720}},audio:false});
+    document.getElementById('video').srcObject=stream;document.getElementById('scan-btn').disabled=false;
+  }catch(e){document.getElementById('no-camera-msg').style.display='flex';document.getElementById('scan-btn').disabled=true;}
+}
+function stopCamera(){if(stream){stream.getTracks().forEach(t=>t.stop());stream=null;document.getElementById('video').srcObject=null;}}
+
+// SCAN
+async function captureAndScan(){
+  const video=document.getElementById('video'),canvas=document.getElementById('canvas'),btn=document.getElementById('scan-btn');
+  if(!stream||!video.videoWidth){showToast('카메라가 준비되지 않았어요');return;}
+  const apiKey=getApiKey();if(!apiKey){openSetupScreen();return;}
+  document.getElementById('flash').classList.add('on');setTimeout(()=>document.getElementById('flash').classList.remove('on'),150);
+  document.getElementById('scan-line').classList.add('scanning');
+  btn.classList.add('loading');btn.disabled=true;
+  document.getElementById('btn-icon').textContent='⏳';document.getElementById('btn-text').textContent='분석 중...';
+  canvas.width=video.videoWidth;canvas.height=video.videoHeight;canvas.getContext('2d').drawImage(video,0,0);
+  const b64=canvas.toDataURL('image/jpeg',0.85).split(',')[1];
+  try{
+    const r=await callClaude(b64,apiKey);
+    if(r)showResult(r.name,r.price);else showToast('가격표를 인식하지 못했어요. 다시 시도해보세요.');
+  }catch(e){showToast('오류: '+(e.message||'다시 시도해주세요'));}
+  finally{
+    document.getElementById('scan-line').classList.remove('scanning');
+    btn.classList.remove('loading');btn.disabled=false;
+    document.getElementById('btn-icon').textContent='⚡';document.getElementById('btn-text').textContent='스캔하기';
   }
 }
-
-// ── CAMERA ──
-async function initCamera() {
-  if (stream) return; // 이미 켜져있으면 skip
-  try {
-    stream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: { ideal: 'environment' }, width: { ideal: 1280 }, height: { ideal: 720 } },
-      audio: false
-    });
-    document.getElementById('video').srcObject = stream;
-    document.getElementById('scan-btn').disabled = false;
-  } catch(e) {
-    document.getElementById('no-camera-msg').style.display = 'flex';
-    document.getElementById('scan-btn').disabled = true;
-    console.warn('Camera error:', e);
-  }
+async function callClaude(b64,apiKey){
+  const res=await fetch(WORKER,{method:'POST',headers:{'Content-Type':'application/json','x-api-key':apiKey},body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:200,messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:'image/jpeg',data:b64}},{type:'text',text:`이 이미지는 마트 가격표입니다. 상품명과 가격을 추출해주세요.\n반드시 아래 JSON 형식만 반환하세요:\n{"name": "상품명", "price": 숫자만}\n가격표가 없거나 인식 불가하면: {"name": null, "price": null}`}]}]})});
+  if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e.error?.message||`API 오류 (${res.status})`);}
+  const data=await res.json();const text=data.content?.[0]?.text?.trim()||'';
+  try{const p=JSON.parse(text.replace(/```json|```/g,'').trim());if(!p.name||!p.price)return null;return{name:p.name,price:parseInt(p.price)};}catch(e){return null;}
 }
 
-function stopCamera() {
-  if (stream) {
-    stream.getTracks().forEach(t => t.stop());
-    stream = null;
-    document.getElementById('video').srcObject = null;
-  }
-}
-
-// ── SCAN ──
-async function captureAndScan() {
-  const video = document.getElementById('video');
-  const canvas = document.getElementById('canvas');
-  const btn = document.getElementById('scan-btn');
-
-  if (!stream || !video.videoWidth) { showToast('카메라가 준비되지 않았어요'); return; }
-  const apiKey = getApiKey();
-  if (!apiKey) { showSetupScreen(); return; }
-
-  const flash = document.getElementById('flash');
-  flash.classList.add('on');
-  setTimeout(() => flash.classList.remove('on'), 150);
-
-  const scanLine = document.getElementById('scan-line');
-  scanLine.classList.add('scanning');
-  btn.classList.add('loading');
-  document.getElementById('btn-icon').textContent = '⏳';
-  document.getElementById('btn-text').textContent = '분석 중...';
-  btn.disabled = true;
-
-  canvas.width = video.videoWidth;
-  canvas.height = video.videoHeight;
-  canvas.getContext('2d').drawImage(video, 0, 0);
-  const base64 = canvas.toDataURL('image/jpeg', 0.85).split(',')[1];
-
-  try {
-    const result = await callClaudeVision(base64, apiKey);
-    if (result) { showResult(result.name, result.price); }
-    else { showToast('가격표를 인식하지 못했어요. 다시 시도해보세요.'); }
-  } catch(e) {
-    console.error(e);
-    showToast('오류: ' + (e.message || '다시 시도해주세요'));
-  } finally {
-    scanLine.classList.remove('scanning');
-    btn.classList.remove('loading');
-    document.getElementById('btn-icon').textContent = '⚡';
-    document.getElementById('btn-text').textContent = '스캔하기';
-    btn.disabled = false;
-  }
-}
-
-async function callClaudeVision(base64Image, apiKey) {
-  const response = await fetch(WORKER_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey },
-    body: JSON.stringify({
-      model: 'claude-haiku-4-5-20251001',
-      max_tokens: 200,
-      messages: [{
-        role: 'user',
-        content: [
-          { type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: base64Image } },
-          { type: 'text', text: `이 이미지는 마트 가격표입니다. 상품명과 가격을 추출해주세요.\n반드시 아래 JSON 형식만 반환하세요:\n{"name": "상품명", "price": 숫자만}\n가격표가 없거나 인식 불가하면: {"name": null, "price": null}` }
-        ]
-      }]
-    })
-  });
-  if (!response.ok) {
-    const err = await response.json().catch(() => ({}));
-    throw new Error(err.error?.message || `API 오류 (${response.status})`);
-  }
-  const data = await response.json();
-  const text = data.content?.[0]?.text?.trim() || '';
-  try {
-    const parsed = JSON.parse(text.replace(/```json|```/g, '').trim());
-    if (!parsed.name || !parsed.price) return null;
-    return { name: parsed.name, price: parseInt(parsed.price) };
-  } catch(e) { return null; }
-}
-
-// ── RESULT SHEET ──
-function showResult(name, price) {
-  pendingItem = { name, price };
-  document.getElementById('result-name-input').value = name;
-  document.getElementById('result-price-input').value = price;
+// RESULT SHEET
+function showResult(name,price){
+  document.getElementById('result-name-input').value=name;document.getElementById('result-price-input').value=price;
   document.getElementById('result-sheet-backdrop').classList.add('open');
-  setTimeout(() => document.getElementById('result-name-input').focus(), 200);
+  setTimeout(()=>document.getElementById('result-name-input').focus(),200);
 }
+function discardResult(){document.getElementById('result-sheet-backdrop').classList.remove('open');}
+function backdropClose(e){if(e.target===document.getElementById('result-sheet-backdrop'))discardResult();}
 
-function discardResult() {
-  pendingItem = null;
-  document.getElementById('result-sheet-backdrop').classList.remove('open');
+// CART
+function addToCart(){
+  const name=document.getElementById('result-name-input').value.trim();
+  const price=parseInt(document.getElementById('result-price-input').value);
+  if(!name){showToast('상품명을 입력해주세요');return;}
+  if(!price||price<=0){showToast('올바른 가격을 입력해주세요');return;}
+  const ex=cart.find(i=>i.name===name);if(ex)ex.qty++;else cart.push({name,price,qty:1,id:Date.now(),isNew:true});
+  discardResult();renderCart();showToast(`✓ ${name} 담았어요`);setTimeout(()=>switchTab('cart'),300);
 }
-
-function backdropClose(e) {
-  if (e.target === document.getElementById('result-sheet-backdrop')) discardResult();
+function addManual(){
+  const name=document.getElementById('manual-name').value.trim();
+  const price=parseInt(document.getElementById('manual-price').value);
+  if(!name){showToast('상품명을 입력해주세요');return;}
+  if(!price||price<=0){showToast('올바른 가격을 입력해주세요');return;}
+  const ex=cart.find(i=>i.name===name);if(ex)ex.qty++;else cart.push({name,price,qty:1,id:Date.now(),isNew:true});
+  closeModal();renderCart();showToast(`✓ ${name} 담았어요`);setTimeout(()=>switchTab('cart'),300);
 }
-
-// ── CART ──
-function addToCart() {
-  const name = document.getElementById('result-name-input').value.trim();
-  const price = parseInt(document.getElementById('result-price-input').value);
-  if (!name) { showToast('상품명을 입력해주세요'); return; }
-  if (!price || price <= 0) { showToast('올바른 가격을 입력해주세요'); return; }
-
-  const existing = cart.find(i => i.name === name);
-  if (existing) { existing.qty++; }
-  else { cart.push({ name, price, qty: 1, id: Date.now(), isNew: true }); }
-
-  const savedName = name;
-  discardResult();
-  renderCart();
-  updateTotal();
-  showToast(`✓ ${savedName} 담았어요`);
-
-  // 장바구니 탭으로 자동 이동
-  setTimeout(() => switchTab('cart'), 300);
-}
-
-function addManual() {
-  const name = document.getElementById('manual-name').value.trim();
-  const price = parseInt(document.getElementById('manual-price').value);
-  if (!name) { showToast('상품명을 입력해주세요'); return; }
-  if (!price || price <= 0) { showToast('올바른 가격을 입력해주세요'); return; }
-
-  const existing = cart.find(i => i.name === name);
-  if (existing) { existing.qty++; }
-  else { cart.push({ name, price, qty: 1, id: Date.now(), isNew: true }); }
-
-  closeModal();
-  renderCart();
-  updateTotal();
-  showToast(`✓ ${name} 담았어요`);
-  setTimeout(() => switchTab('cart'), 300);
-}
-
-function changeQty(id, delta) {
-  const item = cart.find(i => i.id === id);
-  if (!item) return;
-  item.qty += delta;
-  if (item.qty <= 0) cart = cart.filter(i => i.id !== id);
-  renderCart(); updateTotal();
-}
-
-function removeItem(id) {
-  cart = cart.filter(i => i.id !== id);
-  renderCart(); updateTotal();
-}
-
-function clearCart() {
-  if (cart.length === 0) return;
-  if (!confirm('장바구니를 비울까요?')) return;
-  cart = []; renderCart(); updateTotal();
-}
-
-function renderCart() {
-  localStorage.setItem('scanmart-cart', JSON.stringify(cart));
-  const list = document.getElementById('cart-list');
-  const empty = document.getElementById('empty-state');
-  const saveBtn = document.getElementById('save-btn');
-
-  if (cart.length === 0) {
-    empty.style.display = 'flex';
-    list.innerHTML = '';
-    saveBtn.classList.remove('active');
-    return;
-  }
-  empty.style.display = 'none';
-  saveBtn.classList.add('active');
-
-  list.innerHTML = cart.map(item => `
-    <div class="cart-item${item.isNew ? ' new-item' : ''}" id="item-${item.id}">
-      <div class="item-info">
-        <div class="item-name">${escHtml(item.name)}</div>
-        <div class="item-unit">개당 ₩${item.price.toLocaleString('ko-KR')}</div>
-      </div>
+function changeQty(id,delta){const i=cart.find(x=>x.id===id);if(!i)return;i.qty+=delta;if(i.qty<=0)cart=cart.filter(x=>x.id!==id);renderCart();}
+function removeItem(id){cart=cart.filter(i=>i.id!==id);renderCart();}
+function clearCart(){if(!cart.length)return;if(!confirm('장바구니를 비울까요?'))return;cart=[];renderCart();}
+function renderCart(){
+  localStorage.setItem('scanmart-cart',JSON.stringify(cart));
+  const list=document.getElementById('cart-list'),empty=document.getElementById('empty-state'),
+        saveBtn=document.getElementById('save-btn'),badge=document.getElementById('cart-badge');
+  const total=cart.reduce((s,i)=>s+i.price*i.qty,0);
+  document.getElementById('total-amount').textContent='₩'+total.toLocaleString('ko-KR');
+  const tq=cart.reduce((s,i)=>s+i.qty,0);
+  if(tq>0){badge.textContent=tq;badge.classList.add('show');}else badge.classList.remove('show');
+  if(!cart.length){empty.style.display='flex';list.innerHTML='';saveBtn.classList.remove('active');return;}
+  empty.style.display='none';saveBtn.classList.add('active');
+  list.innerHTML=cart.map(item=>`
+    <div class="cart-item${item.isNew?' new-item':''}" id="item-${item.id}">
+      <div class="item-info"><div class="item-name">${esc(item.name)}</div><div class="item-unit">개당 ₩${item.price.toLocaleString('ko-KR')}</div></div>
       <div class="qty-controls">
         <button class="qty-btn" onclick="changeQty(${item.id},-1)">−</button>
         <span class="qty-num">${item.qty}</span>
@@ -633,106 +553,171 @@ function renderCart() {
       </div>
       <div class="item-subtotal">₩${(item.price*item.qty).toLocaleString('ko-KR')}</div>
       <button class="del-btn" onclick="removeItem(${item.id})">✕</button>
+    </div>`).join('');
+  cart.forEach(item=>{if(item.isNew)setTimeout(()=>{item.isNew=false;document.getElementById(`item-${item.id}`)?.classList.remove('new-item');},2000);});
+}
+
+// SAVE
+async function saveSession(){
+  if(!cart.length){showToast('담은 상품이 없어요');return;}
+  if(!currentUser){showToast('저장하려면 로그인이 필요해요');setTimeout(handleLoginBtn,500);return;}
+  const btn=document.getElementById('save-btn');btn.textContent='⏳ 저장 중...';btn.disabled=true;
+  const total=cart.reduce((s,i)=>s+i.price*i.qty,0),now=new Date();
+  try{
+    await addDoc(collection(db,'shopping_sessions'),{
+      uid:currentUser.uid,date:now.toLocaleDateString('ko-KR'),
+      time:now.toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'}),
+      total,items:cart.map(i=>({name:i.name,price:i.price,qty:i.qty})),createdAt:serverTimestamp()
+    });
+    showToast('☁️ 저장 완료! ₩'+total.toLocaleString('ko-KR'));btn.classList.remove('active');
+    allSessions=[];historyLoaded=false;
+  }catch(e){showToast('저장 실패: '+(e.message||'다시 시도해주세요'));btn.classList.add('active');}
+  finally{btn.textContent='🗒️ 쇼핑 저장';btn.disabled=false;}
+}
+
+// HISTORY
+async function renderHistoryPage(){
+  const eLP=document.getElementById('history-login-prompt'),eL=document.getElementById('history-loading'),
+        eE=document.getElementById('history-empty'),eS=document.getElementById('history-scroll'),
+        ePG=document.getElementById('history-pagination');
+  if(!currentUser){eLP.style.display='flex';eL.style.display='none';eE.style.display='none';eS.style.display='none';ePG.style.display='none';return;}
+  eLP.style.display='none';
+  if(!historyLoaded){
+    eL.style.display='flex';eE.style.display='none';eS.style.display='none';ePG.style.display='none';
+    try{
+      const q=query(collection(db,'shopping_sessions'),where('uid','==',currentUser.uid),orderBy('createdAt','desc'));
+      const snap=await getDocs(q);allSessions=snap.docs.map(d=>({id:d.id,...d.data()}));historyLoaded=true;
+    }catch(e){showToast('기록 로드 실패: '+(e.message||'다시 시도해주세요'));eL.style.display='none';return;}
+    eL.style.display='none';
+  }
+  renderHistoryList();
+}
+function renderHistoryList(){
+  const eE=document.getElementById('history-empty'),eS=document.getElementById('history-scroll'),ePG=document.getElementById('history-pagination');
+  if(!allSessions.length){eE.style.display='flex';eS.style.display='none';ePG.style.display='none';document.getElementById('history-list').innerHTML='';return;}
+  eE.style.display='none';eS.style.display='block';
+  hTotalPages=Math.ceil(allSessions.length/PG);if(hPage>hTotalPages)hPage=hTotalPages;
+  const start=(hPage-1)*PG;
+  document.getElementById('history-list').innerHTML=allSessions.slice(start,start+PG).map(s=>renderSessionCard(s)).join('');
+  if(hTotalPages<=1){ePG.style.display='none';}
+  else{ePG.style.display='flex';document.getElementById('page-info').textContent=`${hPage} / ${hTotalPages}`;
+    document.getElementById('prev-page-btn').disabled=hPage<=1;document.getElementById('next-page-btn').disabled=hPage>=hTotalPages;}
+}
+function renderSessionCard(s){
+  const items=s.items||[];const ic=items.reduce((x,i)=>x+(i.qty||1),0);
+  const ihtml=items.map((item,idx)=>`
+    <div class="session-item-row" id="si-${s.id}-${idx}">
+      <span class="si-name">${esc(item.name)}</span>
+      <span class="si-qty">×${item.qty||1}</span>
+      <span class="si-price">₩${(item.price||0).toLocaleString('ko-KR')}</span>
+      <span class="si-subtotal">₩${((item.price||0)*(item.qty||1)).toLocaleString('ko-KR')}</span>
+      <button class="si-edit-btn" onclick="toggleItemEdit('${s.id}',${idx})">✏️</button>
+      <button class="si-del-btn" onclick="deleteSessionItem('${s.id}',${idx})">✕</button>
     </div>
-  `).join('');
-
-  // new 뱃지 2초 후 제거
-  cart.forEach(item => {
-    if (item.isNew) {
-      setTimeout(() => {
-        item.isNew = false;
-        const el = document.getElementById(`item-${item.id}`);
-        if (el) el.classList.remove('new-item');
-      }, 2000);
-    }
-  });
-
-  updateTotal(); // ← 이 줄만 추가
+    <div class="si-edit-form" id="si-edit-${s.id}-${idx}">
+      <div class="si-edit-row"><input class="si-edit-input" type="text" id="si-name-${s.id}-${idx}" value="${esc(item.name)}" placeholder="상품명"></div>
+      <div class="si-edit-row">
+        <input class="si-edit-input small" type="number" id="si-price-${s.id}-${idx}" value="${item.price||0}" inputmode="numeric" placeholder="가격">
+        <input class="si-edit-input small" type="number" id="si-qty-${s.id}-${idx}" value="${item.qty||1}" min="1" inputmode="numeric" placeholder="수량">
+        <button class="si-save-btn" onclick="saveItemEdit('${s.id}',${idx})">저장</button>
+        <button class="si-cancel-btn" onclick="toggleItemEdit('${s.id}',${idx})">취소</button>
+      </div>
+    </div>`).join('');
+  return`<div class="session-card" id="sc-${s.id}">
+    <div class="session-card-header" onclick="toggleSessionCard('${s.id}')">
+      <div class="session-date-block"><span class="session-date">${esc(s.date||'')}</span><span class="session-time">${esc(s.time||'')}</span></div>
+      <div class="session-card-right"><span class="session-item-count">${ic}개</span><span class="session-total">₩${(s.total||0).toLocaleString('ko-KR')}</span><span class="session-chevron">▼</span></div>
+    </div>
+    <div class="session-body">
+      <div class="session-items-list">${ihtml}</div>
+      <div class="session-actions">
+        <button class="session-add-btn" onclick="openAddItem('${s.id}')">＋ 항목 추가</button>
+        <button class="session-del-btn" onclick="deleteSession('${s.id}')">🗑️ 삭제</button>
+      </div>
+    </div>
+  </div>`;
 }
-
-function updateTotal() {
-  localStorage.setItem('scanmart-cart', JSON.stringify(cart));
-  const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
-  document.getElementById('total-amount').textContent = '₩' + total.toLocaleString('ko-KR');
+function toggleSessionCard(id){document.getElementById(`sc-${id}`)?.classList.toggle('open');}
+function toggleItemEdit(sid,idx){
+  const form=document.getElementById(`si-edit-${sid}-${idx}`),row=document.getElementById(`si-${sid}-${idx}`);if(!form)return;
+  const open=form.classList.toggle('open');row?.classList.toggle('editing',open);
+  if(open)setTimeout(()=>document.getElementById(`si-name-${sid}-${idx}`)?.focus(),80);
 }
-
-// ── SAVE ──
-async function saveSession() {
-  if (cart.length === 0) { showToast('담은 상품이 없어요'); return; }
-  const btn = document.getElementById('save-btn');
-  btn.textContent = '⏳ 저장 중...'; btn.disabled = true;
-  const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
-  const session = {
-    date: new Date().toLocaleDateString('ko-KR'),
-    time: new Date().toLocaleTimeString('ko-KR', {hour:'2-digit',minute:'2-digit'}),
-    total, items: cart.map(i => ({name:i.name,price:i.price,qty:i.qty})),
-    createdAt: serverTimestamp()
-  };
-  try {
-    await addDoc(collection(db,'shopping_sessions'), session);
-    showToast('☁️ 저장 완료! 합계 ₩' + total.toLocaleString('ko-KR'));
-    btn.classList.remove('active');
-  } catch(e) {
-    showToast('저장 실패: ' + (e.message || '다시 시도해주세요'));
-    btn.classList.add('active');
-  } finally { btn.textContent = '🗒️ 쇼핑 저장'; btn.disabled = false; }
+async function saveItemEdit(sid,idx){
+  const name=document.getElementById(`si-name-${sid}-${idx}`)?.value.trim();
+  const price=parseInt(document.getElementById(`si-price-${sid}-${idx}`)?.value);
+  const qty=parseInt(document.getElementById(`si-qty-${sid}-${idx}`)?.value);
+  if(!name){showToast('상품명을 입력해주세요');return;}
+  if(!price||price<=0){showToast('올바른 가격을 입력해주세요');return;}
+  if(!qty||qty<1){showToast('수량은 1 이상이어야 해요');return;}
+  const s=allSessions.find(x=>x.id===sid);if(!s)return;
+  s.items[idx]={name,price,qty};s.total=s.items.reduce((x,i)=>x+(i.price||0)*(i.qty||1),0);
+  try{await updateDoc(doc(db,'shopping_sessions',sid),{items:s.items,total:s.total});showToast('✓ 수정됐어요');renderHistoryList();}
+  catch(e){showToast('수정 실패: '+(e.message||'다시 시도해주세요'));}
 }
-
-// ── MODAL ──
-function openModal() {
-  document.getElementById('modal-backdrop').classList.add('open');
-  setTimeout(() => document.getElementById('manual-name').focus(), 100);
+async function deleteSessionItem(sid,idx){
+  const s=allSessions.find(x=>x.id===sid);if(!s)return;
+  if(!confirm(`"${s.items[idx]?.name}" 항목을 삭제할까요?`))return;
+  s.items.splice(idx,1);s.total=s.items.reduce((x,i)=>x+(i.price||0)*(i.qty||1),0);
+  try{await updateDoc(doc(db,'shopping_sessions',sid),{items:s.items,total:s.total});showToast('✓ 항목 삭제됐어요');renderHistoryList();}
+  catch(e){showToast('삭제 실패: '+(e.message||'다시 시도해주세요'));}
 }
-function closeModal() {
-  document.getElementById('modal-backdrop').classList.remove('open');
-  document.getElementById('manual-name').value = '';
-  document.getElementById('manual-price').value = '';
+async function deleteSession(sid){
+  const s=allSessions.find(x=>x.id===sid);if(!s)return;
+  if(!confirm(`${s.date} 쇼핑 기록을 삭제할까요?`))return;
+  try{await deleteDoc(doc(db,'shopping_sessions',sid));allSessions=allSessions.filter(x=>x.id!==sid);showToast('🗑️ 삭제됐어요');renderHistoryList();}
+  catch(e){showToast('삭제 실패: '+(e.message||'다시 시도해주세요'));}
 }
-function closeModalOnBackdrop(e) {
-  if (e.target === document.getElementById('modal-backdrop')) closeModal();
+function openAddItem(sid){
+  addItemTarget=sid;const s=allSessions.find(x=>x.id===sid);
+  document.getElementById('additem-session-date').textContent=s?`📅 ${s.date} ${s.time}`:'';
+  document.getElementById('additem-name').value='';document.getElementById('additem-price').value='';document.getElementById('additem-qty').value='1';
+  document.getElementById('additem-bd').classList.add('open');setTimeout(()=>document.getElementById('additem-name').focus(),100);
 }
-
-// ── TOAST ──
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.classList.add('show');
-  clearTimeout(t._to);
-  t._to = setTimeout(() => t.classList.remove('show'), 2500);
+async function confirmAddItem(){
+  const name=document.getElementById('additem-name').value.trim();
+  const price=parseInt(document.getElementById('additem-price').value);
+  const qty=parseInt(document.getElementById('additem-qty').value)||1;
+  if(!name){showToast('상품명을 입력해주세요');return;}
+  if(!price||price<=0){showToast('올바른 가격을 입력해주세요');return;}
+  const sid=addItemTarget,s=allSessions.find(x=>x.id===sid);if(!s)return;
+  s.items=s.items||[];s.items.push({name,price,qty});s.total=s.items.reduce((x,i)=>x+(i.price||0)*(i.qty||1),0);
+  try{
+    await updateDoc(doc(db,'shopping_sessions',sid),{items:s.items,total:s.total});
+    closeAddItem();showToast(`✓ ${name} 추가됐어요`);renderHistoryList();
+    setTimeout(()=>{const card=document.getElementById(`sc-${sid}`);if(card&&!card.classList.contains('open'))card.classList.add('open');},200);
+  }catch(e){showToast('추가 실패: '+(e.message||'다시 시도해주세요'));}
 }
+function closeAddItem(){document.getElementById('additem-bd').classList.remove('open');addItemTarget=null;}
+function closeAddItemOnBackdrop(e){if(e.target===document.getElementById('additem-bd'))closeAddItem();}
+function changePage(d){hPage=Math.max(1,Math.min(hTotalPages,hPage+d));renderHistoryList();document.getElementById('history-scroll').scrollTop=0;}
 
-function escHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+// MODAL
+function openModal(){document.getElementById('modal-bd').classList.add('open');setTimeout(()=>document.getElementById('manual-name').focus(),100);}
+function closeModal(){document.getElementById('modal-bd').classList.remove('open');document.getElementById('manual-name').value='';document.getElementById('manual-price').value='';}
+function closeModalOnBackdrop(e){if(e.target===document.getElementById('modal-bd'))closeModal();}
 
-// ── VISIBILITY (화면 꺼지면 카메라 OFF) ──
-document.addEventListener('visibilitychange', () => {
-  if (document.hidden) { stopCamera(); }
-  else if (currentTab === 'scan') { initCamera(); }
+// TOAST
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._to);t._to=setTimeout(()=>t.classList.remove('show'),2500);}
+function esc(s){if(!s)return'';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+document.addEventListener('visibilitychange',()=>{if(document.hidden)stopCamera();else if(currentTab==='scan')initCamera();});
+
+Object.assign(window,{
+  saveApiKey,openSetupScreen,hideSetupScreen,
+  handleLoginBtn,handleSignOut,openUserSheet,closeUserSheet,closeUserSheetOnBackdrop,
+  switchTab,captureAndScan,
+  addToCart,discardResult,backdropClose,
+  addManual,changeQty,removeItem,clearCart,saveSession,
+  openModal,closeModal,closeModalOnBackdrop,
+  toggleSessionCard,toggleItemEdit,saveItemEdit,deleteSessionItem,deleteSession,
+  openAddItem,confirmAddItem,closeAddItem,closeAddItemOnBackdrop,
+  changePage
 });
 
-// ── GLOBALS ──
-window.saveApiKey = saveApiKey;
-window.showSetupScreen = showSetupScreen;
-window.hideSetupScreen = hideSetupScreen;
-window.switchTab = switchTab;
-window.captureAndScan = captureAndScan;
-window.addToCart = addToCart;
-window.discardResult = discardResult;
-window.backdropClose = backdropClose;
-window.addManual = addManual;
-window.changeQty = changeQty;
-window.removeItem = removeItem;
-window.clearCart = clearCart;
-window.saveSession = saveSession;
-window.openModal = openModal;
-window.closeModal = closeModal;
-window.closeModalOnBackdrop = closeModalOnBackdrop;
-
-// ── INIT ──
-if (!getApiKey()) showSetupScreen();
-renderCart();  // 카메라는 스캔 탭 눌러야 켜짐!
-
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js').catch(e => console.warn('SW:', e));
-}
+if(!getApiKey())document.getElementById('setup-screen').classList.add('visible');
+renderCart();
+if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js').catch(e=>console.warn('SW:',e));
 </script>
 </body>
 </html>
