@@ -1,4 +1,4 @@
-const CACHE = 'scanmart-v1';
+const CACHE = 'scanmart-v2';
 const ASSETS = [
   './',
   './index.html',
@@ -20,10 +20,22 @@ self.addEventListener('activate', e => {
 });
 
 self.addEventListener('fetch', e => {
-  if (e.request.url.includes('api.anthropic.com') || e.request.url.includes('fonts.googleapis.com')) {
-    return;
-  }
+  // API·폰트는 서비스 워커 완전 제외 (기존과 동일)
+  if (
+    e.request.url.includes('api.anthropic.com') ||
+    e.request.url.includes('fonts.googleapis.com') ||
+    e.request.url.includes('firestore.googleapis.com') ||
+    e.request.url.includes('firebase')
+  ) return;
+
   e.respondWith(
-    caches.match(e.request).then(cached => cached || fetch(e.request))
+    fetch(e.request)
+      .then(response => {
+        // 네트워크 성공 → 캐시 업데이트 후 반환
+        const clone = response.clone();
+        caches.open(CACHE).then(c => c.put(e.request, clone));
+        return response;
+      })
+      .catch(() => caches.match(e.request)) // 오프라인이면 캐시 사용
   );
 });
