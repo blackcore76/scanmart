@@ -5,32 +5,31 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="theme-color" content="#0a0a0a">
+<meta name="theme-color" content="#080c14">
 <title>스캔마트</title>
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Noto+Sans+KR:wght@400;700;800&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg: #080c14;
-  --sf: #0e1422;
-  --sf2: #1a2030;
-  --bd: #2a3448;
-  --accent: #e8912d;
-  --accent-dim: #c97820;
-  --danger: #e05252;
-  --text: #f0f0f0;
-  --muted: #666;
-  --total-bg: #0a1020;
-  --radius: 10px;
-  --mono: 'JetBrains Mono', monospace;
-  --sans: 'Noto Sans KR', sans-serif;
-}
-
-html { background: #080c14; }
+  :root {
+    --bg: #080c14;
+    --sf: #0e1422;
+    --sf2: #1a2030;
+    --bd: #2a3448;
+    --accent: #e8912d;
+    --accent-dim: #c97820;
+    --danger: #e05252;
+    --text: #f0f0f0;
+    --muted: #666;
+    --total-bg: #0a1020;
+    --radius: 10px;
+    --mono: 'JetBrains Mono', monospace;
+    --sans: 'Noto Sans KR', sans-serif;
+  }
 
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html { background: #080c14; }
   html, body {
     height:100%; background:var(--bg); color:var(--text);
     font-family:var(--sans); overflow:hidden;
@@ -43,26 +42,16 @@ html { background: #080c14; }
   #header {
     flex-shrink:0; background:var(--total-bg);
     border-bottom:1px solid var(--accent);
+    border-left:4px solid var(--accent);
     padding:10px 16px; display:flex; align-items:center;
     justify-content:space-between; z-index:10;
   }
-  #logo {
-    font-size:17px; font-weight:800; color:var(--accent);
-    letter-spacing:-0.3px; font-family:var(--sans);
-  }
+  #logo { font-size:17px; font-weight:800; color:var(--accent); letter-spacing:-0.3px; font-family:var(--sans); }
   #header-right { display:flex; align-items:center; gap:10px; }
   #total-display { text-align:right; }
-  #total-label {
-    font-size:10px; color:var(--muted);
-    letter-spacing:1.5px; text-transform:uppercase;
-    font-family:var(--mono);
-  }
-  #total-amount {
-    font-family:var(--mono); font-size:22px;
-    color:var(--accent); line-height:1; font-weight:700;
-  }
+  #total-label { font-size:10px; color:var(--muted); letter-spacing:1.5px; text-transform:uppercase; font-family:var(--mono); }
+  #total-amount { font-family:var(--mono); font-size:22px; color:var(--accent); line-height:1; font-weight:700; }
 
-  /* 로그인 버튼 */
   #login-btn {
     height:32px; padding:0 12px; background:var(--sf2);
     border:1px solid var(--bd); border-radius:20px;
@@ -73,46 +62,32 @@ html { background: #080c14; }
   }
   #login-btn:active { border-color:var(--accent); color:var(--accent); }
   #login-btn.logged-in { border-color:var(--accent-dim); color:var(--accent-dim); }
-  #login-btn .avatar {
-    width:20px; height:20px; border-radius:50%; background:var(--accent);
-    display:none; align-items:center; justify-content:center;
-    font-size:10px; color:#000; font-weight:800;
-  }
+  #login-btn .avatar { width:20px; height:20px; border-radius:50%; background:var(--accent); display:none; align-items:center; justify-content:center; font-size:10px; color:#000; font-weight:800; }
   #login-btn.logged-in .avatar { display:flex; }
   #login-btn.logged-in .login-text { display:none; }
 
   /* ── TAB PAGES ── */
   #pages { flex:1; overflow:hidden; position:relative; }
-  .page {
-    position:absolute; inset:0; display:flex;
-    flex-direction:column; transition:opacity 0.2s;
-  }
+  .page { position:absolute; inset:0; display:flex; flex-direction:column; transition:opacity 0.2s; }
   .page.hidden { opacity:0; pointer-events:none; }
 
   /* ── 장바구니 탭 ── */
   #cart-page { background:var(--bg); }
-  #cart-scroll {
-    flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:14px;
-  }
+  #cart-scroll { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:14px; }
   #cart-scroll::-webkit-scrollbar { width:2px; }
   #cart-scroll::-webkit-scrollbar-thumb { background:var(--bd); border-radius:2px; }
 
   #empty-state {
     height:100%; display:flex; flex-direction:column;
-    align-items:center; justify-content:center;
-    gap:10px; color:var(--muted); padding-bottom:60px;
+    align-items:center; justify-content:center; gap:10px; color:var(--muted); padding-bottom:60px;
   }
   .empty-icon { font-size:48px; opacity:0.2; }
   .empty-title { font-size:15px; font-weight:800; color:var(--text); }
-  .empty-sub {
-    font-size:13px; color:var(--muted);
-    text-align:center; line-height:1.7;
-  }
+  .empty-sub { font-size:13px; color:var(--muted); text-align:center; line-height:1.7; }
   .empty-cta {
     margin-top:8px; padding:11px 24px;
     background:var(--total-bg); border:1px solid var(--accent);
-    border-radius:20px; color:var(--accent); font-size:13px;
-    font-weight:800; cursor:pointer; font-family:var(--sans);
+    border-radius:20px; color:var(--accent); font-size:13px; font-weight:800; cursor:pointer; font-family:var(--sans);
   }
   .empty-cta:active { background:#2a1200; }
 
@@ -121,53 +96,32 @@ html { background: #080c14; }
   .cart-item {
     background:var(--sf); border:1px solid var(--bd);
     border-radius:var(--radius); padding:12px 14px;
-    display:flex; align-items:center; gap:10px;
-    animation:slideIn 0.2s ease;
+    display:flex; align-items:center; gap:10px; animation:slideIn 0.2s ease;
   }
   .cart-item.new-item { border-color:var(--accent); background:#1a0d00; }
-  @keyframes slideIn {
-    from { opacity:0; transform:translateY(-6px); }
-    to { opacity:1; transform:translateY(0); }
-  }
+  @keyframes slideIn { from{opacity:0;transform:translateY(-6px)} to{opacity:1;transform:translateY(0)} }
   .item-info { flex:1; min-width:0; }
-  .item-name {
-    font-size:14px; font-weight:700;
-    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-  }
-  .item-unit {
-    font-size:11px; color:var(--muted); margin-top:3px;
-    font-family:var(--mono);
-  }
+  .item-name { font-size:14px; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .item-unit { font-size:11px; color:var(--muted); margin-top:3px; font-family:var(--mono); }
   .qty-controls { display:flex; align-items:center; gap:6px; flex-shrink:0; }
   .qty-btn {
-    width:30px; height:30px; border-radius:6px;
-    border:1px solid var(--bd); background:var(--sf2);
-    color:var(--text); font-size:16px; cursor:pointer;
-    display:flex; align-items:center; justify-content:center;
-    transition:border-color 0.15s;
+    width:30px; height:30px; border-radius:6px; border:1px solid var(--bd);
+    background:var(--sf2); color:var(--text); font-size:16px; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; transition:border-color 0.15s;
   }
   .qty-btn:active { border-color:var(--accent); }
-  .qty-num {
-    font-family:var(--mono); font-size:14px;
-    min-width:22px; text-align:center; font-weight:700;
-  }
-  .item-subtotal {
-    font-family:var(--mono); font-size:15px;
-    color:var(--accent); min-width:68px; text-align:right; font-weight:700;
-  }
+  .qty-num { font-family:var(--mono); font-size:14px; min-width:22px; text-align:center; font-weight:700; }
+  .item-subtotal { font-family:var(--mono); font-size:15px; color:var(--accent); min-width:68px; text-align:right; font-weight:700; }
   .del-btn {
     width:28px; height:28px; border-radius:6px; border:none;
     background:transparent; color:#3a3a3a; font-size:15px; cursor:pointer;
-    display:flex; align-items:center; justify-content:center;
-    transition:color 0.15s;
+    display:flex; align-items:center; justify-content:center; transition:color 0.15s;
   }
   .del-btn:active { color:var(--danger); }
 
   #cart-actions {
     flex-shrink:0; background:var(--sf); border-top:1px solid var(--bd);
-    padding:10px 14px;
-    padding-bottom:max(10px, env(safe-area-inset-bottom));
-    display:flex; gap:8px;
+    padding:10px 14px; padding-bottom:max(10px, env(safe-area-inset-bottom)); display:flex; gap:8px;
   }
   #save-btn {
     flex:1; height:46px; background:var(--sf2); color:var(--muted);
@@ -177,10 +131,9 @@ html { background: #080c14; }
   }
   #save-btn.active { border-color:var(--accent-dim); color:var(--accent-dim); }
   #clear-btn {
-    height:46px; padding:0 16px; background:transparent;
-    color:var(--danger); border:1px solid #2a1010;
-    border-radius:var(--radius); font-family:var(--sans);
-    font-size:13px; font-weight:700; cursor:pointer;
+    height:46px; padding:0 16px; background:transparent; color:var(--danger);
+    border:1px solid #2a1010; border-radius:var(--radius);
+    font-family:var(--sans); font-size:13px; font-weight:700; cursor:pointer;
   }
   #clear-btn:active { border-color:var(--danger); }
 
@@ -188,142 +141,77 @@ html { background: #080c14; }
   #scan-page { background:#000; }
   #camera-section { flex:1; position:relative; overflow:hidden; }
   #video { width:100%; height:100%; object-fit:cover; display:block; }
-  #flash {
-    position:absolute; inset:0; background:#fff;
-    opacity:0; pointer-events:none; z-index:5; transition:opacity 0.05s;
-  }
+  #flash { position:absolute; inset:0; background:#fff; opacity:0; pointer-events:none; z-index:5; transition:opacity 0.05s; }
   #flash.on { opacity:0.5; }
   #scan-line {
     position:absolute; left:12.5%; width:75%; height:1px;
-    background:linear-gradient(90deg, transparent, var(--accent), transparent);
+    background:linear-gradient(90deg,transparent,var(--accent),transparent);
     top:15%; opacity:0; transition:opacity 0.3s;
   }
-  #scan-line.scanning {
-    opacity:1; animation:scanMove 1.4s ease-in-out infinite;
-  }
+  #scan-line.scanning { opacity:1; animation:scanMove 1.4s ease-in-out infinite; }
   @keyframes scanMove { 0%{top:15%} 50%{top:85%} 100%{top:15%} }
   #camera-overlay { position:absolute; inset:0; pointer-events:none; }
-  #scan-box {
-    position:absolute; top:50%; left:50%;
-    transform:translate(-50%,-50%); width:75%; height:60%;
-  }
-  .corner {
-    position:absolute; width:24px; height:24px;
-    border-color:var(--accent); border-style:solid; border-width:0;
-  }
+  #scan-box { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:75%; height:60%; }
+  .corner { position:absolute; width:24px; height:24px; border-color:var(--accent); border-style:solid; border-width:0; }
   .corner-tl { top:0; left:0; border-top-width:2px; border-left-width:2px; border-radius:3px 0 0 0; }
   .corner-tr { top:0; right:0; border-top-width:2px; border-right-width:2px; border-radius:0 3px 0 0; }
   .corner-bl { bottom:0; left:0; border-bottom-width:2px; border-left-width:2px; border-radius:0 0 0 3px; }
   .corner-br { bottom:0; right:0; border-bottom-width:2px; border-right-width:2px; border-radius:0 0 3px 0; }
-  #scan-hint {
-    position:absolute; bottom:14px; left:0; right:0;
-    text-align:center; font-size:12px; color:var(--accent);
-    font-weight:700; letter-spacing:0.5px; font-family:var(--mono);
-  }
-  #no-camera-msg {
-    position:absolute; inset:0; display:none; flex-direction:column;
-    align-items:center; justify-content:center;
-    color:var(--muted); font-size:13px; gap:8px;
-  }
+  #scan-hint { position:absolute; bottom:14px; left:0; right:0; text-align:center; font-size:12px; color:var(--accent); font-weight:700; letter-spacing:0.5px; font-family:var(--mono); }
+  #no-camera-msg { position:absolute; inset:0; display:none; flex-direction:column; align-items:center; justify-content:center; color:var(--muted); font-size:13px; gap:8px; }
   #scan-btn-area {
     flex-shrink:0; padding:12px 14px;
-    background:var(--sf); border-top:1px solid var(--bd);
-    display:flex; gap:10px; align-items:center;
+    background:var(--sf); border-top:1px solid var(--bd); display:flex; gap:10px; align-items:center;
   }
   #scan-btn {
-    flex:1; height:52px; background:var(--accent); color:#000;
-    border:none; border-radius:var(--radius);
+    flex:1; height:52px; background:var(--accent); color:#000; border:none; border-radius:var(--radius);
     font-family:var(--sans); font-size:16px; font-weight:800; cursor:pointer;
-    display:flex; align-items:center; justify-content:center; gap:8px;
-    transition:transform 0.1s, opacity 0.2s;
+    display:flex; align-items:center; justify-content:center; gap:8px; transition:transform 0.1s, opacity 0.2s;
   }
   #scan-btn:active { transform:scale(0.97); }
   #scan-btn:disabled { background:#2a2a2a; color:#555; cursor:not-allowed; }
   #scan-btn.loading { background:#3a2000; color:var(--accent); }
   #manual-btn {
-    height:52px; width:52px; background:var(--sf2);
-    border:1px solid var(--bd); border-radius:var(--radius);
-    color:var(--muted); font-size:20px; cursor:pointer;
-    display:flex; align-items:center; justify-content:center;
-    transition:border-color 0.2s;
+    height:52px; width:52px; background:var(--sf2); border:1px solid var(--bd);
+    border-radius:var(--radius); color:var(--muted); font-size:20px; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; transition:border-color 0.2s;
   }
   #manual-btn:active { border-color:var(--accent); }
 
   /* ── 히스토리 탭 ── */
   #history-page { background:var(--bg); }
-  #history-scroll {
-    flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:14px;
-  }
+  #history-scroll { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:14px; }
   #history-scroll::-webkit-scrollbar { width:2px; }
   #history-scroll::-webkit-scrollbar-thumb { background:var(--bd); border-radius:2px; }
 
-  #history-login-prompt {
-    height:100%; display:flex; flex-direction:column;
-    align-items:center; justify-content:center;
-    gap:12px; color:var(--muted); padding-bottom:60px;
-  }
+  #history-login-prompt { height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; color:var(--muted); padding-bottom:60px; }
   #history-list { display:flex; flex-direction:column; gap:10px; }
 
-  /* 히스토리 카드 */
-  .session-card {
-    background:var(--sf); border:1px solid var(--bd);
-    border-radius:var(--radius); overflow:hidden; animation:slideIn 0.2s ease;
-      border-left: 4px solid var(--accent);
-  }
-  .session-card-header {
-    padding:14px 16px; display:flex; align-items:center;
-    justify-content:space-between; cursor:pointer; user-select:none;
-  }
+  .session-card { background:var(--sf); border:1px solid var(--bd); border-radius:var(--radius); overflow:hidden; animation:slideIn 0.2s ease; }
+  .session-card-header { padding:14px 16px; display:flex; align-items:center; justify-content:space-between; cursor:pointer; user-select:none; }
   .session-card-header:active { background:var(--sf2); }
   .session-date-group { display:flex; flex-direction:column; gap:2px; }
   .session-date { font-size:15px; font-weight:800; color:var(--text); }
-  .session-time {
-    font-size:11px; color:var(--muted); font-family:var(--mono);
-  }
+  .session-time { font-size:11px; color:var(--muted); font-family:var(--mono); }
   .session-summary { display:flex; align-items:center; gap:10px; }
-  .session-total {
-    font-family:var(--mono); font-size:16px;
-    color:var(--accent); font-weight:700;
-  }
+  .session-total { font-family:var(--mono); font-size:16px; color:var(--accent); font-weight:700; }
   .session-count { font-size:11px; color:var(--muted); }
-  .session-chevron {
-    color:var(--muted); font-size:11px; transition:transform 0.2s;
-  }
+  .session-chevron { color:var(--muted); font-size:11px; transition:transform 0.2s; }
   .session-card.expanded .session-chevron { transform:rotate(180deg); }
 
   .session-body { display:none; border-top:1px solid var(--bd); }
   .session-card.expanded .session-body { display:block; }
 
   .session-items { padding:10px 12px; display:flex; flex-direction:column; gap:6px; }
-  .session-item-row {
-    display:flex; align-items:center; gap:8px; padding:8px 10px;
-    background:var(--sf2); border-radius:8px; border:1px solid transparent;
-  }
+  .session-item-row { display:flex; align-items:center; gap:8px; padding:8px 10px; background:var(--sf2); border-radius:8px; border:1px solid transparent; }
   .session-item-row.editing { background:#1a0d00; border-color:var(--accent-dim); }
 
-  .si-name {
-    flex:1; font-size:13px; font-weight:700; min-width:0;
-    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-  }
+  .si-name { flex:1; font-size:13px; font-weight:700; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   .si-qty { font-family:var(--mono); font-size:12px; color:var(--muted); flex-shrink:0; }
-  .si-price {
-    font-family:var(--mono); font-size:13px; color:var(--accent);
-    min-width:60px; text-align:right; flex-shrink:0; font-weight:700;
-  }
-  .si-edit-btn {
-    width:26px; height:26px; background:transparent;
-    border:1px solid var(--bd); border-radius:5px; color:var(--muted);
-    font-size:11px; cursor:pointer;
-    display:flex; align-items:center; justify-content:center; flex-shrink:0;
-    transition:border-color 0.15s, color 0.15s;
-  }
+  .si-price { font-family:var(--mono); font-size:13px; color:var(--accent); min-width:60px; text-align:right; flex-shrink:0; font-weight:700; }
+  .si-edit-btn { width:26px; height:26px; background:transparent; border:1px solid var(--bd); border-radius:5px; color:var(--muted); font-size:11px; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:border-color 0.15s, color 0.15s; }
   .si-edit-btn:active { border-color:var(--accent); color:var(--accent); }
-  .si-del-btn {
-    width:26px; height:26px; background:transparent; border:none;
-    border-radius:5px; color:#3a3a3a; font-size:14px; cursor:pointer;
-    display:flex; align-items:center; justify-content:center; flex-shrink:0;
-    transition:color 0.15s;
-  }
+  .si-del-btn { width:26px; height:26px; background:transparent; border:none; border-radius:5px; color:#3a3a3a; font-size:14px; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:color 0.15s; }
   .si-del-btn:active { color:var(--danger); }
 
   .si-edit-fields { display:none; width:100%; gap:6px; align-items:center; flex-wrap:wrap; }
@@ -331,277 +219,96 @@ html { background: #080c14; }
   .session-item-row.editing .si-edit-fields { display:flex; }
   .si-view { display:flex; align-items:center; gap:8px; width:100%; }
 
-  .si-input {
-    height:32px; background:var(--bg); border:1px solid var(--accent-dim);
-    border-radius:6px; color:var(--text); font-family:var(--sans);
-    font-size:13px; padding:0 8px; outline:none;
-  }
+  .si-input { height:32px; background:var(--bg); border:1px solid var(--accent-dim); border-radius:6px; color:var(--text); font-family:var(--sans); font-size:13px; padding:0 8px; outline:none; }
   .si-input-name { flex:1; min-width:80px; }
   .si-input-price { width:72px; font-family:var(--mono); }
   .si-input-qty { width:44px; font-family:var(--mono); text-align:center; }
-  .si-save-btn {
-    height:32px; padding:0 10px; background:var(--accent); border:none;
-    border-radius:6px; color:#000; font-family:var(--sans);
-    font-size:12px; font-weight:800; cursor:pointer;
-  }
-  .si-cancel-btn {
-    height:32px; padding:0 8px; background:transparent;
-    border:1px solid var(--bd); border-radius:6px;
-    color:var(--muted); font-size:12px; cursor:pointer;
-    font-family:var(--sans);
-  }
+  .si-save-btn { height:32px; padding:0 10px; background:var(--accent); border:none; border-radius:6px; color:#000; font-family:var(--sans); font-size:12px; font-weight:800; cursor:pointer; }
+  .si-cancel-btn { height:32px; padding:0 8px; background:transparent; border:1px solid var(--bd); border-radius:6px; color:var(--muted); font-size:12px; cursor:pointer; font-family:var(--sans); }
 
-  .session-footer {
-    padding:10px 12px; border-top:1px solid var(--bd);
-    display:flex; gap:8px; background:var(--bg);
-  }
-  .session-add-btn {
-    flex:1; height:38px; background:var(--sf2); border:1px solid var(--bd);
-    border-radius:7px; color:var(--muted); font-family:var(--sans);
-    font-size:13px; font-weight:700; cursor:pointer;
-    transition:border-color 0.2s, color 0.2s;
-  }
+  .session-footer { padding:10px 12px; border-top:1px solid var(--bd); display:flex; gap:8px; background:var(--bg); }
+  .session-add-btn { flex:1; height:38px; background:var(--sf2); border:1px solid var(--bd); border-radius:7px; color:var(--muted); font-family:var(--sans); font-size:13px; font-weight:700; cursor:pointer; transition:border-color 0.2s, color 0.2s; }
   .session-add-btn:active { border-color:var(--accent); color:var(--accent); }
-  .session-del-session-btn {
-    height:38px; padding:0 14px; background:transparent;
-    border:1px solid #2a1010; border-radius:7px; color:var(--danger);
-    font-family:var(--sans); font-size:12px; font-weight:700; cursor:pointer;
-  }
+  .session-del-session-btn { height:38px; padding:0 14px; background:transparent; border:1px solid #2a1010; border-radius:7px; color:var(--danger); font-family:var(--sans); font-size:12px; font-weight:700; cursor:pointer; }
   .session-del-session-btn:active { border-color:var(--danger); }
 
-  /* 페이지네이션 */
   #history-pagination {
-    flex-shrink:0; padding:10px 14px;
-    padding-bottom:max(10px, env(safe-area-inset-bottom));
+    flex-shrink:0; padding:10px 14px; padding-bottom:max(10px, env(safe-area-inset-bottom));
     background:var(--sf); border-top:1px solid var(--bd);
     display:flex; align-items:center; justify-content:space-between; gap:8px;
   }
-  .page-btn {
-    height:38px; padding:0 16px; background:var(--sf2);
-    border:1px solid var(--bd); border-radius:7px; color:var(--muted);
-    font-family:var(--sans); font-size:13px; font-weight:700; cursor:pointer;
-    transition:border-color 0.2s, color 0.2s;
-  }
+  .page-btn { height:38px; padding:0 16px; background:var(--sf2); border:1px solid var(--bd); border-radius:7px; color:var(--muted); font-family:var(--sans); font-size:13px; font-weight:700; cursor:pointer; transition:border-color 0.2s, color 0.2s; }
   .page-btn:disabled { opacity:0.3; cursor:not-allowed; }
   .page-btn:not(:disabled):active { border-color:var(--accent); color:var(--accent); }
-  #page-info {
-    font-size:12px; color:var(--muted); font-family:var(--mono);
-  }
-  #history-loading {
-    text-align:center; padding:40px 0; color:var(--muted); font-size:13px;
-  }
+  #page-info { font-size:12px; color:var(--muted); font-family:var(--mono); }
+  #history-loading { text-align:center; padding:40px 0; color:var(--muted); font-size:13px; }
 
   /* ── TAB BAR ── */
   #tab-bar {
     flex-shrink:0; background:var(--sf); border-top:1px solid var(--bd);
-    display:flex; padding:6px 0;
-    padding-bottom:max(6px, env(safe-area-inset-bottom));
+    display:flex; padding:6px 0; padding-bottom:max(6px, env(safe-area-inset-bottom));
   }
-  .tab-btn {
-    flex:1; display:flex; flex-direction:column; align-items:center; gap:3px;
-    cursor:pointer; padding:4px 0; border:none; background:transparent;
-    position:relative;
-  }
+  .tab-btn { flex:1; display:flex; flex-direction:column; align-items:center; gap:3px; cursor:pointer; padding:4px 0; border:none; background:transparent; position:relative; }
   .tab-btn-icon { font-size:22px; line-height:1; }
-  .tab-btn-label {
-    font-size:10px; color:var(--muted); font-family:var(--mono);
-    font-weight:700; transition:color 0.2s; letter-spacing:0.5px;
-  }
+  .tab-btn-label { font-size:10px; color:var(--muted); font-family:var(--mono); font-weight:700; transition:color 0.2s; letter-spacing:0.5px; }
   .tab-btn.active .tab-btn-label { color:var(--accent); }
-  .tab-btn.active::before {
-    content:''; position:absolute; top:0; left:25%; right:25%;
-    height:2px; background:var(--accent); border-radius:0 0 2px 2px;
-  }
-  .tab-badge {
-    position:absolute; top:0; right:8px; background:var(--accent);
-    color:#000; font-size:9px; font-weight:800; min-width:16px; height:16px;
-    border-radius:8px; padding:0 4px; display:none; align-items:center;
-    justify-content:center; font-family:var(--mono);
-  }
+  .tab-btn.active::before { content:''; position:absolute; top:0; left:25%; right:25%; height:2px; background:var(--accent); border-radius:0 0 2px 2px; }
+  .tab-badge { position:absolute; top:0; right:8px; background:var(--accent); color:#000; font-size:9px; font-weight:800; min-width:16px; height:16px; border-radius:8px; padding:0 4px; display:none; align-items:center; justify-content:center; font-family:var(--mono); }
   .tab-badge.show { display:flex; }
 
   /* ── USER SHEET ── */
-  #user-sheet-bd {
-    display:none; position:fixed; inset:0;
-    background:rgba(0,0,0,0.7); z-index:90;
-    align-items:flex-end; justify-content:center;
-  }
+  #user-sheet-bd { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:90; align-items:flex-end; justify-content:center; }
   #user-sheet-bd.open { display:flex; }
-  #user-sheet {
-    width:100%; max-width:480px; background:var(--sf);
-    border-top:1px solid var(--bd); border-radius:16px 16px 0 0;
-    padding-bottom:max(16px, env(safe-area-inset-bottom));
-  }
+  #user-sheet { width:100%; max-width:480px; background:var(--sf); border-top:1px solid var(--bd); border-radius:16px 16px 0 0; padding-bottom:max(16px,env(safe-area-inset-bottom)); }
   .usp-av { width:48px; height:48px; border-radius:50%; object-fit:cover; }
-  .usp-ph {
-    width:48px; height:48px; border-radius:50%; background:var(--accent);
-    display:flex; align-items:center; justify-content:center;
-    font-size:20px; color:#000; font-weight:800;
-  }
+  .usp-ph { width:48px; height:48px; border-radius:50%; background:var(--accent); display:flex; align-items:center; justify-content:center; font-size:20px; color:#000; font-weight:800; }
 
   /* ── RESULT BOTTOM SHEET ── */
-  #result-sheet-backdrop {
-    display:none; position:fixed; inset:0;
-    background:rgba(0,0,0,0.7); z-index:90;
-    align-items:flex-end; justify-content:center;
-  }
+  #result-sheet-backdrop { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:90; align-items:flex-end; justify-content:center; }
   #result-sheet-backdrop.open { display:flex; }
   #result-sheet {
     width:100%; max-width:480px; background:var(--sf);
     border-top:1px solid var(--bd); border-radius:16px 16px 0 0;
-    padding-bottom:max(16px, env(safe-area-inset-bottom));
+    padding-bottom:max(16px,env(safe-area-inset-bottom));
     animation:sheetUp 0.25s cubic-bezier(.32,1.2,.45,1);
   }
-  @keyframes sheetUp {
-    from { transform:translateY(60px); opacity:0; }
-    to { transform:translateY(0); opacity:1; }
-  }
-  .sheet-handle {
-    width:36px; height:4px; background:var(--bd);
-    border-radius:2px; margin:12px auto 0;
-  }
-  .sheet-header {
-    display:flex; align-items:center; justify-content:space-between;
-    padding:14px 16px; border-bottom:1px solid var(--bd);
-  }
-  .sheet-title {
-    display:flex; align-items:center; gap:8px;
-    font-size:14px; font-weight:800; color:var(--accent);
-  }
-  .sheet-dot {
-    width:7px; height:7px; border-radius:50%; background:var(--accent);
-    animation:dotPulse 1.4s ease infinite;
-  }
+  @keyframes sheetUp { from{transform:translateY(60px);opacity:0} to{transform:translateY(0);opacity:1} }
+  .sheet-handle { width:36px; height:4px; background:var(--bd); border-radius:2px; margin:12px auto 0; }
+  .sheet-header { display:flex; align-items:center; justify-content:space-between; padding:14px 16px; border-bottom:1px solid var(--bd); }
+  .sheet-title { display:flex; align-items:center; gap:8px; font-size:14px; font-weight:800; color:var(--accent); }
+  .sheet-dot { width:7px; height:7px; border-radius:50%; background:var(--accent); animation:dotPulse 1.4s ease infinite; }
   @keyframes dotPulse { 0%,100%{opacity:1} 50%{opacity:0.2} }
-  #sheet-close-btn {
-    width:30px; height:30px; border-radius:50%; background:var(--sf2);
-    border:1px solid var(--bd); color:var(--muted); font-size:13px;
-    cursor:pointer; display:flex; align-items:center; justify-content:center;
-  }
+  #sheet-close-btn { width:30px; height:30px; border-radius:50%; background:var(--sf2); border:1px solid var(--bd); color:var(--muted); font-size:13px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
   .sheet-body { padding:18px 16px 0; }
-  .sheet-field-label {
-    font-size:10px; color:var(--muted); letter-spacing:1.5px;
-    text-transform:uppercase; margin-bottom:7px; font-family:var(--mono);
-  }
-  .sheet-input {
-    width:100%; height:50px; background:var(--sf2);
-    border:1.5px solid var(--bd); border-radius:var(--radius);
-    color:var(--text); font-family:var(--sans); font-size:16px;
-    padding:0 14px; outline:none; margin-bottom:14px;
-    transition:border-color 0.2s, background 0.2s;
-  }
+  .sheet-field-label { font-size:10px; color:var(--muted); letter-spacing:1.5px; text-transform:uppercase; margin-bottom:7px; font-family:var(--mono); }
+  .sheet-input { width:100%; height:50px; background:var(--sf2); border:1.5px solid var(--bd); border-radius:var(--radius); color:var(--text); font-family:var(--sans); font-size:16px; padding:0 14px; outline:none; margin-bottom:14px; transition:border-color 0.2s, background 0.2s; }
   .sheet-input:focus { border-color:var(--accent); background:#1a0d00; }
-  #result-price-input {
-    font-family:var(--mono); font-size:22px;
-    color:var(--accent); font-weight:700;
-  }
+  #result-price-input { font-family:var(--mono); font-size:22px; color:var(--accent); font-weight:700; }
   .sheet-actions { display:flex; gap:10px; padding:4px 16px 0; }
-  #discard-btn {
-    flex:1; height:52px; background:var(--sf2); border:1px solid var(--bd);
-    border-radius:var(--radius); color:var(--muted); font-family:var(--sans);
-    font-size:15px; font-weight:700; cursor:pointer;
-  }
-  #add-btn {
-    flex:2; height:52px; background:var(--accent); border:none;
-    border-radius:var(--radius); color:#000; font-family:var(--sans);
-    font-size:16px; font-weight:800; cursor:pointer; transition:transform 0.1s;
-  }
+  #discard-btn { flex:1; height:52px; background:var(--sf2); border:1px solid var(--bd); border-radius:var(--radius); color:var(--muted); font-family:var(--sans); font-size:15px; font-weight:700; cursor:pointer; }
+  #add-btn { flex:2; height:52px; background:var(--accent); border:none; border-radius:var(--radius); color:#000; font-family:var(--sans); font-size:16px; font-weight:800; cursor:pointer; transition:transform 0.1s; }
   #add-btn:active { transform:scale(0.97); }
-  .sheet-note {
-    font-size:11px; color:#444; text-align:center; padding:10px 16px 0;
-    font-family:var(--mono);
-  }
+  .sheet-note { font-size:11px; color:#444; text-align:center; padding:10px 16px 0; font-family:var(--mono); }
 
   /* ── MANUAL MODAL ── */
-  #modal-backdrop {
-    display:none; position:fixed; inset:0;
-    background:rgba(0,0,0,0.75); z-index:100; align-items:flex-end;
-  }
+  #modal-backdrop { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.75); z-index:100; align-items:flex-end; }
   #modal-backdrop.open { display:flex; }
-  #modal {
-    width:100%; max-width:480px; margin:0 auto;
-    background:var(--sf); border-top:1px solid var(--bd);
-    border-radius:16px 16px 0 0; padding:20px 16px 32px;
-  }
+  #modal { width:100%; max-width:480px; margin:0 auto; background:var(--sf); border-top:1px solid var(--bd); border-radius:16px 16px 0 0; padding:20px 16px 32px; }
   #modal h3 { font-size:14px; font-weight:800; margin-bottom:16px; color:var(--muted); }
   .modal-field { margin-bottom:12px; }
-  .modal-field label {
-    display:block; font-size:10px; color:var(--muted);
-    letter-spacing:1.5px; text-transform:uppercase;
-    margin-bottom:6px; font-family:var(--mono);
-  }
-  .modal-field input {
-    width:100%; height:46px; background:var(--sf2); border:1px solid var(--bd);
-    border-radius:var(--radius); color:var(--text); font-family:var(--sans);
-    font-size:16px; padding:0 12px; outline:none; transition:border-color 0.2s;
-  }
+  .modal-field label { display:block; font-size:10px; color:var(--muted); letter-spacing:1.5px; text-transform:uppercase; margin-bottom:6px; font-family:var(--mono); }
+  .modal-field input { width:100%; height:46px; background:var(--sf2); border:1px solid var(--bd); border-radius:var(--radius); color:var(--text); font-family:var(--sans); font-size:16px; padding:0 12px; outline:none; transition:border-color 0.2s; }
   .modal-field input:focus { border-color:var(--accent); }
-  #modal-add-btn {
-    width:100%; height:50px; background:var(--accent); color:#000; border:none;
-    border-radius:var(--radius); font-family:var(--sans);
-    font-size:16px; font-weight:800; cursor:pointer; margin-top:4px;
-  }
+  #modal-add-btn { width:100%; height:50px; background:var(--accent); color:#000; border:none; border-radius:var(--radius); font-family:var(--sans); font-size:16px; font-weight:800; cursor:pointer; margin-top:4px; }
 
-  /* 히스토리 항목 추가 모달 */
-  #hist-add-modal-backdrop {
-    display:none; position:fixed; inset:0;
-    background:rgba(0,0,0,0.75); z-index:100; align-items:flex-end;
-  }
+  /* ── 히스토리 항목 추가 모달 ── */
+  #hist-add-modal-backdrop { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.75); z-index:100; align-items:flex-end; }
   #hist-add-modal-backdrop.open { display:flex; }
-  #hist-add-modal {
-    width:100%; max-width:480px; margin:0 auto;
-    background:var(--sf); border-top:1px solid var(--bd);
-    border-radius:16px 16px 0 0; padding:20px 16px 32px;
-  }
+  #hist-add-modal { width:100%; max-width:480px; margin:0 auto; background:var(--sf); border-top:1px solid var(--bd); border-radius:16px 16px 0 0; padding:20px 16px 32px; }
   #hist-add-modal h3 { font-size:14px; font-weight:800; margin-bottom:16px; color:var(--muted); }
 
-  /* ── SETUP SCREEN ── */
-  #setup-screen {
-    display:none; position:fixed; inset:0; background:var(--bg);
-    z-index:999; flex-direction:column; align-items:center;
-    justify-content:center; padding:32px 24px;
-  }
-  #setup-screen.visible { display:flex; }
-  .setup-logo { font-size:36px; margin-bottom:8px; }
-  .setup-title { font-size:20px; font-weight:800; color:var(--accent); margin-bottom:8px; }
-  .setup-desc {
-    font-size:13px; color:var(--muted); text-align:center;
-    line-height:1.8; margin-bottom:28px;
-  }
-  .setup-desc a { color:var(--accent-dim); text-decoration:none; }
-  .setup-field { width:100%; max-width:360px; margin-bottom:12px; }
-  .setup-field label {
-    display:block; font-size:10px; color:var(--muted);
-    letter-spacing:1.5px; text-transform:uppercase;
-    margin-bottom:6px; font-family:var(--mono);
-  }
-  .setup-field input {
-    width:100%; height:50px; background:var(--sf); border:1px solid var(--bd);
-    border-radius:var(--radius); color:var(--text); font-family:var(--mono);
-    font-size:13px; padding:0 14px; outline:none;
-  }
-  .setup-field input:focus { border-color:var(--accent); }
-  #setup-save-btn {
-    width:100%; max-width:360px; height:52px; background:var(--accent);
-    color:#000; border:none; border-radius:var(--radius); font-family:var(--sans);
-    font-size:16px; font-weight:800; cursor:pointer; margin-top:4px;
-  }
-  .setup-hint {
-    margin-top:16px; font-size:11px; color:#444;
-    text-align:center; line-height:1.8; font-family:var(--mono);
-  }
-
   /* ── TOAST ── */
-  #toast {
-    position:fixed; bottom:90px; left:50%;
-    transform:translateX(-50%) translateY(20px);
-    background:var(--sf2); border:1px solid var(--bd);
-    color:var(--text); padding:10px 18px; border-radius:20px;
-    font-size:13px; font-weight:700; opacity:0;
-    transition:opacity 0.25s, transform 0.25s;
-    z-index:200; white-space:nowrap; pointer-events:none;
-    font-family:var(--sans);
-  }
+  #toast { position:fixed; bottom:90px; left:50%; transform:translateX(-50%) translateY(20px); background:var(--sf2); border:1px solid var(--bd); color:var(--text); padding:10px 18px; border-radius:20px; font-size:13px; font-weight:700; opacity:0; transition:opacity 0.25s,transform 0.25s; z-index:200; white-space:nowrap; pointer-events:none; font-family:var(--sans); }
   #toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
 
   canvas { display:none; }
@@ -609,17 +316,9 @@ html { background: #080c14; }
   .hist-login-icon { font-size:44px; opacity:0.2; }
   .hist-login-title { font-size:15px; font-weight:800; color:var(--text); }
   .hist-login-sub { font-size:13px; color:var(--muted); text-align:center; line-height:1.7; }
-  .hist-login-cta {
-    margin-top:8px; padding:11px 28px;
-    background:var(--total-bg); border:1px solid var(--accent);
-    border-radius:20px; color:var(--accent); font-size:14px;
-    font-weight:800; cursor:pointer; font-family:var(--sans);
-  }
+  .hist-login-cta { margin-top:8px; padding:11px 28px; background:var(--total-bg); border:1px solid var(--accent); border-radius:20px; color:var(--accent); font-size:14px; font-weight:800; cursor:pointer; font-family:var(--sans); }
 
-  #history-empty {
-    display:none; flex-direction:column; align-items:center;
-    justify-content:center; gap:12px; color:var(--muted); padding:60px 0;
-  }
+  #history-empty { display:none; flex-direction:column; align-items:center; justify-content:center; gap:12px; color:var(--muted); padding:60px 0; }
 </style>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
@@ -629,23 +328,6 @@ firebase.initializeApp({apiKey:"AIzaSyC_vh0fqH6vYFwFDYCKVcBi-xlFKvxnu6U",authDom
 </script>
 </head>
 <body>
-
-<!-- SETUP SCREEN -->
-<div id="setup-screen">
-  <div class="setup-logo">🔑</div>
-  <div class="setup-title">API 키 설정</div>
-  <div class="setup-desc">
-    스캔마트를 사용하려면 Anthropic API 키가 필요해요.<br>
-    키는 이 기기에만 저장돼요.<br>
-    <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a>에서 발급받으세요.
-  </div>
-  <div class="setup-field">
-    <label>Anthropic API Key</label>
-    <input type="password" id="setup-key-input" placeholder="sk-ant-api03-..." autocomplete="off" spellcheck="false">
-  </div>
-  <button id="setup-save-btn" onclick="saveApiKey()">저장하고 시작하기</button>
-  <div class="setup-hint">🔒 키는 이 기기 브라우저에만 저장돼요</div>
-</div>
 
 <div id="app">
 
@@ -717,22 +399,18 @@ firebase.initializeApp({apiKey:"AIzaSyC_vh0fqH6vYFwFDYCKVcBi-xlFKvxnu6U",authDom
     <!-- 📋 히스토리 탭 -->
     <div class="page hidden" id="history-page">
       <div id="history-scroll">
-        <!-- 로그인 안내 -->
         <div id="history-login-prompt" style="height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding-bottom:60px;">
           <span class="hist-login-icon">📋</span>
           <span class="hist-login-title">로그인이 필요해요</span>
           <span class="hist-login-sub">쇼핑 기록을 저장하고<br>언제든 다시 볼 수 있어요</span>
           <button class="hist-login-cta" onclick="handleLoginBtn()">🔑 Google로 로그인</button>
         </div>
-        <!-- 로딩 -->
         <div id="history-loading" style="display:none;">불러오는 중...</div>
-        <!-- 빈 상태 -->
         <div id="history-empty">
           <span class="empty-icon">📋</span>
           <span class="empty-title">저장된 쇼핑 기록이 없어요</span>
           <span class="empty-sub">장바구니에서 저장하면<br>여기서 확인할 수 있어요</span>
         </div>
-        <!-- 세션 목록 -->
         <div id="history-list"></div>
       </div>
       <div id="history-pagination">
@@ -742,7 +420,7 @@ firebase.initializeApp({apiKey:"AIzaSyC_vh0fqH6vYFwFDYCKVcBi-xlFKvxnu6U",authDom
       </div>
     </div>
 
-  </div><!-- /pages -->
+  </div>
 
   <!-- TAB BAR -->
   <div id="tab-bar">
@@ -761,16 +439,14 @@ firebase.initializeApp({apiKey:"AIzaSyC_vh0fqH6vYFwFDYCKVcBi-xlFKvxnu6U",authDom
     </button>
   </div>
 
-</div><!-- /app -->
+</div>
 
 <!-- RESULT BOTTOM SHEET -->
 <div id="result-sheet-backdrop" onclick="backdropClose(event)">
   <div id="result-sheet">
     <div class="sheet-handle"></div>
     <div class="sheet-header">
-      <div class="sheet-title">
-        <div class="sheet-dot"></div>인식 결과 확인
-      </div>
+      <div class="sheet-title"><div class="sheet-dot"></div>인식 결과 확인</div>
       <button id="sheet-close-btn" onclick="discardResult()">✕</button>
     </div>
     <div class="sheet-body">
@@ -787,7 +463,7 @@ firebase.initializeApp({apiKey:"AIzaSyC_vh0fqH6vYFwFDYCKVcBi-xlFKvxnu6U",authDom
   </div>
 </div>
 
-<!-- MANUAL MODAL (스캔탭용) -->
+<!-- MANUAL MODAL -->
 <div id="modal-backdrop" onclick="closeModalOnBackdrop(event)">
   <div id="modal">
     <h3>직접 입력</h3>
@@ -807,7 +483,7 @@ firebase.initializeApp({apiKey:"AIzaSyC_vh0fqH6vYFwFDYCKVcBi-xlFKvxnu6U",authDom
 <div id="hist-add-modal-backdrop" onclick="closeAddItemOnBackdrop(event)">
   <div id="hist-add-modal">
     <h3>항목 추가</h3>
-    <div id="additem-session-date" style="font-size:12px;color:var(--muted);margin-bottom:12px;font-family:'Share Tech Mono',monospace;"></div>
+    <div id="additem-session-date" style="font-size:12px;color:var(--muted);margin-bottom:12px;font-family:var(--mono);"></div>
     <div class="modal-field">
       <label>상품명</label>
       <input type="text" id="hist-add-name" placeholder="예: 비요뜨 복숭아" autocomplete="off">
@@ -820,7 +496,7 @@ firebase.initializeApp({apiKey:"AIzaSyC_vh0fqH6vYFwFDYCKVcBi-xlFKvxnu6U",authDom
       <label>수량</label>
       <input type="number" id="hist-add-qty" placeholder="1" inputmode="numeric" value="1" min="1">
     </div>
-    <button id="hist-add-confirm-btn" onclick="confirmAddItem()" style="width:100%;height:50px;background:var(--accent);color:#000;border:none;border-radius:8px;font-family:'Nanum Gothic',sans-serif;font-size:16px;font-weight:800;cursor:pointer;margin-top:4px;">추가하기</button>
+    <button id="hist-add-confirm-btn" onclick="confirmAddItem()" style="width:100%;height:50px;background:var(--accent);color:#000;border:none;border-radius:var(--radius);font-family:var(--sans);font-size:16px;font-weight:800;cursor:pointer;margin-top:4px;">추가하기</button>
   </div>
 </div>
 
@@ -836,8 +512,7 @@ firebase.initializeApp({apiKey:"AIzaSyC_vh0fqH6vYFwFDYCKVcBi-xlFKvxnu6U",authDom
           <div id="usp-email" style="font-size:12px;color:var(--muted);margin-top:2px;"></div>
         </div>
       </div>
-      <button onclick="openSetupScreen()" style="width:100%;height:44px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--muted);font-family:'Nanum Gothic',sans-serif;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:8px;">🔑 API 키 변경</button>
-      <button onclick="handleSignOut()" style="width:100%;height:44px;background:transparent;border:1px solid #331010;border-radius:8px;color:var(--danger);font-family:'Nanum Gothic',sans-serif;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:4px;">로그아웃</button>
+      <button onclick="handleSignOut()" style="width:100%;height:44px;background:transparent;border:1px solid #2a1010;border-radius:var(--radius);color:var(--danger);font-family:var(--sans);font-size:14px;font-weight:700;cursor:pointer;margin-bottom:4px;">로그아웃</button>
     </div>
   </div>
 </div>
@@ -846,263 +521,410 @@ firebase.initializeApp({apiKey:"AIzaSyC_vh0fqH6vYFwFDYCKVcBi-xlFKvxnu6U",authDom
 <canvas id="canvas"></canvas>
 
 <script>
-const WORKER='https://fancy-sound-0453.blackcore-ff6.workers.dev';
-const PG=10;
-const db=firebase.firestore();
-const auth=firebase.auth();
-const gp=new firebase.auth.GoogleAuthProvider();
+// ★ Worker URL — orange-feather-980a 로 변경됨
+const WORKER = 'https://orange-feather-980a.blackcore-ff6.workers.dev';
+const PG = 10;
+const db = firebase.firestore();
+const auth = firebase.auth();
+const gp = new firebase.auth.GoogleAuthProvider();
 
-let cart=JSON.parse(localStorage.getItem('scanmart-cart')||'[]');
-let stream=null,currentTab='cart',currentUser=null;
-let allSessions=[],hPage=1,hTotalPages=1,addItemTarget=null,historyLoaded=false;
+let cart = JSON.parse(localStorage.getItem('scanmart-cart') || '[]');
+let stream = null, currentTab = 'cart', currentUser = null;
+let allSessions = [], hPage = 1, hTotalPages = 1, addItemTarget = null, historyLoaded = false;
 
-function getApiKey(){return localStorage.getItem('scanmart-api-key')||'';}
-function saveApiKey(){
-  const k=document.getElementById('setup-key-input').value.trim();
-  if(!k.startsWith('sk-ant-')){showToast('올바른 API 키 형식이 아니에요');return;}
-  localStorage.setItem('scanmart-api-key',k);hideSetupScreen();showToast('✓ API 키가 저장됐어요');
-}
-function openSetupScreen(){closeUserSheet();const k=getApiKey();if(k)document.getElementById('setup-key-input').value=k;document.getElementById('setup-screen').classList.add('visible');}
-function hideSetupScreen(){document.getElementById('setup-screen').classList.remove('visible');}
-
-auth.onAuthStateChanged(user=>{
-  currentUser=user;updateAuthUI(user);
-  if(!user){allSessions=[];historyLoaded=false;}
-  if(currentTab==='history')renderHistoryPage();
+auth.onAuthStateChanged(user => {
+  currentUser = user;
+  updateAuthUI(user);
+  if (!user) { allSessions = []; historyLoaded = false; }
+  if (currentTab === 'history') renderHistoryPage();
 });
-function updateAuthUI(u){
-  const lb=document.getElementById('login-btn'),av=document.getElementById('user-avatar');
-  if(u){
+
+function updateAuthUI(u) {
+  const lb = document.getElementById('login-btn'), av = document.getElementById('user-avatar');
+  if (u) {
     lb.classList.add('logged-in');
-    if(u.photoURL){av.innerHTML=`<img src="${u.photoURL}" style="width:20px;height:20px;border-radius:50%;object-fit:cover;" alt="">`;}
-    else{av.textContent=(u.displayName||'U')[0];}
-  }else{
-    lb.classList.remove('logged-in');av.innerHTML='';
+    if (u.photoURL) { av.innerHTML = `<img src="${u.photoURL}" style="width:20px;height:20px;border-radius:50%;object-fit:cover;" alt="">`; }
+    else { av.textContent = (u.displayName || 'U')[0]; }
+  } else {
+    lb.classList.remove('logged-in'); av.innerHTML = '';
   }
 }
-async function handleLoginBtn(){
-  if(currentUser){openUserSheet();return;}
-  try{
+
+async function handleLoginBtn() {
+  if (currentUser) { openUserSheet(); return; }
+  try {
     await auth.signInWithPopup(gp);
     showToast('✓ 로그인 됐어요');
-  }catch(e){
-    if(e.code!=='auth/popup-closed-by-user')showToast('로그인 실패: '+(e.message||'다시 시도'));
+  } catch (e) {
+    if (e.code !== 'auth/popup-closed-by-user') showToast('로그인 실패: ' + (e.message || '다시 시도'));
   }
 }
-async function handleSignOut(){closeUserSheet();await auth.signOut();allSessions=[];historyLoaded=false;showToast('로그아웃됐어요');}
 
-function openUserSheet(){
-  if(!currentUser)return;
-  document.getElementById('usp-name').textContent=currentUser.displayName||'사용자';
-  document.getElementById('usp-email').textContent=currentUser.email||'';
-  document.getElementById('usp-av-wrap').innerHTML=currentUser.photoURL?`<img class="usp-av" src="${currentUser.photoURL}" alt="">`:`<div class="usp-ph">👤</div>`;
+async function handleSignOut() {
+  closeUserSheet();
+  await auth.signOut();
+  allSessions = []; historyLoaded = false;
+  showToast('로그아웃됐어요');
+}
+
+function openUserSheet() {
+  if (!currentUser) return;
+  document.getElementById('usp-name').textContent = currentUser.displayName || '사용자';
+  document.getElementById('usp-email').textContent = currentUser.email || '';
+  document.getElementById('usp-av-wrap').innerHTML = currentUser.photoURL
+    ? `<img class="usp-av" src="${currentUser.photoURL}" alt="">`
+    : `<div class="usp-ph">👤</div>`;
   document.getElementById('user-sheet-bd').classList.add('open');
 }
-function closeUserSheet(){document.getElementById('user-sheet-bd').classList.remove('open');}
-function closeUserSheetOnBackdrop(e){if(e.target===document.getElementById('user-sheet-bd'))closeUserSheet();}
+function closeUserSheet() { document.getElementById('user-sheet-bd').classList.remove('open'); }
+function closeUserSheetOnBackdrop(e) { if (e.target === document.getElementById('user-sheet-bd')) closeUserSheet(); }
 
-function switchTab(tab){
-  currentTab=tab;
-  ['cart','scan','history'].forEach(t=>{document.getElementById(t+'-page').classList.toggle('hidden',t!==tab);document.getElementById('tab-'+t).classList.toggle('active',t===tab);});
-  if(tab==='scan')initCamera();else stopCamera();
-  if(tab==='history')renderHistoryPage();
+function switchTab(tab) {
+  currentTab = tab;
+  ['cart', 'scan', 'history'].forEach(t => {
+    document.getElementById(t + '-page').classList.toggle('hidden', t !== tab);
+    document.getElementById('tab-' + t).classList.toggle('active', t === tab);
+  });
+  if (tab === 'scan') initCamera(); else stopCamera();
+  if (tab === 'history') renderHistoryPage();
 }
 
-async function initCamera(){
-  if(stream)return;
-  try{
-    stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:1280},height:{ideal:720}},audio:false});
-    document.getElementById('video').srcObject=stream;document.getElementById('scan-btn').disabled=false;
-  }catch(e){document.getElementById('no-camera-msg').style.display='flex';document.getElementById('scan-btn').disabled=true;}
-}
-function stopCamera(){if(stream){stream.getTracks().forEach(t=>t.stop());stream=null;document.getElementById('video').srcObject=null;}}
-
-async function captureAndScan(){
-  const video=document.getElementById('video'),canvas=document.getElementById('canvas'),btn=document.getElementById('scan-btn');
-  if(!stream||!video.videoWidth){showToast('카메라가 준비되지 않았어요');return;}
-  const apiKey=getApiKey();if(!apiKey){openSetupScreen();return;}
-  document.getElementById('flash').classList.add('on');setTimeout(()=>document.getElementById('flash').classList.remove('on'),150);
-  document.getElementById('scan-line').classList.add('scanning');
-  btn.classList.add('loading');btn.disabled=true;
-  document.getElementById('btn-icon').textContent='⏳';document.getElementById('btn-text').textContent='분석 중...';
-  canvas.width=video.videoWidth;canvas.height=video.videoHeight;canvas.getContext('2d').drawImage(video,0,0);
-  const b64=canvas.toDataURL('image/jpeg',0.85).split(',')[1];
-  try{
-    const r=await callClaude(b64,apiKey);
-    if(r)showResult(r.name,r.price);else showToast('가격표를 인식하지 못했어요. 다시 시도해보세요.');
-  }catch(e){showToast('오류: '+(e.message||'다시 시도해주세요'));}
-  finally{
-    document.getElementById('scan-line').classList.remove('scanning');
-    btn.classList.remove('loading');btn.disabled=false;
-    document.getElementById('btn-icon').textContent='⚡';document.getElementById('btn-text').textContent='스캔하기';
+async function initCamera() {
+  if (stream) return;
+  try {
+    stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: 'environment' }, width: { ideal: 1280 }, height: { ideal: 720 } }, audio: false });
+    document.getElementById('video').srcObject = stream;
+    document.getElementById('scan-btn').disabled = false;
+  } catch (e) {
+    document.getElementById('no-camera-msg').style.display = 'flex';
+    document.getElementById('scan-btn').disabled = true;
   }
 }
-async function callClaude(b64,apiKey){
-  const res=await fetch(WORKER,{method:'POST',headers:{'Content-Type':'application/json','x-api-key':apiKey},body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:200,messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:'image/jpeg',data:b64}},{type:'text',text:'이 이미지는 마트 가격표입니다. 상품명과 가격을 추출해주세요.\n반드시 아래 JSON 형식만 반환하세요:\n{"name": "상품명", "price": 숫자만}\n가격표가 없거나 인식 불가하면: {"name": null, "price": null}'}]}]})});
-  if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e.error?.message||`API 오류 (${res.status})`);}
-  const data=await res.json();const text=data.content?.[0]?.text?.trim()||'';
-  try{const p=JSON.parse(text.replace(/```json|```/g,'').trim());if(!p.name||!p.price)return null;return{name:p.name,price:parseInt(p.price)};}catch(e){return null;}
+function stopCamera() {
+  if (stream) { stream.getTracks().forEach(t => t.stop()); stream = null; document.getElementById('video').srcObject = null; }
 }
 
-function showResult(name,price){
-  document.getElementById('result-name-input').value=name;document.getElementById('result-price-input').value=price;
+async function captureAndScan() {
+  // 로그인 확인
+  if (!currentUser) {
+    showToast('스캔하려면 로그인이 필요해요');
+    setTimeout(handleLoginBtn, 500);
+    return;
+  }
+
+  const video = document.getElementById('video'), canvas = document.getElementById('canvas'), btn = document.getElementById('scan-btn');
+  if (!stream || !video.videoWidth) { showToast('카메라가 준비되지 않았어요'); return; }
+
+  document.getElementById('flash').classList.add('on');
+  setTimeout(() => document.getElementById('flash').classList.remove('on'), 150);
+  document.getElementById('scan-line').classList.add('scanning');
+  btn.classList.add('loading'); btn.disabled = true;
+  document.getElementById('btn-icon').textContent = '⏳';
+  document.getElementById('btn-text').textContent = '분석 중...';
+
+  canvas.width = video.videoWidth; canvas.height = video.videoHeight;
+  canvas.getContext('2d').drawImage(video, 0, 0);
+  const b64 = canvas.toDataURL('image/jpeg', 0.85).split(',')[1];
+
+  try {
+    const r = await callClaude(b64);
+    if (r) showResult(r.name, r.price);
+    else showToast('가격표를 인식하지 못했어요. 다시 시도해보세요.');
+  } catch (e) {
+    showToast('오류: ' + (e.message || '다시 시도해주세요'));
+  } finally {
+    document.getElementById('scan-line').classList.remove('scanning');
+    btn.classList.remove('loading'); btn.disabled = false;
+    document.getElementById('btn-icon').textContent = '⚡';
+    document.getElementById('btn-text').textContent = '스캔하기';
+  }
+}
+
+// ★ API Key 없이 Firebase 토큰으로 Worker 호출
+async function callClaude(b64) {
+  if (!currentUser) return null;
+
+  const token = await currentUser.getIdToken();
+
+  const res = await fetch(WORKER, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + token
+    },
+    body: JSON.stringify({
+      model: 'claude-haiku-4-5-20251001',
+      max_tokens: 200,
+      messages: [{
+        role: 'user',
+        content: [
+          { type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: b64 } },
+          { type: 'text', text: '이 이미지는 마트 가격표입니다. 상품명과 가격을 추출해주세요.\n반드시 아래 JSON 형식만 반환하세요:\n{"name": "상품명", "price": 숫자만}\n가격표가 없거나 인식 불가하면: {"name": null, "price": null}' }
+        ]
+      }]
+    })
+  });
+
+  if (!res.ok) {
+    const e = await res.json().catch(() => ({}));
+    throw new Error(e.error?.message || `API 오류 (${res.status})`);
+  }
+
+  const data = await res.json();
+  const text = data.content?.[0]?.text?.trim() || '';
+
+  try {
+    const p = JSON.parse(text.replace(/```json|```/g, '').trim());
+    if (!p.name || !p.price) return null;
+    return { name: p.name, price: parseInt(p.price) };
+  } catch (e) {
+    return null;
+  }
+}
+
+function showResult(name, price) {
+  document.getElementById('result-name-input').value = name;
+  document.getElementById('result-price-input').value = price;
   document.getElementById('result-sheet-backdrop').classList.add('open');
-  setTimeout(()=>document.getElementById('result-name-input').focus(),200);
+  setTimeout(() => document.getElementById('result-name-input').focus(), 200);
 }
-function discardResult(){document.getElementById('result-sheet-backdrop').classList.remove('open');}
-function backdropClose(e){if(e.target===document.getElementById('result-sheet-backdrop'))discardResult();}
+function discardResult() { document.getElementById('result-sheet-backdrop').classList.remove('open'); }
+function backdropClose(e) { if (e.target === document.getElementById('result-sheet-backdrop')) discardResult(); }
 
-function addToCart(){
-  const name=document.getElementById('result-name-input').value.trim();
-  const price=parseInt(document.getElementById('result-price-input').value);
-  if(!name){showToast('상품명을 입력해주세요');return;}
-  if(!price||price<=0){showToast('올바른 가격을 입력해주세요');return;}
-  const ex=cart.find(i=>i.name===name);if(ex)ex.qty++;else cart.push({name,price,qty:1,id:Date.now(),isNew:true});
-  discardResult();renderCart();showToast('✓ '+name+' 담았어요');setTimeout(()=>switchTab('cart'),300);
-}
-function addManual(){
-  const name=document.getElementById('manual-name').value.trim();
-  const price=parseInt(document.getElementById('manual-price').value);
-  if(!name){showToast('상품명을 입력해주세요');return;}
-  if(!price||price<=0){showToast('올바른 가격을 입력해주세요');return;}
-  const ex=cart.find(i=>i.name===name);if(ex)ex.qty++;else cart.push({name,price,qty:1,id:Date.now(),isNew:true});
-  closeModal();renderCart();showToast('✓ '+name+' 담았어요');setTimeout(()=>switchTab('cart'),300);
-}
-function changeQty(id,delta){const i=cart.find(x=>x.id===id);if(!i)return;i.qty+=delta;if(i.qty<=0)cart=cart.filter(x=>x.id!==id);renderCart();}
-function removeItem(id){cart=cart.filter(i=>i.id!==id);renderCart();}
-function clearCart(){if(!cart.length)return;if(!confirm('장바구니를 비울까요?'))return;cart=[];renderCart();}
-function renderCart(){
-  localStorage.setItem('scanmart-cart',JSON.stringify(cart));
-  const list=document.getElementById('cart-list'),empty=document.getElementById('empty-state'),
-        saveBtn=document.getElementById('save-btn'),badge=document.getElementById('cart-badge');
-  const total=cart.reduce((s,i)=>s+i.price*i.qty,0);
-  document.getElementById('total-amount').textContent=total.toLocaleString('ko-KR')+'원';
-  const tq=cart.reduce((s,i)=>s+i.qty,0);
-  if(tq>0){badge.textContent=tq;badge.classList.add('show');}else badge.classList.remove('show');
-  if(!cart.length){empty.style.display='flex';list.innerHTML='';saveBtn.classList.remove('active');return;}
-  empty.style.display='none';saveBtn.classList.add('active');
-  list.innerHTML=cart.map(item=>`<div class="cart-item${item.isNew?' new-item':''}" id="item-${item.id}"><div class="item-info"><div class="item-name">${esc(item.name)}</div><div class="item-unit">개당 ${item.price.toLocaleString('ko-KR')}원</div></div><div class="qty-controls"><button class="qty-btn" onclick="changeQty(${item.id},-1)">−</button><span class="qty-num">${item.qty}</span><button class="qty-btn" onclick="changeQty(${item.id},1)">+</button></div><div class="item-subtotal">${(item.price*item.qty).toLocaleString('ko-KR')}원</div><button class="del-btn" onclick="removeItem(${item.id})">✕</button></div>`).join('');
-  cart.forEach(item=>{if(item.isNew)setTimeout(()=>{item.isNew=false;document.getElementById('item-'+item.id)?.classList.remove('new-item');},2000);});
+function addToCart() {
+  const name = document.getElementById('result-name-input').value.trim();
+  const price = parseInt(document.getElementById('result-price-input').value);
+  if (!name) { showToast('상품명을 입력해주세요'); return; }
+  if (!price || price <= 0) { showToast('올바른 가격을 입력해주세요'); return; }
+  const ex = cart.find(i => i.name === name);
+  if (ex) ex.qty++; else cart.push({ name, price, qty: 1, id: Date.now(), isNew: true });
+  discardResult(); renderCart(); showToast('✓ ' + name + ' 담았어요');
+  setTimeout(() => switchTab('cart'), 300);
 }
 
-async function saveSession(){
-  if(!cart.length){showToast('담은 상품이 없어요');return;}
-  if(!currentUser){showToast('저장하려면 로그인이 필요해요');setTimeout(handleLoginBtn,500);return;}
-  const btn=document.getElementById('save-btn');btn.textContent='⏳ 저장 중...';btn.disabled=true;
-  const total=cart.reduce((s,i)=>s+i.price*i.qty,0),now=new Date();
-  try{
+function addManual() {
+  const name = document.getElementById('manual-name').value.trim();
+  const price = parseInt(document.getElementById('manual-price').value);
+  if (!name) { showToast('상품명을 입력해주세요'); return; }
+  if (!price || price <= 0) { showToast('올바른 가격을 입력해주세요'); return; }
+  const ex = cart.find(i => i.name === name);
+  if (ex) ex.qty++; else cart.push({ name, price, qty: 1, id: Date.now(), isNew: true });
+  closeModal(); renderCart(); showToast('✓ ' + name + ' 담았어요');
+  setTimeout(() => switchTab('cart'), 300);
+}
+
+function changeQty(id, delta) {
+  const i = cart.find(x => x.id === id); if (!i) return;
+  i.qty += delta; if (i.qty <= 0) cart = cart.filter(x => x.id !== id);
+  renderCart();
+}
+function removeItem(id) { cart = cart.filter(i => i.id !== id); renderCart(); }
+function clearCart() { if (!cart.length) return; if (!confirm('장바구니를 비울까요?')) return; cart = []; renderCart(); }
+
+function renderCart() {
+  localStorage.setItem('scanmart-cart', JSON.stringify(cart));
+  const list = document.getElementById('cart-list'), empty = document.getElementById('empty-state'),
+        saveBtn = document.getElementById('save-btn'), badge = document.getElementById('cart-badge');
+  const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
+  document.getElementById('total-amount').textContent = total.toLocaleString('ko-KR') + '원';
+  const tq = cart.reduce((s, i) => s + i.qty, 0);
+  if (tq > 0) { badge.textContent = tq; badge.classList.add('show'); } else badge.classList.remove('show');
+  if (!cart.length) { empty.style.display = 'flex'; list.innerHTML = ''; saveBtn.classList.remove('active'); return; }
+  empty.style.display = 'none'; saveBtn.classList.add('active');
+  list.innerHTML = cart.map(item => `
+    <div class="cart-item${item.isNew ? ' new-item' : ''}" id="item-${item.id}">
+      <div class="item-info">
+        <div class="item-name">${esc(item.name)}</div>
+        <div class="item-unit">개당 ${item.price.toLocaleString('ko-KR')}원</div>
+      </div>
+      <div class="qty-controls">
+        <button class="qty-btn" onclick="changeQty(${item.id},-1)">−</button>
+        <span class="qty-num">${item.qty}</span>
+        <button class="qty-btn" onclick="changeQty(${item.id},1)">+</button>
+      </div>
+      <div class="item-subtotal">${(item.price * item.qty).toLocaleString('ko-KR')}원</div>
+      <button class="del-btn" onclick="removeItem(${item.id})">✕</button>
+    </div>`).join('');
+  cart.forEach(item => {
+    if (item.isNew) setTimeout(() => { item.isNew = false; document.getElementById('item-' + item.id)?.classList.remove('new-item'); }, 2000);
+  });
+}
+
+async function saveSession() {
+  if (!cart.length) { showToast('담은 상품이 없어요'); return; }
+  if (!currentUser) { showToast('저장하려면 로그인이 필요해요'); setTimeout(handleLoginBtn, 500); return; }
+  const btn = document.getElementById('save-btn'); btn.textContent = '⏳ 저장 중...'; btn.disabled = true;
+  const total = cart.reduce((s, i) => s + i.price * i.qty, 0), now = new Date();
+  try {
     await db.collection('shopping_sessions').add({
-      uid:currentUser.uid,
-      date:now.toLocaleDateString('ko-KR'),
-      time:now.toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'}),
-      total,items:cart.map(i=>({name:i.name,price:i.price,qty:i.qty})),
-      createdAt:firebase.firestore.FieldValue.serverTimestamp()
+      uid: currentUser.uid,
+      date: now.toLocaleDateString('ko-KR'),
+      time: now.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }),
+      total, items: cart.map(i => ({ name: i.name, price: i.price, qty: i.qty })),
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
     });
-    showToast('☁️ 저장 완료! '+total.toLocaleString('ko-KR')+'원');btn.classList.remove('active');
-    allSessions=[];historyLoaded=false;
-  }catch(e){showToast('저장 실패: '+(e.message||'다시 시도해주세요'));btn.classList.add('active');}
-  finally{btn.textContent='🗒️ 쇼핑 저장';btn.disabled=false;}
+    showToast('☁️ 저장 완료! ' + total.toLocaleString('ko-KR') + '원');
+    btn.classList.remove('active');
+    allSessions = []; historyLoaded = false;
+  } catch (e) {
+    showToast('저장 실패: ' + (e.message || '다시 시도해주세요')); btn.classList.add('active');
+  } finally {
+    btn.textContent = '🗒️ 쇼핑 저장'; btn.disabled = false;
+  }
 }
 
-async function renderHistoryPage(){
-  const eLP=document.getElementById('history-login-prompt'),eL=document.getElementById('history-loading'),
-        eE=document.getElementById('history-empty'),
-        ePG=document.getElementById('history-pagination');
-  if(!currentUser){eLP.style.display='flex';eL.style.display='none';eE.style.display='none';ePG.style.display='none';return;}
-  eLP.style.display='none';
-  if(!historyLoaded){
-    eL.style.display='flex';eE.style.display='none';ePG.style.display='none';
-    try{
-      const snap=await db.collection('shopping_sessions').where('uid','==',currentUser.uid).orderBy('createdAt','desc').get();
-      allSessions=snap.docs.map(d=>({id:d.id,...d.data()}));historyLoaded=true;
-    }catch(e){showToast('기록 로드 실패: '+(e.message||'다시 시도해주세요'));eL.style.display='none';return;}
-    eL.style.display='none';
+async function renderHistoryPage() {
+  const eLP = document.getElementById('history-login-prompt'), eL = document.getElementById('history-loading'),
+        eE = document.getElementById('history-empty'), ePG = document.getElementById('history-pagination');
+  if (!currentUser) { eLP.style.display = 'flex'; eL.style.display = 'none'; eE.style.display = 'none'; ePG.style.display = 'none'; return; }
+  eLP.style.display = 'none';
+  if (!historyLoaded) {
+    eL.style.display = 'flex'; eE.style.display = 'none'; ePG.style.display = 'none';
+    try {
+      const snap = await db.collection('shopping_sessions').where('uid', '==', currentUser.uid).orderBy('createdAt', 'desc').get();
+      allSessions = snap.docs.map(d => ({ id: d.id, ...d.data() })); historyLoaded = true;
+    } catch (e) { showToast('기록 로드 실패: ' + (e.message || '다시 시도해주세요')); eL.style.display = 'none'; return; }
+    eL.style.display = 'none';
   }
   renderHistoryList();
 }
-function renderHistoryList(){
-  const eE=document.getElementById('history-empty'),ePG=document.getElementById('history-pagination');
-  if(!allSessions.length){eE.style.display='flex';ePG.style.display='none';document.getElementById('history-list').innerHTML='';return;}
-  eE.style.display='none';
-  hTotalPages=Math.ceil(allSessions.length/PG);if(hPage>hTotalPages)hPage=hTotalPages;
-  const start=(hPage-1)*PG;
-  document.getElementById('history-list').innerHTML=allSessions.slice(start,start+PG).map(s=>renderSessionCard(s)).join('');
-  if(hTotalPages<=1){ePG.style.display='none';}
-  else{ePG.style.display='flex';document.getElementById('page-info').textContent=hPage+' / '+hTotalPages;
-    document.getElementById('prev-page-btn').disabled=hPage<=1;document.getElementById('next-page-btn').disabled=hPage>=hTotalPages;}
-}
-function renderSessionCard(s){
-  const items=s.items||[];const ic=items.reduce((x,i)=>x+(i.qty||1),0);
-  const ihtml=items.map((item,idx)=>`<div class="session-item-row" id="si-${s.id}-${idx}"><div class="si-view"><span class="si-name">${esc(item.name)}</span><span class="si-qty">×${item.qty||1}</span><span class="si-price">${((item.price||0)*(item.qty||1)).toLocaleString('ko-KR')}원</span><button class="si-edit-btn" onclick="toggleItemEdit('${s.id}',${idx})">✏️</button><button class="si-del-btn" onclick="deleteSessionItem('${s.id}',${idx})">✕</button></div><div class="si-edit-fields"><input class="si-input si-input-name" type="text" id="si-name-${s.id}-${idx}" value="${esc(item.name)}" placeholder="상품명"><input class="si-input si-input-price" type="number" id="si-price-${s.id}-${idx}" value="${item.price||0}" inputmode="numeric" placeholder="가격"><input class="si-input si-input-qty" type="number" id="si-qty-${s.id}-${idx}" value="${item.qty||1}" min="1" inputmode="numeric" placeholder="수량"><button class="si-save-btn" onclick="saveItemEdit('${s.id}',${idx})">저장</button><button class="si-cancel-btn" onclick="toggleItemEdit('${s.id}',${idx})">취소</button></div></div>`).join('');
-  return`<div class="session-card" id="sc-${s.id}"><div class="session-card-header" onclick="toggleSessionCard('${s.id}')"><div class="session-date-group"><span class="session-date">${esc(s.date||'')}</span><span class="session-time">${esc(s.time||'')}</span></div><div class="session-summary"><span class="session-count">${ic}개</span><span class="session-total">${(s.total||0).toLocaleString('ko-KR')}원</span><span class="session-chevron">▼</span></div></div><div class="session-body"><div class="session-items">${ihtml}</div><div class="session-footer"><button class="session-add-btn" onclick="openAddItem('${s.id}')">＋ 항목 추가</button><button class="session-del-session-btn" onclick="deleteSession('${s.id}')">🗑️ 삭제</button></div></div></div>`;
-}
-function toggleSessionCard(id){document.getElementById('sc-'+id)?.classList.toggle('expanded');}
-function toggleItemEdit(sid,idx){
-  const row=document.getElementById('si-'+sid+'-'+idx);if(!row)return;
-  const open=row.classList.toggle('editing');
-  if(open)setTimeout(()=>document.getElementById('si-name-'+sid+'-'+idx)?.focus(),80);
-}
-async function saveItemEdit(sid,idx){
-  const name=document.getElementById('si-name-'+sid+'-'+idx)?.value.trim();
-  const price=parseInt(document.getElementById('si-price-'+sid+'-'+idx)?.value);
-  const qty=parseInt(document.getElementById('si-qty-'+sid+'-'+idx)?.value);
-  if(!name){showToast('상품명을 입력해주세요');return;}
-  if(!price||price<=0){showToast('올바른 가격을 입력해주세요');return;}
-  if(!qty||qty<1){showToast('수량은 1 이상이어야 해요');return;}
-  const s=allSessions.find(x=>x.id===sid);if(!s)return;
-  s.items[idx]={name,price,qty};s.total=s.items.reduce((x,i)=>x+(i.price||0)*(i.qty||1),0);
-  try{await db.collection('shopping_sessions').doc(sid).update({items:s.items,total:s.total});showToast('✓ 수정됐어요');renderHistoryList();}
-  catch(e){showToast('수정 실패: '+(e.message||'다시 시도해주세요'));}
-}
-async function deleteSessionItem(sid,idx){
-  const s=allSessions.find(x=>x.id===sid);if(!s)return;
-  if(!confirm('"'+s.items[idx]?.name+'" 항목을 삭제할까요?'))return;
-  s.items.splice(idx,1);s.total=s.items.reduce((x,i)=>x+(i.price||0)*(i.qty||1),0);
-  try{await db.collection('shopping_sessions').doc(sid).update({items:s.items,total:s.total});showToast('✓ 항목 삭제됐어요');renderHistoryList();}
-  catch(e){showToast('삭제 실패: '+(e.message||'다시 시도해주세요'));}
-}
-async function deleteSession(sid){
-  const s=allSessions.find(x=>x.id===sid);if(!s)return;
-  if(!confirm(s.date+' 쇼핑 기록을 삭제할까요?'))return;
-  try{await db.collection('shopping_sessions').doc(sid).delete();allSessions=allSessions.filter(x=>x.id!==sid);showToast('🗑️ 삭제됐어요');renderHistoryList();}
-  catch(e){showToast('삭제 실패: '+(e.message||'다시 시도해주세요'));}
-}
-function openAddItem(sid){
-  addItemTarget=sid;const s=allSessions.find(x=>x.id===sid);
-  document.getElementById('additem-session-date').textContent=s?'📅 '+s.date+' '+s.time:'';
-  document.getElementById('hist-add-name').value='';document.getElementById('hist-add-price').value='';document.getElementById('hist-add-qty').value='1';
-  document.getElementById('hist-add-modal-backdrop').classList.add('open');setTimeout(()=>document.getElementById('hist-add-name').focus(),100);
-}
-async function confirmAddItem(){
-  const name=document.getElementById('hist-add-name').value.trim();
-  const price=parseInt(document.getElementById('hist-add-price').value);
-  const qty=parseInt(document.getElementById('hist-add-qty').value)||1;
-  if(!name){showToast('상품명을 입력해주세요');return;}
-  if(!price||price<=0){showToast('올바른 가격을 입력해주세요');return;}
-  const sid=addItemTarget,s=allSessions.find(x=>x.id===sid);if(!s)return;
-  s.items=s.items||[];s.items.push({name,price,qty});s.total=s.items.reduce((x,i)=>x+(i.price||0)*(i.qty||1),0);
-  try{
-    await db.collection('shopping_sessions').doc(sid).update({items:s.items,total:s.total});
-    closeAddItem();showToast('✓ '+name+' 추가됐어요');renderHistoryList();
-    setTimeout(()=>{const card=document.getElementById('sc-'+sid);if(card&&!card.classList.contains('open'))card.classList.add('open');},200);
-  }catch(e){showToast('추가 실패: '+(e.message||'다시 시도해주세요'));}
-}
-function closeAddItem(){document.getElementById('hist-add-modal-backdrop').classList.remove('open');addItemTarget=null;}
-function closeAddItemOnBackdrop(e){if(e.target===document.getElementById('hist-add-modal-backdrop'))closeAddItem();}
-function changePage(d){hPage=Math.max(1,Math.min(hTotalPages,hPage+d));renderHistoryList();document.getElementById('history-scroll').scrollTop=0;}
 
-function openModal(){document.getElementById('modal-backdrop').classList.add('open');setTimeout(()=>document.getElementById('manual-name').focus(),100);}
-function closeModal(){document.getElementById('modal-backdrop').classList.remove('open');document.getElementById('manual-name').value='';document.getElementById('manual-price').value='';}
-function closeModalOnBackdrop(e){if(e.target===document.getElementById('modal-backdrop'))closeModal();}
+function renderHistoryList() {
+  const eE = document.getElementById('history-empty'), ePG = document.getElementById('history-pagination');
+  if (!allSessions.length) { eE.style.display = 'flex'; ePG.style.display = 'none'; document.getElementById('history-list').innerHTML = ''; return; }
+  eE.style.display = 'none';
+  hTotalPages = Math.ceil(allSessions.length / PG); if (hPage > hTotalPages) hPage = hTotalPages;
+  const start = (hPage - 1) * PG;
+  document.getElementById('history-list').innerHTML = allSessions.slice(start, start + PG).map(s => renderSessionCard(s)).join('');
+  if (hTotalPages <= 1) { ePG.style.display = 'none'; }
+  else {
+    ePG.style.display = 'flex';
+    document.getElementById('page-info').textContent = hPage + ' / ' + hTotalPages;
+    document.getElementById('prev-page-btn').disabled = hPage <= 1;
+    document.getElementById('next-page-btn').disabled = hPage >= hTotalPages;
+  }
+}
 
-function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._to);t._to=setTimeout(()=>t.classList.remove('show'),2500);}
-function esc(s){if(!s)return'';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function renderSessionCard(s) {
+  const items = s.items || []; const ic = items.reduce((x, i) => x + (i.qty || 1), 0);
+  const ihtml = items.map((item, idx) => `
+    <div class="session-item-row" id="si-${s.id}-${idx}">
+      <div class="si-view">
+        <span class="si-name">${esc(item.name)}</span>
+        <span class="si-qty">×${item.qty || 1}</span>
+        <span class="si-price">${((item.price || 0) * (item.qty || 1)).toLocaleString('ko-KR')}원</span>
+        <button class="si-edit-btn" onclick="toggleItemEdit('${s.id}',${idx})">✏️</button>
+        <button class="si-del-btn" onclick="deleteSessionItem('${s.id}',${idx})">✕</button>
+      </div>
+      <div class="si-edit-fields">
+        <input class="si-input si-input-name" type="text" id="si-name-${s.id}-${idx}" value="${esc(item.name)}" placeholder="상품명">
+        <input class="si-input si-input-price" type="number" id="si-price-${s.id}-${idx}" value="${item.price || 0}" inputmode="numeric" placeholder="가격">
+        <input class="si-input si-input-qty" type="number" id="si-qty-${s.id}-${idx}" value="${item.qty || 1}" min="1" inputmode="numeric" placeholder="수량">
+        <button class="si-save-btn" onclick="saveItemEdit('${s.id}',${idx})">저장</button>
+        <button class="si-cancel-btn" onclick="toggleItemEdit('${s.id}',${idx})">취소</button>
+      </div>
+    </div>`).join('');
+  return `
+    <div class="session-card" id="sc-${s.id}">
+      <div class="session-card-header" onclick="toggleSessionCard('${s.id}')">
+        <div class="session-date-group">
+          <span class="session-date">${esc(s.date || '')}</span>
+          <span class="session-time">${esc(s.time || '')}</span>
+        </div>
+        <div class="session-summary">
+          <span class="session-count">${ic}개</span>
+          <span class="session-total">${(s.total || 0).toLocaleString('ko-KR')}원</span>
+          <span class="session-chevron">▼</span>
+        </div>
+      </div>
+      <div class="session-body">
+        <div class="session-items">${ihtml}</div>
+        <div class="session-footer">
+          <button class="session-add-btn" onclick="openAddItem('${s.id}')">＋ 항목 추가</button>
+          <button class="session-del-session-btn" onclick="deleteSession('${s.id}')">🗑️ 삭제</button>
+        </div>
+      </div>
+    </div>`;
+}
 
-document.addEventListener('visibilitychange',()=>{if(document.hidden)stopCamera();else if(currentTab==='scan')initCamera();});
+function toggleSessionCard(id) { document.getElementById('sc-' + id)?.classList.toggle('expanded'); }
 
-if(!getApiKey())document.getElementById('setup-screen').classList.add('visible');
+function toggleItemEdit(sid, idx) {
+  const row = document.getElementById('si-' + sid + '-' + idx); if (!row) return;
+  const open = row.classList.toggle('editing');
+  if (open) setTimeout(() => document.getElementById('si-name-' + sid + '-' + idx)?.focus(), 80);
+}
+
+async function saveItemEdit(sid, idx) {
+  const name = document.getElementById('si-name-' + sid + '-' + idx)?.value.trim();
+  const price = parseInt(document.getElementById('si-price-' + sid + '-' + idx)?.value);
+  const qty = parseInt(document.getElementById('si-qty-' + sid + '-' + idx)?.value);
+  if (!name) { showToast('상품명을 입력해주세요'); return; }
+  if (!price || price <= 0) { showToast('올바른 가격을 입력해주세요'); return; }
+  if (!qty || qty < 1) { showToast('수량은 1 이상이어야 해요'); return; }
+  const s = allSessions.find(x => x.id === sid); if (!s) return;
+  s.items[idx] = { name, price, qty }; s.total = s.items.reduce((x, i) => x + (i.price || 0) * (i.qty || 1), 0);
+  try { await db.collection('shopping_sessions').doc(sid).update({ items: s.items, total: s.total }); showToast('✓ 수정됐어요'); renderHistoryList(); }
+  catch (e) { showToast('수정 실패: ' + (e.message || '다시 시도해주세요')); }
+}
+
+async function deleteSessionItem(sid, idx) {
+  const s = allSessions.find(x => x.id === sid); if (!s) return;
+  if (!confirm('"' + s.items[idx]?.name + '" 항목을 삭제할까요?')) return;
+  s.items.splice(idx, 1); s.total = s.items.reduce((x, i) => x + (i.price || 0) * (i.qty || 1), 0);
+  try { await db.collection('shopping_sessions').doc(sid).update({ items: s.items, total: s.total }); showToast('✓ 항목 삭제됐어요'); renderHistoryList(); }
+  catch (e) { showToast('삭제 실패: ' + (e.message || '다시 시도해주세요')); }
+}
+
+async function deleteSession(sid) {
+  const s = allSessions.find(x => x.id === sid); if (!s) return;
+  if (!confirm(s.date + ' 쇼핑 기록을 삭제할까요?')) return;
+  try { await db.collection('shopping_sessions').doc(sid).delete(); allSessions = allSessions.filter(x => x.id !== sid); showToast('🗑️ 삭제됐어요'); renderHistoryList(); }
+  catch (e) { showToast('삭제 실패: ' + (e.message || '다시 시도해주세요')); }
+}
+
+function openAddItem(sid) {
+  addItemTarget = sid;
+  const s = allSessions.find(x => x.id === sid);
+  document.getElementById('additem-session-date').textContent = s ? '📅 ' + s.date + ' ' + s.time : '';
+  document.getElementById('hist-add-name').value = '';
+  document.getElementById('hist-add-price').value = '';
+  document.getElementById('hist-add-qty').value = '1';
+  document.getElementById('hist-add-modal-backdrop').classList.add('open');
+  setTimeout(() => document.getElementById('hist-add-name').focus(), 100);
+}
+
+async function confirmAddItem() {
+  const name = document.getElementById('hist-add-name').value.trim();
+  const price = parseInt(document.getElementById('hist-add-price').value);
+  const qty = parseInt(document.getElementById('hist-add-qty').value) || 1;
+  if (!name) { showToast('상품명을 입력해주세요'); return; }
+  if (!price || price <= 0) { showToast('올바른 가격을 입력해주세요'); return; }
+  const sid = addItemTarget, s = allSessions.find(x => x.id === sid); if (!s) return;
+  s.items = s.items || []; s.items.push({ name, price, qty });
+  s.total = s.items.reduce((x, i) => x + (i.price || 0) * (i.qty || 1), 0);
+  try {
+    await db.collection('shopping_sessions').doc(sid).update({ items: s.items, total: s.total });
+    closeAddItem(); showToast('✓ ' + name + ' 추가됐어요'); renderHistoryList();
+    setTimeout(() => { const card = document.getElementById('sc-' + sid); if (card && !card.classList.contains('expanded')) card.classList.add('expanded'); }, 200);
+  } catch (e) { showToast('추가 실패: ' + (e.message || '다시 시도해주세요')); }
+}
+
+function closeAddItem() { document.getElementById('hist-add-modal-backdrop').classList.remove('open'); addItemTarget = null; }
+function closeAddItemOnBackdrop(e) { if (e.target === document.getElementById('hist-add-modal-backdrop')) closeAddItem(); }
+function changePage(d) { hPage = Math.max(1, Math.min(hTotalPages, hPage + d)); renderHistoryList(); document.getElementById('history-scroll').scrollTop = 0; }
+
+function openModal() { document.getElementById('modal-backdrop').classList.add('open'); setTimeout(() => document.getElementById('manual-name').focus(), 100); }
+function closeModal() { document.getElementById('modal-backdrop').classList.remove('open'); document.getElementById('manual-name').value = ''; document.getElementById('manual-price').value = ''; }
+function closeModalOnBackdrop(e) { if (e.target === document.getElementById('modal-backdrop')) closeModal(); }
+
+function showToast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(t._to); t._to = setTimeout(() => t.classList.remove('show'), 2500); }
+function esc(s) { if (!s) return ''; return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
+document.addEventListener('visibilitychange', () => { if (document.hidden) stopCamera(); else if (currentTab === 'scan') initCamera(); });
+
 renderCart();
-if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js').catch(e=>console.warn('SW:',e));
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(e => console.warn('SW:', e));
 </script>
 
 </body>
