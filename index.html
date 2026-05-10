@@ -14,9 +14,9 @@
 <style>
   :root {
     --bg: #0a0a0a; --surface: #141414; --surface2: #1e1e1e;
-    --accent: #00ff88; --accent-dim: #00cc6a;
-    --danger: #ff4757; --text: #f0f0f0; --muted: #888;
-    --border: #2a2a2a; --total-bg: #001a0d;
+    --accent: #e8912d; --accent-dim: #c97820;
+    --danger: #ff4757; --text: #f0f0f0; --muted: #9a9a9a;
+    --border: #333333; --total-bg: #1a0d00;
   }
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
   html, body { height:100%; background:var(--bg); color:var(--text); font-family:'Nanum Gothic',sans-serif; overflow:hidden; }
@@ -71,7 +71,7 @@
     border-radius:24px; color:var(--accent); font-size:14px; font-weight:800;
     cursor:pointer; transition:background 0.2s;
   }
-  .empty-cta:active { background:#003320; }
+  .empty-cta:active { background:#331a00; }
 
   #cart-list { display:flex; flex-direction:column; gap:8px; }
 
@@ -81,7 +81,7 @@
     display:flex; align-items:center; gap:10px;
     animation:slideIn 0.2s ease;
   }
-  .cart-item.new-item { border-color:var(--accent); background:#001a0d; }
+  .cart-item.new-item { border-color:var(--accent); background:#1a0d00; }
   @keyframes slideIn { from { opacity:0; transform:translateY(-6px); } to { opacity:1; transform:translateY(0); } }
   .item-info { flex:1; min-width:0; }
   .item-name { font-size:14px; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
@@ -141,7 +141,7 @@
   .corner-tr { top:0; right:0; border-top-width:2px; border-right-width:2px; }
   .corner-bl { bottom:0; left:0; border-bottom-width:2px; border-left-width:2px; }
   .corner-br { bottom:0; right:0; border-bottom-width:2px; border-right-width:2px; }
-  #scan-hint { position:absolute; bottom:12px; left:0; right:0; text-align:center; font-size:12px; color:rgba(255,255,255,0.55); }
+  #scan-hint { position:absolute; bottom:12px; left:0; right:0; text-align:center; font-size:12px; color:var(--accent); font-weight:700; letter-spacing:0.3px; }
   #no-camera-msg {
     position:absolute; inset:0; display:none; flex-direction:column;
     align-items:center; justify-content:center; color:var(--muted); font-size:13px; gap:8px;
@@ -159,7 +159,7 @@
   }
   #scan-btn:active { transform:scale(0.97); }
   #scan-btn:disabled { background:#333; color:#666; cursor:not-allowed; }
-  #scan-btn.loading { background:#005533; color:var(--accent); }
+  #scan-btn.loading { background:#553300; color:var(--accent); }
   #manual-btn {
     height:52px; width:52px; background:var(--surface2); border:1px solid var(--border);
     border-radius:8px; color:var(--muted); font-size:20px; cursor:pointer;
@@ -206,7 +206,7 @@
     display:flex; align-items:center; gap:8px; padding:8px 10px;
     background:var(--surface2); border-radius:8px;
   }
-  .session-item-row.editing { background:#0d1a14; border:1px solid var(--accent-dim); }
+  .session-item-row.editing { background:#1a0d00; border:1px solid var(--accent-dim); }
 
   /* 뷰 모드 */
   .si-name { flex:1; font-size:13px; font-weight:700; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
@@ -332,7 +332,7 @@
   .sheet-body { padding:18px 16px 0; }
   .sheet-field-label { font-size:10px; color:var(--muted); letter-spacing:1.2px; text-transform:uppercase; margin-bottom:7px; }
   .sheet-input { width:100%; height:52px; background:var(--surface2); border:1.5px solid var(--accent); border-radius:10px; color:var(--text); font-family:'Nanum Gothic',sans-serif; font-size:17px; padding:0 14px; outline:none; margin-bottom:16px; transition:border-color 0.2s,background 0.2s; }
-  .sheet-input:focus { border-color:#00ffaa; background:#0d1a14; }
+  .sheet-input:focus { border-color:var(--accent); background:#1a0d00; }
   #result-price-input { font-family:'Share Tech Mono',monospace; font-size:24px; color:var(--accent); }
   .sheet-actions { display:flex; gap:10px; padding:4px 16px 0; }
   #discard-btn { flex:1; height:54px; background:var(--surface2); border:1px solid var(--border); border-radius:10px; color:var(--muted); font-family:'Nanum Gothic',sans-serif; font-size:15px; font-weight:700; cursor:pointer; }
@@ -429,7 +429,7 @@ firebase.initializeApp({apiKey:"AIzaSyC_vh0fqH6vYFwFDYCKVcBi-xlFKvxnu6U",authDom
     <div id="header-right">
       <div id="total-display">
         <div id="total-label">합계</div>
-        <div id="total-amount">₩0</div>
+        <div id="total-amount">0원</div>
       </div>
       <button id="login-btn" onclick="handleLoginBtn()">
         <div class="avatar" id="user-avatar"></div>
@@ -750,12 +750,12 @@ function renderCart(){
   const list=document.getElementById('cart-list'),empty=document.getElementById('empty-state'),
         saveBtn=document.getElementById('save-btn'),badge=document.getElementById('cart-badge');
   const total=cart.reduce((s,i)=>s+i.price*i.qty,0);
-  document.getElementById('total-amount').textContent='₩'+total.toLocaleString('ko-KR');
+  document.getElementById('total-amount').textContent=total.toLocaleString('ko-KR')+'원';
   const tq=cart.reduce((s,i)=>s+i.qty,0);
   if(tq>0){badge.textContent=tq;badge.classList.add('show');}else badge.classList.remove('show');
   if(!cart.length){empty.style.display='flex';list.innerHTML='';saveBtn.classList.remove('active');return;}
   empty.style.display='none';saveBtn.classList.add('active');
-  list.innerHTML=cart.map(item=>`<div class="cart-item${item.isNew?' new-item':''}" id="item-${item.id}"><div class="item-info"><div class="item-name">${esc(item.name)}</div><div class="item-unit">개당 ₩${item.price.toLocaleString('ko-KR')}</div></div><div class="qty-controls"><button class="qty-btn" onclick="changeQty(${item.id},-1)">−</button><span class="qty-num">${item.qty}</span><button class="qty-btn" onclick="changeQty(${item.id},1)">+</button></div><div class="item-subtotal">₩${(item.price*item.qty).toLocaleString('ko-KR')}</div><button class="del-btn" onclick="removeItem(${item.id})">✕</button></div>`).join('');
+  list.innerHTML=cart.map(item=>`<div class="cart-item${item.isNew?' new-item':''}" id="item-${item.id}"><div class="item-info"><div class="item-name">${esc(item.name)}</div><div class="item-unit">개당 ${item.price.toLocaleString('ko-KR')}원</div></div><div class="qty-controls"><button class="qty-btn" onclick="changeQty(${item.id},-1)">−</button><span class="qty-num">${item.qty}</span><button class="qty-btn" onclick="changeQty(${item.id},1)">+</button></div><div class="item-subtotal">${(item.price*item.qty).toLocaleString('ko-KR')}원</div><button class="del-btn" onclick="removeItem(${item.id})">✕</button></div>`).join('');
   cart.forEach(item=>{if(item.isNew)setTimeout(()=>{item.isNew=false;document.getElementById('item-'+item.id)?.classList.remove('new-item');},2000);});
 }
 
@@ -772,7 +772,7 @@ async function saveSession(){
       total,items:cart.map(i=>({name:i.name,price:i.price,qty:i.qty})),
       createdAt:firebase.firestore.FieldValue.serverTimestamp()
     });
-    showToast('☁️ 저장 완료! ₩'+total.toLocaleString('ko-KR'));btn.classList.remove('active');
+    showToast('☁️ 저장 완료! '+total.toLocaleString('ko-KR')+'원');btn.classList.remove('active');
     allSessions=[];historyLoaded=false;
   }catch(e){showToast('저장 실패: '+(e.message||'다시 시도해주세요'));btn.classList.add('active');}
   finally{btn.textContent='🗒️ 쇼핑 저장';btn.disabled=false;}
@@ -807,8 +807,8 @@ function renderHistoryList(){
 }
 function renderSessionCard(s){
   const items=s.items||[];const ic=items.reduce((x,i)=>x+(i.qty||1),0);
-  const ihtml=items.map((item,idx)=>`<div class="session-item-row" id="si-${s.id}-${idx}"><div class="si-view"><span class="si-name">${esc(item.name)}</span><span class="si-qty">×${item.qty||1}</span><span class="si-price">₩${((item.price||0)*(item.qty||1)).toLocaleString('ko-KR')}</span><button class="si-edit-btn" onclick="toggleItemEdit('${s.id}',${idx})">✏️</button><button class="si-del-btn" onclick="deleteSessionItem('${s.id}',${idx})">✕</button></div><div class="si-edit-fields"><input class="si-input si-input-name" type="text" id="si-name-${s.id}-${idx}" value="${esc(item.name)}" placeholder="상품명"><input class="si-input si-input-price" type="number" id="si-price-${s.id}-${idx}" value="${item.price||0}" inputmode="numeric" placeholder="가격"><input class="si-input si-input-qty" type="number" id="si-qty-${s.id}-${idx}" value="${item.qty||1}" min="1" inputmode="numeric" placeholder="수량"><button class="si-save-btn" onclick="saveItemEdit('${s.id}',${idx})">저장</button><button class="si-cancel-btn" onclick="toggleItemEdit('${s.id}',${idx})">취소</button></div></div>`).join('');
-  return`<div class="session-card" id="sc-${s.id}"><div class="session-card-header" onclick="toggleSessionCard('${s.id}')"><div class="session-date-group"><span class="session-date">${esc(s.date||'')}</span><span class="session-time">${esc(s.time||'')}</span></div><div class="session-summary"><span class="session-count">${ic}개</span><span class="session-total">₩${(s.total||0).toLocaleString('ko-KR')}</span><span class="session-chevron">▼</span></div></div><div class="session-body"><div class="session-items">${ihtml}</div><div class="session-footer"><button class="session-add-btn" onclick="openAddItem('${s.id}')">＋ 항목 추가</button><button class="session-del-session-btn" onclick="deleteSession('${s.id}')">🗑️ 삭제</button></div></div></div>`;
+  const ihtml=items.map((item,idx)=>`<div class="session-item-row" id="si-${s.id}-${idx}"><div class="si-view"><span class="si-name">${esc(item.name)}</span><span class="si-qty">×${item.qty||1}</span><span class="si-price">${((item.price||0)*(item.qty||1)).toLocaleString('ko-KR')}원</span><button class="si-edit-btn" onclick="toggleItemEdit('${s.id}',${idx})">✏️</button><button class="si-del-btn" onclick="deleteSessionItem('${s.id}',${idx})">✕</button></div><div class="si-edit-fields"><input class="si-input si-input-name" type="text" id="si-name-${s.id}-${idx}" value="${esc(item.name)}" placeholder="상품명"><input class="si-input si-input-price" type="number" id="si-price-${s.id}-${idx}" value="${item.price||0}" inputmode="numeric" placeholder="가격"><input class="si-input si-input-qty" type="number" id="si-qty-${s.id}-${idx}" value="${item.qty||1}" min="1" inputmode="numeric" placeholder="수량"><button class="si-save-btn" onclick="saveItemEdit('${s.id}',${idx})">저장</button><button class="si-cancel-btn" onclick="toggleItemEdit('${s.id}',${idx})">취소</button></div></div>`).join('');
+  return`<div class="session-card" id="sc-${s.id}"><div class="session-card-header" onclick="toggleSessionCard('${s.id}')"><div class="session-date-group"><span class="session-date">${esc(s.date||'')}</span><span class="session-time">${esc(s.time||'')}</span></div><div class="session-summary"><span class="session-count">${ic}개</span><span class="session-total">${(s.total||0).toLocaleString('ko-KR')}원</span><span class="session-chevron">▼</span></div></div><div class="session-body"><div class="session-items">${ihtml}</div><div class="session-footer"><button class="session-add-btn" onclick="openAddItem('${s.id}')">＋ 항목 추가</button><button class="session-del-session-btn" onclick="deleteSession('${s.id}')">🗑️ 삭제</button></div></div></div>`;
 }
 function toggleSessionCard(id){document.getElementById('sc-'+id)?.classList.toggle('expanded');}
 function toggleItemEdit(sid,idx){
