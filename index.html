@@ -299,6 +299,15 @@
   .tab-btn-label { font-size:11px; color:var(--muted); font-family:'Nanum Gothic',sans-serif; font-weight:700; transition:color 0.2s; }
   .tab-btn.active .tab-btn-label { color:var(--accent); }
   .tab-btn.active .tab-btn-icon { filter:drop-shadow(0 0 4px rgba(0,255,136,0.4)); }
+  .tab-badge { position:absolute; top:2px; right:10px; background:var(--accent); color:#000; font-size:10px; font-weight:800; min-width:16px; height:16px; border-radius:8px; padding:0 4px; display:none; align-items:center; justify-content:center; font-family:'Share Tech Mono',monospace; }
+  .tab-badge.show { display:flex; }
+
+  /* ── USER SHEET ── */
+  #user-sheet-bd { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.65); z-index:90; align-items:flex-end; justify-content:center; }
+  #user-sheet-bd.open { display:flex; }
+  #user-sheet { width:100%; max-width:480px; background:#1a1a1a; border-top:1px solid var(--border); border-radius:20px 20px 0 0; padding-bottom:max(16px,env(safe-area-inset-bottom)); }
+  .usp-av { width:48px; height:48px; border-radius:50%; object-fit:cover; }
+  .usp-ph { width:48px; height:48px; border-radius:50%; background:var(--accent); display:flex; align-items:center; justify-content:center; font-size:20px; color:#000; font-weight:800; }
 
   /* ── RESULT BOTTOM SHEET ── */
   #result-sheet-backdrop {
@@ -501,9 +510,9 @@ firebase.initializeApp({apiKey:"AIzaSyC_vh0fqH6vYFwFDYCKVcBi-xlFKvxnu6U",authDom
         <div id="history-list"></div>
       </div>
       <div id="history-pagination">
-        <button class="page-btn" id="prev-page-btn" onclick="historyPage(-1)" disabled>← 이전</button>
+        <button class="page-btn" id="prev-page-btn" onclick="changePage(-1)" disabled>← 이전</button>
         <span id="page-info">-</span>
-        <button class="page-btn" id="next-page-btn" onclick="historyPage(1)" disabled>다음 →</button>
+        <button class="page-btn" id="next-page-btn" onclick="changePage(1)" disabled>다음 →</button>
       </div>
     </div>
 
@@ -514,6 +523,7 @@ firebase.initializeApp({apiKey:"AIzaSyC_vh0fqH6vYFwFDYCKVcBi-xlFKvxnu6U",authDom
     <button class="tab-btn active" id="tab-cart" onclick="switchTab('cart')">
       <span class="tab-btn-icon">🛒</span>
       <span class="tab-btn-label">장바구니</span>
+      <span class="tab-badge" id="cart-badge"></span>
     </button>
     <button class="tab-btn" id="tab-scan" onclick="switchTab('scan')">
       <span class="tab-btn-icon">📷</span>
@@ -568,9 +578,10 @@ firebase.initializeApp({apiKey:"AIzaSyC_vh0fqH6vYFwFDYCKVcBi-xlFKvxnu6U",authDom
 </div>
 
 <!-- 히스토리 항목 추가 모달 -->
-<div id="hist-add-modal-backdrop" onclick="closeHistAddModalOnBackdrop(event)">
+<div id="hist-add-modal-backdrop" onclick="closeAddItemOnBackdrop(event)">
   <div id="hist-add-modal">
     <h3>항목 추가</h3>
+    <div id="additem-session-date" style="font-size:12px;color:var(--muted);margin-bottom:12px;font-family:'Share Tech Mono',monospace;"></div>
     <div class="modal-field">
       <label>상품명</label>
       <input type="text" id="hist-add-name" placeholder="예: 비요뜨 복숭아" autocomplete="off">
@@ -583,7 +594,25 @@ firebase.initializeApp({apiKey:"AIzaSyC_vh0fqH6vYFwFDYCKVcBi-xlFKvxnu6U",authDom
       <label>수량</label>
       <input type="number" id="hist-add-qty" placeholder="1" inputmode="numeric" value="1" min="1">
     </div>
-    <button id="hist-add-confirm-btn" onclick="confirmHistAddItem()" style="width:100%;height:50px;background:var(--accent);color:#000;border:none;border-radius:8px;font-family:'Nanum Gothic',sans-serif;font-size:16px;font-weight:800;cursor:pointer;margin-top:4px;">추가하기</button>
+    <button id="hist-add-confirm-btn" onclick="confirmAddItem()" style="width:100%;height:50px;background:var(--accent);color:#000;border:none;border-radius:8px;font-family:'Nanum Gothic',sans-serif;font-size:16px;font-weight:800;cursor:pointer;margin-top:4px;">추가하기</button>
+  </div>
+</div>
+
+<!-- USER SHEET -->
+<div id="user-sheet-bd" onclick="closeUserSheetOnBackdrop(event)">
+  <div id="user-sheet">
+    <div class="sheet-handle"></div>
+    <div style="padding:20px 16px 0;">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px;">
+        <div id="usp-av-wrap"></div>
+        <div>
+          <div id="usp-name" style="font-size:16px;font-weight:800;color:var(--text);"></div>
+          <div id="usp-email" style="font-size:12px;color:var(--muted);margin-top:2px;"></div>
+        </div>
+      </div>
+      <button onclick="openSetupScreen()" style="width:100%;height:44px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--muted);font-family:'Nanum Gothic',sans-serif;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:8px;">🔑 API 키 변경</button>
+      <button onclick="handleSignOut()" style="width:100%;height:44px;background:transparent;border:1px solid #331010;border-radius:8px;color:var(--danger);font-family:'Nanum Gothic',sans-serif;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:4px;">로그아웃</button>
+    </div>
   </div>
 </div>
 
@@ -617,8 +646,13 @@ auth.onAuthStateChanged(user=>{
 });
 function updateAuthUI(u){
   const lb=document.getElementById('login-btn'),av=document.getElementById('user-avatar');
-  if(u){lb.style.display='none';if(u.photoURL){av.src=u.photoURL;av.style.display='block';}else av.style.display='none';}
-  else{lb.style.display='flex';av.style.display='none';}
+  if(u){
+    lb.classList.add('logged-in');
+    if(u.photoURL){av.innerHTML=`<img src="${u.photoURL}" style="width:20px;height:20px;border-radius:50%;object-fit:cover;" alt="">`;}
+    else{av.textContent=(u.displayName||'U')[0];}
+  }else{
+    lb.classList.remove('logged-in');av.innerHTML='';
+  }
 }
 async function handleLoginBtn(){
   if(currentUser){openUserSheet();return;}
@@ -746,12 +780,12 @@ async function saveSession(){
 
 async function renderHistoryPage(){
   const eLP=document.getElementById('history-login-prompt'),eL=document.getElementById('history-loading'),
-        eE=document.getElementById('history-empty'),eS=document.getElementById('history-scroll'),
+        eE=document.getElementById('history-empty'),
         ePG=document.getElementById('history-pagination');
-  if(!currentUser){eLP.style.display='flex';eL.style.display='none';eE.style.display='none';eS.style.display='none';ePG.style.display='none';return;}
+  if(!currentUser){eLP.style.display='flex';eL.style.display='none';eE.style.display='none';ePG.style.display='none';return;}
   eLP.style.display='none';
   if(!historyLoaded){
-    eL.style.display='flex';eE.style.display='none';eS.style.display='none';ePG.style.display='none';
+    eL.style.display='flex';eE.style.display='none';ePG.style.display='none';
     try{
       const snap=await db.collection('shopping_sessions').where('uid','==',currentUser.uid).orderBy('createdAt','desc').get();
       allSessions=snap.docs.map(d=>({id:d.id,...d.data()}));historyLoaded=true;
@@ -761,9 +795,9 @@ async function renderHistoryPage(){
   renderHistoryList();
 }
 function renderHistoryList(){
-  const eE=document.getElementById('history-empty'),eS=document.getElementById('history-scroll'),ePG=document.getElementById('history-pagination');
-  if(!allSessions.length){eE.style.display='flex';eS.style.display='none';ePG.style.display='none';document.getElementById('history-list').innerHTML='';return;}
-  eE.style.display='none';eS.style.display='block';
+  const eE=document.getElementById('history-empty'),ePG=document.getElementById('history-pagination');
+  if(!allSessions.length){eE.style.display='flex';ePG.style.display='none';document.getElementById('history-list').innerHTML='';return;}
+  eE.style.display='none';
   hTotalPages=Math.ceil(allSessions.length/PG);if(hPage>hTotalPages)hPage=hTotalPages;
   const start=(hPage-1)*PG;
   document.getElementById('history-list').innerHTML=allSessions.slice(start,start+PG).map(s=>renderSessionCard(s)).join('');
@@ -773,13 +807,13 @@ function renderHistoryList(){
 }
 function renderSessionCard(s){
   const items=s.items||[];const ic=items.reduce((x,i)=>x+(i.qty||1),0);
-  const ihtml=items.map((item,idx)=>`<div class="session-item-row" id="si-${s.id}-${idx}"><span class="si-name">${esc(item.name)}</span><span class="si-qty">×${item.qty||1}</span><span class="si-price">₩${(item.price||0).toLocaleString('ko-KR')}</span><span class="si-subtotal">₩${((item.price||0)*(item.qty||1)).toLocaleString('ko-KR')}</span><button class="si-edit-btn" onclick="toggleItemEdit('${s.id}',${idx})">✏️</button><button class="si-del-btn" onclick="deleteSessionItem('${s.id}',${idx})">✕</button></div><div class="si-edit-form" id="si-edit-${s.id}-${idx}"><div class="si-edit-row"><input class="si-edit-input" type="text" id="si-name-${s.id}-${idx}" value="${esc(item.name)}" placeholder="상품명"></div><div class="si-edit-row"><input class="si-edit-input small" type="number" id="si-price-${s.id}-${idx}" value="${item.price||0}" inputmode="numeric" placeholder="가격"><input class="si-edit-input small" type="number" id="si-qty-${s.id}-${idx}" value="${item.qty||1}" min="1" inputmode="numeric" placeholder="수량"><button class="si-save-btn" onclick="saveItemEdit('${s.id}',${idx})">저장</button><button class="si-cancel-btn" onclick="toggleItemEdit('${s.id}',${idx})">취소</button></div></div>`).join('');
-  return`<div class="session-card" id="sc-${s.id}"><div class="session-card-header" onclick="toggleSessionCard('${s.id}')"><div class="session-date-block"><span class="session-date">${esc(s.date||'')}</span><span class="session-time">${esc(s.time||'')}</span></div><div class="session-card-right"><span class="session-item-count">${ic}개</span><span class="session-total">₩${(s.total||0).toLocaleString('ko-KR')}</span><span class="session-chevron">▼</span></div></div><div class="session-body"><div class="session-items-list">${ihtml}</div><div class="session-actions"><button class="session-add-btn" onclick="openAddItem('${s.id}')">＋ 항목 추가</button><button class="session-del-btn" onclick="deleteSession('${s.id}')">🗑️ 삭제</button></div></div></div>`;
+  const ihtml=items.map((item,idx)=>`<div class="session-item-row" id="si-${s.id}-${idx}"><div class="si-view"><span class="si-name">${esc(item.name)}</span><span class="si-qty">×${item.qty||1}</span><span class="si-price">₩${((item.price||0)*(item.qty||1)).toLocaleString('ko-KR')}</span><button class="si-edit-btn" onclick="toggleItemEdit('${s.id}',${idx})">✏️</button><button class="si-del-btn" onclick="deleteSessionItem('${s.id}',${idx})">✕</button></div><div class="si-edit-fields"><input class="si-input si-input-name" type="text" id="si-name-${s.id}-${idx}" value="${esc(item.name)}" placeholder="상품명"><input class="si-input si-input-price" type="number" id="si-price-${s.id}-${idx}" value="${item.price||0}" inputmode="numeric" placeholder="가격"><input class="si-input si-input-qty" type="number" id="si-qty-${s.id}-${idx}" value="${item.qty||1}" min="1" inputmode="numeric" placeholder="수량"><button class="si-save-btn" onclick="saveItemEdit('${s.id}',${idx})">저장</button><button class="si-cancel-btn" onclick="toggleItemEdit('${s.id}',${idx})">취소</button></div></div>`).join('');
+  return`<div class="session-card" id="sc-${s.id}"><div class="session-card-header" onclick="toggleSessionCard('${s.id}')"><div class="session-date-group"><span class="session-date">${esc(s.date||'')}</span><span class="session-time">${esc(s.time||'')}</span></div><div class="session-summary"><span class="session-count">${ic}개</span><span class="session-total">₩${(s.total||0).toLocaleString('ko-KR')}</span><span class="session-chevron">▼</span></div></div><div class="session-body"><div class="session-items">${ihtml}</div><div class="session-footer"><button class="session-add-btn" onclick="openAddItem('${s.id}')">＋ 항목 추가</button><button class="session-del-session-btn" onclick="deleteSession('${s.id}')">🗑️ 삭제</button></div></div></div>`;
 }
-function toggleSessionCard(id){document.getElementById('sc-'+id)?.classList.toggle('open');}
+function toggleSessionCard(id){document.getElementById('sc-'+id)?.classList.toggle('expanded');}
 function toggleItemEdit(sid,idx){
-  const form=document.getElementById('si-edit-'+sid+'-'+idx),row=document.getElementById('si-'+sid+'-'+idx);if(!form)return;
-  const open=form.classList.toggle('open');row?.classList.toggle('editing',open);
+  const row=document.getElementById('si-'+sid+'-'+idx);if(!row)return;
+  const open=row.classList.toggle('editing');
   if(open)setTimeout(()=>document.getElementById('si-name-'+sid+'-'+idx)?.focus(),80);
 }
 async function saveItemEdit(sid,idx){
@@ -810,13 +844,13 @@ async function deleteSession(sid){
 function openAddItem(sid){
   addItemTarget=sid;const s=allSessions.find(x=>x.id===sid);
   document.getElementById('additem-session-date').textContent=s?'📅 '+s.date+' '+s.time:'';
-  document.getElementById('additem-name').value='';document.getElementById('additem-price').value='';document.getElementById('additem-qty').value='1';
-  document.getElementById('additem-bd').classList.add('open');setTimeout(()=>document.getElementById('additem-name').focus(),100);
+  document.getElementById('hist-add-name').value='';document.getElementById('hist-add-price').value='';document.getElementById('hist-add-qty').value='1';
+  document.getElementById('hist-add-modal-backdrop').classList.add('open');setTimeout(()=>document.getElementById('hist-add-name').focus(),100);
 }
 async function confirmAddItem(){
-  const name=document.getElementById('additem-name').value.trim();
-  const price=parseInt(document.getElementById('additem-price').value);
-  const qty=parseInt(document.getElementById('additem-qty').value)||1;
+  const name=document.getElementById('hist-add-name').value.trim();
+  const price=parseInt(document.getElementById('hist-add-price').value);
+  const qty=parseInt(document.getElementById('hist-add-qty').value)||1;
   if(!name){showToast('상품명을 입력해주세요');return;}
   if(!price||price<=0){showToast('올바른 가격을 입력해주세요');return;}
   const sid=addItemTarget,s=allSessions.find(x=>x.id===sid);if(!s)return;
@@ -827,13 +861,13 @@ async function confirmAddItem(){
     setTimeout(()=>{const card=document.getElementById('sc-'+sid);if(card&&!card.classList.contains('open'))card.classList.add('open');},200);
   }catch(e){showToast('추가 실패: '+(e.message||'다시 시도해주세요'));}
 }
-function closeAddItem(){document.getElementById('additem-bd').classList.remove('open');addItemTarget=null;}
-function closeAddItemOnBackdrop(e){if(e.target===document.getElementById('additem-bd'))closeAddItem();}
+function closeAddItem(){document.getElementById('hist-add-modal-backdrop').classList.remove('open');addItemTarget=null;}
+function closeAddItemOnBackdrop(e){if(e.target===document.getElementById('hist-add-modal-backdrop'))closeAddItem();}
 function changePage(d){hPage=Math.max(1,Math.min(hTotalPages,hPage+d));renderHistoryList();document.getElementById('history-scroll').scrollTop=0;}
 
-function openModal(){document.getElementById('modal-bd').classList.add('open');setTimeout(()=>document.getElementById('manual-name').focus(),100);}
-function closeModal(){document.getElementById('modal-bd').classList.remove('open');document.getElementById('manual-name').value='';document.getElementById('manual-price').value='';}
-function closeModalOnBackdrop(e){if(e.target===document.getElementById('modal-bd'))closeModal();}
+function openModal(){document.getElementById('modal-backdrop').classList.add('open');setTimeout(()=>document.getElementById('manual-name').focus(),100);}
+function closeModal(){document.getElementById('modal-backdrop').classList.remove('open');document.getElementById('manual-name').value='';document.getElementById('manual-price').value='';}
+function closeModalOnBackdrop(e){if(e.target===document.getElementById('modal-backdrop'))closeModal();}
 
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._to);t._to=setTimeout(()=>t.classList.remove('show'),2500);}
 function esc(s){if(!s)return'';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
