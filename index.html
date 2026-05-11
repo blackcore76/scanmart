@@ -59,6 +59,7 @@
     padding:0 16px 0 20px; height:38px;
     display:flex; align-items:center; justify-content:space-between;
     position:relative; overflow:hidden;
+    border-radius:0 0 14px 14px;
   }
   #total-bar::before {
     content:''; position:absolute; left:0; top:0; bottom:0;
@@ -405,12 +406,15 @@
   #help-sheet {
     width:100%; max-width:480px; background:var(--sf);
     border-top:1px solid var(--bd); border-radius:16px 16px 0 0;
-    max-height:80vh; overflow-y:auto; -webkit-overflow-scrolling:touch;
-    padding-bottom:max(20px,env(safe-area-inset-bottom));
+    max-height:80vh; display:flex; flex-direction:column;
     animation:sheetUp 0.25s cubic-bezier(.32,1.2,.45,1);
   }
-  #help-sheet::-webkit-scrollbar { width:2px; }
-  #help-sheet::-webkit-scrollbar-thumb { background:var(--bd); }
+  #help-content {
+    flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch;
+    padding-bottom:max(20px,env(safe-area-inset-bottom));
+  }
+  #help-content::-webkit-scrollbar { width:2px; }
+  #help-content::-webkit-scrollbar-thumb { background:var(--bd); }
   .help-section { padding:14px 16px 0; }
   .help-section-title { font-size:10px; color:var(--muted); letter-spacing:1.5px; text-transform:uppercase; font-family:var(--mono); margin-bottom:10px; }
   .help-row {
@@ -665,6 +669,7 @@ firebase.initializeApp({apiKey:"AIzaSyC_vh0fqH6vYFwFDYCKVcBi-xlFKvxnu6U",authDom
       <button id="help-close-btn" onclick="closeHelp()">✕</button>
     </div>
 
+    <div id="help-content">
     <div class="help-section">
       <div class="help-section-title">탭 안내</div>
       <div class="help-row">
@@ -699,6 +704,7 @@ firebase.initializeApp({apiKey:"AIzaSyC_vh0fqH6vYFwFDYCKVcBi-xlFKvxnu6U",authDom
       <div class="help-tip">🔢 <b>가격 숫자가 선명</b>하게 보이는지 먼저 확인하세요</div>
       <div class="help-tip">🔁 인식이 틀렸다면 결과창에서 <b>직접 수정</b>하고 담으면 돼요</div>
     </div>
+    </div><!-- /help-content -->
   </div>
 </div>
 
