@@ -54,9 +54,25 @@
   }
   #logo { font-size:17px; font-weight:800; color:var(--accent); letter-spacing:-0.3px; font-family:var(--sans); }
   #header-right { display:flex; align-items:center; gap:10px; }
-  #total-display { text-align:right; }
-  #total-label { font-size:10px; color:var(--muted); letter-spacing:1.5px; text-transform:uppercase; font-family:var(--mono); }
-  #total-amount { font-family:var(--mono); font-size:22px; color:var(--accent); line-height:1; font-weight:700; }
+  #total-bar {
+    flex-shrink:0; background:var(--total-bg); border-bottom:1px solid var(--bd);
+    padding:0 16px 0 20px; height:38px;
+    display:flex; align-items:center; justify-content:space-between;
+    position:relative; overflow:hidden;
+  }
+  #total-bar::before {
+    content:''; position:absolute; left:0; top:0; bottom:0;
+    width:4px; background:linear-gradient(to bottom, #00d4ff, transparent);
+  }
+  #total-bar-label { font-size:11px; color:var(--muted); font-family:var(--mono); letter-spacing:0.5px; }
+  #total-amount { font-family:var(--mono); font-size:18px; color:var(--accent); font-weight:700; }
+  #help-btn {
+    width:32px; height:32px; background:var(--sf2); border:1px solid var(--bd);
+    border-radius:50%; color:var(--muted); font-size:15px; font-weight:800; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    transition:border-color 0.2s, color 0.2s;
+  }
+  #help-btn:active { border-color:var(--accent); color:var(--accent); }
 
   #login-btn {
     height:32px; padding:0 12px; background:var(--sf2);
@@ -382,6 +398,36 @@
   .hist-login-cta { margin-top:8px; padding:11px 28px; background:var(--total-bg); border:1px solid var(--accent); border-radius:20px; color:var(--accent); font-size:14px; font-weight:800; cursor:pointer; font-family:var(--sans); }
 
   #history-empty { display:none; flex-direction:column; align-items:center; justify-content:center; gap:12px; color:var(--muted); padding:60px 0; }
+
+  /* ── HELP SHEET ── */
+  #help-sheet-bd { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:90; align-items:flex-end; justify-content:center; }
+  #help-sheet-bd.open { display:flex; }
+  #help-sheet {
+    width:100%; max-width:480px; background:var(--sf);
+    border-top:1px solid var(--bd); border-radius:16px 16px 0 0;
+    max-height:80vh; overflow-y:auto; -webkit-overflow-scrolling:touch;
+    padding-bottom:max(20px,env(safe-area-inset-bottom));
+    animation:sheetUp 0.25s cubic-bezier(.32,1.2,.45,1);
+  }
+  #help-sheet::-webkit-scrollbar { width:2px; }
+  #help-sheet::-webkit-scrollbar-thumb { background:var(--bd); }
+  .help-section { padding:14px 16px 0; }
+  .help-section-title { font-size:10px; color:var(--muted); letter-spacing:1.5px; text-transform:uppercase; font-family:var(--mono); margin-bottom:10px; }
+  .help-row {
+    display:flex; align-items:flex-start; gap:12px;
+    padding:12px 14px; background:var(--sf2); border-radius:10px;
+    border:1px solid var(--bd); margin-bottom:8px;
+  }
+  .help-row-icon { font-size:22px; flex-shrink:0; }
+  .help-row-title { font-size:13px; font-weight:800; color:var(--text); margin-bottom:4px; }
+  .help-row-desc { font-size:12px; color:var(--muted); line-height:1.7; }
+  .help-tip {
+    display:flex; align-items:flex-start; gap:10px;
+    padding:10px 12px; background:var(--bg); border-radius:8px;
+    border-left:3px solid var(--accent); margin-bottom:6px;
+    font-size:12px; color:var(--text); line-height:1.6;
+  }
+  #help-close-btn { width:30px; height:30px; border-radius:50%; background:var(--sf2); border:1px solid var(--bd); color:var(--muted); font-size:13px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
 </style>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
@@ -425,15 +471,18 @@ firebase.initializeApp({apiKey:"AIzaSyC_vh0fqH6vYFwFDYCKVcBi-xlFKvxnu6U",authDom
   <div id="header">
     <div id="logo">   📷 스 캔 마 트</div>
     <div id="header-right">
-      <div id="total-display">
-        <div id="total-label">합계</div>
-        <div id="total-amount">0원</div>
-      </div>
+      <button id="help-btn" onclick="openHelp()">?</button>
       <button id="login-btn" onclick="handleLoginBtn()">
         <div class="avatar" id="user-avatar"></div>
         <span class="login-text">로그인</span>
       </button>
     </div>
+  </div>
+
+  <!-- TOTAL BAR -->
+  <div id="total-bar">
+    <span id="total-bar-label">오늘 장본 금액</span>
+    <span id="total-amount">0원</span>
   </div>
 
   <!-- PAGES -->
@@ -603,6 +652,52 @@ firebase.initializeApp({apiKey:"AIzaSyC_vh0fqH6vYFwFDYCKVcBi-xlFKvxnu6U",authDom
         </div>
       </div>
       <button onclick="handleSignOut()" style="width:100%;height:44px;background:transparent;border:1px solid #2a1010;border-radius:var(--radius);color:var(--danger);font-family:var(--sans);font-size:14px;font-weight:700;cursor:pointer;margin-bottom:4px;">로그아웃</button>
+    </div>
+  </div>
+</div>
+
+<!-- HELP SHEET -->
+<div id="help-sheet-bd" onclick="closeHelpOnBackdrop(event)">
+  <div id="help-sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-header">
+      <div class="sheet-title">📖 사용 가이드</div>
+      <button id="help-close-btn" onclick="closeHelp()">✕</button>
+    </div>
+
+    <div class="help-section">
+      <div class="help-section-title">탭 안내</div>
+      <div class="help-row">
+        <span class="help-row-icon">🛒</span>
+        <div>
+          <div class="help-row-title">장바구니</div>
+          <div class="help-row-desc">스캔한 상품이 담기는 곳이에요. 수량 ＋／－ 로 조절하고, 쇼핑이 끝나면 <b>쇼핑 저장</b>으로 기록에 남길 수 있어요.</div>
+        </div>
+      </div>
+      <div class="help-row">
+        <span class="help-row-icon">📷</span>
+        <div>
+          <div class="help-row-title">스캔</div>
+          <div class="help-row-desc">카메라로 마트 가격표를 찍으면 AI가 상품명과 가격을 자동 인식해요. ✏️ 버튼으로 직접 입력도 가능해요. 인식 결과는 수정 후 담을 수 있어요.</div>
+        </div>
+      </div>
+      <div class="help-row">
+        <span class="help-row-icon">📋</span>
+        <div>
+          <div class="help-row-title">기록</div>
+          <div class="help-row-desc">저장된 쇼핑 기록을 날짜별로 확인해요. 항목 수정·추가·삭제, 기록 삭제도 여기서 가능해요. Google 로그인이 필요해요.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="help-section" style="margin-top:4px; padding-bottom:8px;">
+      <div class="help-section-title">📷 스캔 잘 하는 요령</div>
+      <div class="help-tip">📐 가격표 <b>전체</b>가 스캔 박스 안에 꽉 들어오게 맞추세요</div>
+      <div class="help-tip">📏 가격표와 <b>20~30cm</b> 정도 거리를 유지하세요</div>
+      <div class="help-tip">💡 그림자나 반사광이 없는 <b>밝은 환경</b>이 인식률이 높아요</div>
+      <div class="help-tip">✋ 손이 흔들리지 않게 <b>잠깐 멈춘 뒤</b> 스캔 버튼을 누르세요</div>
+      <div class="help-tip">🔢 <b>가격 숫자가 선명</b>하게 보이는지 먼저 확인하세요</div>
+      <div class="help-tip">🔁 인식이 틀렸다면 결과창에서 <b>직접 수정</b>하고 담으면 돼요</div>
     </div>
   </div>
 </div>
@@ -1020,6 +1115,10 @@ async function confirmAddItem() {
 function closeAddItem() { document.getElementById('hist-add-modal-backdrop').classList.remove('open'); addItemTarget = null; }
 function closeAddItemOnBackdrop(e) { if (e.target === document.getElementById('hist-add-modal-backdrop')) closeAddItem(); }
 function changePage(d) { hPage = Math.max(1, Math.min(hTotalPages, hPage + d)); renderHistoryList(); document.getElementById('history-scroll').scrollTop = 0; }
+
+function openHelp() { document.getElementById('help-sheet-bd').classList.add('open'); }
+function closeHelp() { document.getElementById('help-sheet-bd').classList.remove('open'); }
+function closeHelpOnBackdrop(e) { if (e.target === document.getElementById('help-sheet-bd')) closeHelp(); }
 
 function openModal() { document.getElementById('modal-backdrop').classList.add('open'); setTimeout(() => document.getElementById('manual-name').focus(), 100); }
 function closeModal() { document.getElementById('modal-backdrop').classList.remove('open'); document.getElementById('manual-name').value = ''; document.getElementById('manual-price').value = ''; }
